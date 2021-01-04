@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 631128461}
   - component: {fileID: 631128462}
   m_Layer: 0
-  m_Name: playerLegs
+  m_Name: Legs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -424,7 +424,7 @@ GameObject:
   - component: {fileID: 1273738787}
   - component: {fileID: 1273738786}
   m_Layer: 0
-  m_Name: player
+  m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -467,7 +467,6 @@ MonoBehaviour:
   jumpType: 0
   jumpButtonHoldingTime: 0.71734405
   playerLegsAnimator: {fileID: 0}
-  playerBodyAnimator: {fileID: 0}
   legsGO: {fileID: 631128459}
   bodyGO: {fileID: 1385846455}
 --- !u!50 &1273738787
@@ -485,7 +484,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 2
   m_Material: {fileID: 6200000, guid: 2ffa71479f76bd64b93d606545413eb0, type: 2}
   m_Interpolate: 0
   m_SleepingMode: 1
@@ -529,7 +528,7 @@ GameObject:
   - component: {fileID: 1385846457}
   - component: {fileID: 1385846458}
   m_Layer: 0
-  m_Name: playerBody
+  m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
