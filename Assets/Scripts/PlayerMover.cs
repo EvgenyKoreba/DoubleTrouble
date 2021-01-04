@@ -12,28 +12,51 @@ public class PlayerMover : MonoBehaviour
         strong
     }
 
-        [Header("Set in Inspector: Move Options")]
-    [SerializeField] private float          speed;
+    [Header("Set in Inspector: Move Options")]
+    [SerializeField] private float speed;
 
-        [Header("Set in Inspector: Jump Options")]
-    [SerializeField] private KeyCode        jumpButton = KeyCode.Space;
-    [SerializeField] private float          weakJumpForce;
-    [SerializeField] private float          maxJumpForce;
-    [SerializeField] private float          maxWeakJumpButtonHoldingTime;
-    [SerializeField] private float          strongJumpTimeScaling;
+    [Header("Set in Inspector: Jump Options")]
+    [SerializeField] private KeyCode jumpButton = KeyCode.Space;
+    [SerializeField] private float weakJumpForce;
+    [SerializeField] private float maxJumpForce;
+    [SerializeField] private float maxWeakJumpButtonHoldingTime;
+    [SerializeField] private float strongJumpTimeScaling;
+
+    [Header("Set in Inspector: Attack Options")]
+    [SerializeField] private KeyCode attackButton = KeyCode.E;
+    [SerializeField] private bool canAttack = true;
+    [SerializeField] private float attackCoolDown = 1f;
 
 
     [Header("Set Dynamically")]
-    [SerializeField] private JumpType       jumpType = JumpType.idle;
-    [SerializeField] private float          jumpButtonHoldingTime;
+    [SerializeField] private JumpType jumpType = JumpType.idle;
+    [SerializeField] private float jumpButtonHoldingTime;
 
 
-    private Rigidbody2D                     rigidBody;
+    [Header("Animations")]
+    [SerializeField] private Animator playerLegsAnimator;
+    [SerializeField] private Animator playerBodyAnimator;
+
+
+    [Header("PartsOfPlayer")]
+    [SerializeField] private GameObject legsGO;
+    [SerializeField] private GameObject bodyGO;
+
+
+    private Rigidbody2D rigidBody;
+    private SpriteRenderer legsSpriteRenderer;
+    private SpriteRenderer bodySpriteRenderer;
 
 
     private void Awake()
     {
+        legsSpriteRenderer = legsGO.GetComponent<SpriteRenderer>();
+        bodySpriteRenderer = bodyGO.GetComponent<SpriteRenderer>();
+
         rigidBody = GetComponent<Rigidbody2D>();
+        playerLegsAnimator = legsGO.GetComponent<Animator>();
+        playerBodyAnimator = bodyGO.GetComponent<Animator>();
+
     }
 
     private void Update()
@@ -61,6 +84,8 @@ public class PlayerMover : MonoBehaviour
             Jump();
             jumpButtonHoldingTime = 0.0f;
         }
+        if (Input.GetKeyUp(attackButton) && canAttack)
+            Attack();
     }
 
 
@@ -69,6 +94,27 @@ public class PlayerMover : MonoBehaviour
         // Move
         float moveInput = Input.GetAxis("Horizontal");
         rigidBody.velocity = new Vector2(moveInput * speed, rigidBody.velocity.y);
+
+
+        if (moveInput > 0)
+        {
+            legsSpriteRenderer.flipX = false;
+            bodySpriteRenderer.flipX = false;
+            playerLegsAnimator.Play("RunAnimation");
+            //playerBodyAnimator.Play("RunBodyAnimation");
+        }
+        else if (moveInput < 0)
+        {
+            legsSpriteRenderer.flipX = true;
+            bodySpriteRenderer.flipX = true;
+            playerLegsAnimator.Play("RunAnimation");
+            //playerBodyAnimator.Play("RunBodyAnimation");
+
+        }
+        else if ((moveInput - 0.05f) < 0)
+        {
+            //playerLegsAnimator.Play("IdleAnimation");
+        }
     }
 
 
@@ -95,5 +141,10 @@ public class PlayerMover : MonoBehaviour
         {
             jumpType = JumpType.idle;
         }
+    }
+    private void Attack()
+    {
+        Time attackTime
+        playerBodyAnimator.Play("AttackBodyAnimation");
     }
 }
