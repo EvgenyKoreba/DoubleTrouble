@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 967018290564815738}
   - component: {fileID: 1748941854529127251}
   - component: {fileID: 7345155772487404430}
-  - component: {fileID: 7862188694931622909}
+  - component: {fileID: 3167803657147429749}
   m_Layer: 0
   m_Name: Projectile
   m_TagString: Untagged
@@ -27,7 +27,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2492677222597433731}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.2078476, y: 2.8562875, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 0.4, y: 0.4, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -94,13 +94,13 @@ CircleCollider2D:
   m_Enabled: 1
   m_Density: 1
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
   m_Radius: 0.5
---- !u!114 &7862188694931622909
+--- !u!114 &3167803657147429749
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -109,10 +109,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2492677222597433731}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e2ea632f78ac434e89ec27dff420047, type: 3}
+  m_Script: {fileID: 11500000, guid: 22045d6beeb72864a8d4b161b69a90dc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveToPosX: 0
-  moveToPosY: 0
-  unitsPerSecond: 20
-  isLooping: 0
+  damage: 0

@@ -10,7 +10,7 @@ public class PlayerStatus : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.tag == "DamageObject")
+        if (collision.gameObject.GetComponent<DamageObject>() != null)
         {
         }
     }

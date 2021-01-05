@@ -4,17 +4,15 @@ using UnityEngine;
 
 public class CameraFollow : MonoBehaviour
 {
-    [Header(""), Space(10)]
-    [SerializeField] private GameObject FocusObject;
-    [SerializeField] private float cameraFollowSpeed;
+        [Header("Set in Inspector")]
+    [SerializeField] private GameObject         poi;
+    [SerializeField] private float              easing; 
 
-
-
-    void Update()
+    private void FixedUpdate()
     {
-        Vector3 posOfFocus = new Vector3(FocusObject.transform.position.x, FocusObject.transform.position.y, -10.0f);
-        Vector3 posOfCamera = transform.position;
-        transform.position = Vector3.Lerp(posOfCamera, posOfFocus , Time.deltaTime*cameraFollowSpeed);
-        
+        Vector3 destination = poi.transform.position;
+        destination.z = transform.position.z;
+        destination = Vector3.Lerp(transform.position, destination, easing);
+        transform.position = destination;     
     }
 }
