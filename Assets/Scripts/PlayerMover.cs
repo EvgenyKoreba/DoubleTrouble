@@ -119,6 +119,10 @@ public class PlayerMover : MonoBehaviour
             //playerBodyAnimator.Play("RunBodyAnimation");
 
         }
+        if (moveInput == 0 )
+        {
+            playerLegsAnimator.Play("IdleAnimation");
+        } 
     }
     #endregion
 
