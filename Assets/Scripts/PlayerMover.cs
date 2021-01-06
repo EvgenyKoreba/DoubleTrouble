@@ -14,26 +14,26 @@ public class PlayerMover : MonoBehaviour
 
     #region Fields
     [Header("Set in Inspector: Move Options")]
-    [SerializeField] private float              speed;
+    [SerializeField] private float speed;
 
-        [Header("Set in Inspector: Jump Options"), Space(10)]
-    [SerializeField] private KeyCode            jumpButton = KeyCode.Space;
-    [SerializeField] private float              weakJumpForce;
-    [SerializeField] private float              maxJumpForce;
-    [SerializeField] private float              maxWeakJumpButtonHoldingTime;
-    [SerializeField] private float              strongJumpTimeScaling;
-
-
-        [Header("Set Dynamically"), Space(10)]
-    [SerializeField] private JumpType           jumpType = JumpType.idle;
-    [SerializeField] private float              jumpButtonHoldingTime = 0.0f;
+    [Header("Set in Inspector: Jump Options"), Space(10)]
+    [SerializeField] private KeyCode jumpButton = KeyCode.Space;
+    [SerializeField] private float weakJumpForce;
+    [SerializeField] private float maxJumpForce;
+    [SerializeField] private float maxWeakJumpButtonHoldingTime;
+    [SerializeField] private float strongJumpTimeScaling;
 
 
-        [Header("Animation"), Space(10)]
-    [SerializeField] private Animator           playerLegsAnimator;
+    [Header("Set Dynamically"), Space(10)]
+    [SerializeField] private JumpType jumpType = JumpType.idle;
+    [SerializeField] private float jumpButtonHoldingTime = 0.0f;
 
 
-        [Header("Parts Of Player"), Space(10)]
+    [Header("Animation"), Space(10)]
+    [SerializeField] private Animator playerLegsAnimator;
+
+
+    [Header("Parts Of Player"), Space(10)]
     [SerializeField] private GameObject legsGO;
     [SerializeField] private GameObject bodyGO;
 
@@ -55,7 +55,7 @@ public class PlayerMover : MonoBehaviour
 
     #region Jump
     private void Update()
-    {   
+    {
         if (Input.GetKeyDown(jumpButton))
         {
             if (jumpType == JumpType.idle)
@@ -119,10 +119,10 @@ public class PlayerMover : MonoBehaviour
             //playerBodyAnimator.Play("RunBodyAnimation");
 
         }
-        if (moveInput == 0 )
+        if (moveInput == 0)
         {
             playerLegsAnimator.Play("IdleAnimation");
-        } 
+        }
     }
     #endregion
 
