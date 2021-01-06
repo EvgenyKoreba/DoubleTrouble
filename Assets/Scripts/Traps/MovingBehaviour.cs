@@ -1,21 +1,21 @@
-﻿using System.Collections; 
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class MovingBehaviour : MonoBehaviour
 {
     [Header("Set in Inspector: MovingBehaviour")]
-    [SerializeField] private List<Vector3>      pts;
-    [SerializeField] private string             easingCurve = Easing.Linear;
-    [SerializeField] private float              duration;
+    [SerializeField] private List<Vector3> pts;
+    [SerializeField] private string easingCurve = Easing.Linear;
+    [SerializeField] private float duration;
 
 
     [Header("Set Dynamically: MovingBehaviour"), Space(10)]
     [SerializeField] private bool isLooping = true;
 
 
-    private float                   timeStart = -1;
-    private List<Vector3>           points;
+    private float timeStart = -1;
+    private List<Vector3> points;
 
 
     public Vector3 position
@@ -105,4 +105,5 @@ public class MovingBehaviour : MonoBehaviour
         }
         points = revercePts;
     }
+    
 }

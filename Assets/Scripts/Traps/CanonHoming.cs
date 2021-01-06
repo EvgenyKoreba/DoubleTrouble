@@ -21,7 +21,7 @@ public class CanonHoming : MonoBehaviour
     private void ShootingLoop()
     {
         GameObject shot = Instantiate(projectile, transform.position, Quaternion.identity);
-        shot.GetComponent<ObjectMover>().SetDestination(targetPosX, targetPosY, projectileUnitsPerSecond, true);
+       // shot.GetComponent<ObjectMover>().SetDestination(targetPosX, targetPosY, projectileUnitsPerSecond, true);
         Invoke("ShootingLoop", timeForNextShoot);
     }
     

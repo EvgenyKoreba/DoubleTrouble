@@ -1428,13 +1428,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 1273738782}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d138f53e8043b72479b43d694068d38c, type: 3}
+  m_Script: {fileID: 11500000, guid: 278fa75e4153b63449f5c9e3a0e8ea6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  attackButton: 101
-  canAttack: 1
-  attackDelay: 1
-  playerBodyAnimator: {fileID: 1385846458}
+  lives: 0
+  respawnPos: {x: 0, y: 0}
 --- !u!4 &1273738785
 Transform:
   m_ObjectHideFlags: 0
@@ -1443,7 +1441,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1273738782}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -5.49, y: 0, z: 0}
+  m_LocalPosition: {x: -5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 631128460}
@@ -1597,6 +1595,63 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!1 &1399460550
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1399460552}
+  - component: {fileID: 1399460551}
+  - component: {fileID: 1399460553}
+  m_Layer: 0
+  m_Name: CheckPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!65 &1399460551
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1399460550}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1.17, y: 10.14, z: 1}
+  m_Center: {x: 0, y: 2.4, z: 0}
+--- !u!4 &1399460552
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1399460550}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -3.51, y: -0.05, z: -19.580078}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1399460553
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1399460550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f8a9d21d9db6e864a8c7a1b7859c0152, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1414694453
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1664,10 +1719,20 @@ PrefabInstance:
       propertyPath: m_Name
       value: Saw
       objectReference: {fileID: 0}
+    - target: {fileID: 1071871747460113469, guid: a30a4ca2ad26f2d448f8b6f799ee06af,
+        type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 3960951130913005805, guid: a30a4ca2ad26f2d448f8b6f799ee06af,
+        type: 3}
+      propertyPath: isLooping
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3960951130913005805, guid: a30a4ca2ad26f2d448f8b6f799ee06af,
         type: 3}
       propertyPath: pts.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 3960951130913005805, guid: a30a4ca2ad26f2d448f8b6f799ee06af,
         type: 3}
@@ -1678,6 +1743,16 @@ PrefabInstance:
         type: 3}
       propertyPath: pts.Array.data[0].y
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3960951130913005805, guid: a30a4ca2ad26f2d448f8b6f799ee06af,
+        type: 3}
+      propertyPath: pts.Array.data[1].x
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3960951130913005805, guid: a30a4ca2ad26f2d448f8b6f799ee06af,
+        type: 3}
+      propertyPath: pts.Array.data[1].y
+      value: 12
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 1071871747460113465, guid: a30a4ca2ad26f2d448f8b6f799ee06af, type: 3}
@@ -1827,6 +1902,7 @@ MonoBehaviour:
     type: 3}
   targetPosX: -16.33
   targetPosY: 4.7
+  projectileUnitsPerSecond: 0
 --- !u!61 &1998214702
 BoxCollider2D:
   m_ObjectHideFlags: 0
