@@ -8,6 +8,7 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] private GameObject         poi;
     [SerializeField] private float              easing; 
 
+
     private void FixedUpdate()
     {
         Vector3 destination = poi.transform.position;

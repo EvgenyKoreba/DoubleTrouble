@@ -12,6 +12,7 @@ public class MovingBehaviour : MonoBehaviour
 
     [Header("Set Dynamically: MovingBehaviour"), Space(10)]
     [SerializeField] private bool isLooping = true;
+    [SerializeField] private bool changeDirection = false;
 
 
     private float timeStart = -1;
@@ -78,7 +79,10 @@ public class MovingBehaviour : MonoBehaviour
             // Если интерполяция закончена, сменить направление
             if (u == 1)
             {
-                ChangeDirection();
+                if (changeDirection)
+                {
+                    ChangeDirection();
+                }
             }
         }
     }

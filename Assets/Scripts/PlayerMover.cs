@@ -24,10 +24,13 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] private float maxJumpForce;
     [SerializeField] private float maxWeakJumpButtonHoldingTime;
     [SerializeField] private float strongJumpTimeScaling;
+    [SerializeField] private int maxNumberExtraJumps = 2;
+    [SerializeField] private float airJumpForceScale = 50f;
 
 
     [Header("Set Dynamically"), Space(10)]
     [SerializeField] private JumpType jumpType = JumpType.idle;
+    [SerializeField] private int currentNumExtraJumps;
     [SerializeField] private float jumpButtonHoldingTime = 0.0f;
 
 
@@ -62,9 +65,9 @@ public class PlayerMover : MonoBehaviour
         {
             if (jumpType == JumpType.idle)
             {
-                jumpType = JumpType.weak;
-            }
+                jumpType = JumpType.weak;            }
         }
+
 
         if (Input.GetKey(jumpButton))
         {
@@ -75,10 +78,11 @@ public class PlayerMover : MonoBehaviour
             }
         }
 
-        if (Input.GetKeyUp(jumpButton))
+
+        if (Input.GetKeyUp(jumpButton) && currentNumExtraJumps > 0)
         {
             Jump();
-            jumpButtonHoldingTime = 0.0f;
+            currentNumExtraJumps--;
         }
     }
 
@@ -94,7 +98,16 @@ public class PlayerMover : MonoBehaviour
                 jumpForce.y = Mathf.Min(maxJumpForce, weakJumpForce + jumpButtonHoldingTime * strongJumpTimeScaling);
                 break;
         }
+
+        float speedY = _rigidBody.velocity.y;
+        if (speedY < 0)
+        {
+            jumpForce.y += Mathf.Abs(speedY * airJumpForceScale);
+        }
         _rigidBody.AddForce(jumpForce);
+
+        jumpButtonHoldingTime = 0.0f;
+        jumpType = JumpType.idle;
     }
     #endregion
 
@@ -134,6 +147,7 @@ public class PlayerMover : MonoBehaviour
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
             jumpType = JumpType.idle;
+            currentNumExtraJumps = maxNumberExtraJumps;
         }
     }
 }

@@ -5,17 +5,19 @@ using UnityEngine;
 public class CheckPoint : MonoBehaviour
 {
 
-    private bool isAchived = false;
+    [SerializeField] private bool       isAchived = false;
+
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.GetComponent<PlayerStatus>() != null && !isAchived)
-            CheckPointAchived(collision.gameObject.GetComponent<PlayerStatus>());
+        PlayerStatus ps = collision.gameObject.GetComponent<PlayerStatus>();
+        if (ps != null && !isAchived)
+            Achiev(ps);
     }
 
 
-    private void CheckPointAchived(PlayerStatus player)
+    private void Achiev(PlayerStatus player)
     {
-        print("CheckPoint achived");
         isAchived = true;
         player.SetRespawnPos(new Vector2(transform.position.x, transform.position.y));
     }
