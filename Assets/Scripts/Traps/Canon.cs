@@ -5,27 +5,37 @@ using UnityEngine;
 public class Canon : MonoBehaviour
 {
 
-    [SerializeField] private float timeForNextShoot;
-    [SerializeField] private GameObject projectile;
-    [SerializeField] private float targetPosX;
-    [SerializeField] private float targetPosY;
-    [SerializeField] private float projectileUnitsPerSecond;
+    [SerializeField] protected float timeForNextShoot;
+    [SerializeField] protected Projectile projectile;
+    [SerializeField] protected float targetPosX;
+    [SerializeField] protected float targetPosY;
+    [SerializeField] protected float shotGravityScale;
+    [SerializeField] protected float shotForce;
+    [SerializeField] protected float timeBeforeShotDestroyed;
+    [SerializeField] protected bool isShoting = true;
 
-    private float rotZ;
-    void Start()
+    protected float rotZ;
+    protected Vector2 target;
+    private void Start()
     {
         rotZ = transform.rotation.z;
         AimTo();
         Invoke("ShootingLoop", timeForNextShoot);
     }
-    private void ShootingLoop()
+    protected void ShootingLoop()
     {
-        GameObject shot = Instantiate(projectile, transform.position, Quaternion.identity);
-        //shot.GetComponent<ObjectMover>().SetDestination(targetPosX, targetPosY, projectileUnitsPerSecond, true);
+        Projectile shot = Instantiate(projectile, transform.position, Quaternion.identity);
+        Rigidbody2D shotRB = shot.GetComponent<Rigidbody2D>();
+        shotRB.gravityScale = shotGravityScale;
+        target = new Vector2(targetPosX - transform.position.x, targetPosY - transform.position.y);
+        target.Normalize();
+        shotRB.AddForce(target * shotForce);
+        if (isShoting)
+            Invoke("ShootingLoop", timeForNextShoot);
 
-        Invoke("ShootingLoop", timeForNextShoot);
+        Destroy(shot.gameObject, timeBeforeShotDestroyed);
     }
-    private void AimTo()
+    protected void AimTo()
     {
         float x = targetPosX - transform.position.x;
         float y = targetPosY - transform.position.y;
@@ -36,5 +46,6 @@ public class Canon : MonoBehaviour
     {
         Gizmos.DrawLine(transform.position, new Vector3(targetPosX, targetPosY, transform.position.z));
     }
+
 
 }

@@ -34,9 +34,6 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] private float jumpButtonHoldingTime = 0.0f;
 
 
-    [Header("Animation"), Space(10)]
-    [SerializeField] private Animator playerLegsAnimator;
-
 
     [Header("Parts Of Player"), Space(10)]
     [SerializeField] private GameObject legsGO;
@@ -44,17 +41,14 @@ public class PlayerMover : MonoBehaviour
 
 
     private Rigidbody2D _rigidBody;
-    private SpriteRenderer legsSpriteRenderer;
-    private SpriteRenderer bodySpriteRenderer;
+    private Animator playerAnimator;
     #endregion
 
     private void Awake()
     {
         _rigidBody = GetComponent<Rigidbody2D>();
 
-        legsSpriteRenderer = legsGO.GetComponent<SpriteRenderer>();
-        bodySpriteRenderer = bodyGO.GetComponent<SpriteRenderer>();
-        playerLegsAnimator = legsGO.GetComponent<Animator>();
+        playerAnimator = GetComponent<Animator>();
 
     }
 
@@ -121,22 +115,20 @@ public class PlayerMover : MonoBehaviour
 
         if (moveInput > 0)
         {
-            legsSpriteRenderer.flipX = false;
-            bodySpriteRenderer.flipX = false;
-            playerLegsAnimator.Play("RunAnimation");
+            transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
+            playerAnimator.Play("RunAnimation");
             //playerBodyAnimator.Play("RunBodyAnimation");
         }
         else if (moveInput < 0)
         {
-            legsSpriteRenderer.flipX = true;
-            bodySpriteRenderer.flipX = true;
-            playerLegsAnimator.Play("RunAnimation");
+            transform.rotation = Quaternion.Euler(new Vector3(0, -180, 0));
+            playerAnimator.Play("RunAnimation");
             //playerBodyAnimator.Play("RunBodyAnimation");
 
         }
         if (moveInput == 0)
         {
-            playerLegsAnimator.Play("IdleAnimation");
+            playerAnimator.Play("IdleAnimation");
         }
     }
     #endregion
