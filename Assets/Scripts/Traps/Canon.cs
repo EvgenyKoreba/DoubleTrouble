@@ -16,14 +16,17 @@ public class Canon : MonoBehaviour
 
     protected float rotZ;
     protected Vector2 target;
+    private Animator canonAnimator;
     private void Start()
     {
+        canonAnimator = gameObject.GetComponent<Animator>();
         rotZ = transform.rotation.z;
         AimTo();
         Invoke("ShootingLoop", timeForNextShoot);
     }
     protected void ShootingLoop()
     {
+        ShotAnimation();
         Projectile shot = Instantiate(projectile, transform.position, Quaternion.identity);
         Rigidbody2D shotRB = shot.GetComponent<Rigidbody2D>();
         shotRB.gravityScale = shotGravityScale;
@@ -45,6 +48,10 @@ public class Canon : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.DrawLine(transform.position, new Vector3(targetPosX, targetPosY, transform.position.z));
+    }
+    protected virtual void ShotAnimation()
+    {
+        canonAnimator.Play("CanonShot");
     }
 
 

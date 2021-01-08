@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class CanonHoming : Canon
 {
-
+    private Animator homingCanonAnimator;
     private void Start()
     {
+        homingCanonAnimator = gameObject.GetComponent<Animator>();
         rotZ = transform.rotation.z;
         isShoting = false;
     }
@@ -34,6 +35,10 @@ public class CanonHoming : Canon
             isShoting = true;
             ShootingLoop();
         }
+    }
+    protected override void ShotAnimation()
+    {
+        homingCanonAnimator.Play("HomingCanonShot");
     }
 
 

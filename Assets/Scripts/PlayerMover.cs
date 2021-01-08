@@ -17,6 +17,8 @@ public class PlayerMover : MonoBehaviour
     #region Fields
     [Header("Set in Inspector: Move Options")]
     [SerializeField] private float speed;
+    [SerializeField] private bool turnRight = true;
+    public bool TurnRight { get { return turnRight; } }
 
     [Header("Set in Inspector: Jump Options"), Space(10)]
     [SerializeField] private KeyCode jumpButton = KeyCode.Space;
@@ -34,10 +36,6 @@ public class PlayerMover : MonoBehaviour
     [SerializeField] private float jumpButtonHoldingTime = 0.0f;
 
 
-
-    [Header("Parts Of Player"), Space(10)]
-    [SerializeField] private GameObject legsGO;
-    [SerializeField] private GameObject bodyGO;
 
 
     private Rigidbody2D _rigidBody;
@@ -59,7 +57,8 @@ public class PlayerMover : MonoBehaviour
         {
             if (jumpType == JumpType.idle)
             {
-                jumpType = JumpType.weak;            }
+                jumpType = JumpType.weak;
+            }
         }
 
 
@@ -115,15 +114,15 @@ public class PlayerMover : MonoBehaviour
 
         if (moveInput > 0)
         {
+            turnRight = true;
             transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
             playerAnimator.Play("RunAnimation");
-            //playerBodyAnimator.Play("RunBodyAnimation");
         }
         else if (moveInput < 0)
         {
+            turnRight = false;
             transform.rotation = Quaternion.Euler(new Vector3(0, -180, 0));
             playerAnimator.Play("RunAnimation");
-            //playerBodyAnimator.Play("RunBodyAnimation");
 
         }
         if (moveInput == 0)
