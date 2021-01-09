@@ -19,21 +19,11 @@ public class CanonHoming : Canon
     {
         if (other.GetComponent<Player>() != null)
         {
-
-            //targetPos.x = other.gameObject.transform.position.x;
-            //targetPos.y = other.gameObject.transform.position.y;
-            //AimToTarget();
-
             targetPos = other.gameObject.transform.position;
         }
     }
-    private void OnTriggerExit2D(Collider2D other)
-    {
-        if (other.GetComponent<Player>() != null)
-        {
-            StopShooting();
-        }
-    }
+
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.GetComponent<Player>() != null)
@@ -41,25 +31,35 @@ public class CanonHoming : Canon
             StartShooting();
         }
     }
+
+
+    private void OnTriggerExit2D(Collider2D other)
+    {
+        if (other.GetComponent<Player>() != null)
+        {
+            StopShooting();
+        }
+    }
+
+
     protected override void ShotAnimation()
     {
         animator.Play("HomingCanonShot");
     }
 
 
-    protected override IEnumerator AimToTarget1()
+    protected override IEnumerator AimToTarget()
     {
         while (true)
         {
             float x = targetPos.x - transform.position.x;
             float y = targetPos.y - transform.position.y;
-            float rotZ = Mathf.Atan2(y, x);
+            float rotZ = Mathf.Atan2(y, x) * Mathf.Rad2Deg;
 
-            // ВОТ ТУТ ИСПРАВИТЬ, ХУЁВО ПОВОРАЧИВАЕТСЯ
-            Quaternion newRotation = Quaternion.LookRotation(new Vector3(x,y,0));
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, newRotation, rotateSpeed * Time.deltaTime);
-            //transform.rotation = Quaternion.Euler(new Vector3(0, 0, rotZ + 90));
-            yield return null;
+            Quaternion newRotation = Quaternion.Euler(new Vector3(0, 0, rotZ + 90));
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, newRotation, rotateSpeed * Time.fixedDeltaTime);
+
+            yield return new WaitForFixedUpdate();
         }
     }
 

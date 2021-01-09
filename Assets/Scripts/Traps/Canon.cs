@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class Canon : MonoBehaviour
 {
-
     [Header("Set in Inspector")]
     [SerializeField] protected float shootingSpeed;
     [SerializeField] protected Projectile projectilePrefab;
@@ -14,7 +13,7 @@ public class Canon : MonoBehaviour
     [SerializeField] protected float projectileLifetime;
     [SerializeField] private bool _isShoting = false;
 
-    //protected float rotZ;
+
     protected Animator animator;
 
 
@@ -26,8 +25,8 @@ public class Canon : MonoBehaviour
             _isShoting = value;
             if (isShoting)
             {
-                StartCoroutine(AimToTarget1());
-                StartCoroutine(ShootingLoop1());
+                StartCoroutine(AimToTarget());
+                StartCoroutine(ShootingLoop());
             }
             else
             {
@@ -36,43 +35,17 @@ public class Canon : MonoBehaviour
         }
     }
 
+
     protected virtual void Awake()
     {
         animator = GetComponent<Animator>();
-        //rotZ = transform.rotation.z;
-        //AimToTarget();
-        //Invoke("ShootingLoop", 1 / shootingSpeed);
     }
+
 
     private void Start()
     {
         //StartShooting();
     }
-
-
-    //protected void ShootingLoop()
-    //{
-    //    ShotAnimation();
-    //    Projectile shot = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
-    //    Rigidbody2D shotRB = shot.GetComponent<Rigidbody2D>();
-    //    shotRB.gravityScale = projectileGravityScale;
-    //    target = new Vector2(targetPos.x - transform.position.x, targetPos.y - transform.position.y);
-    //    target.Normalize();
-    //    shotRB.AddForce(target * shotForce);
-    //    if (isShoting)
-    //        Invoke("ShootingLoop", 1 / shootingSpeed);
-
-    //    Destroy(shot.gameObject, projectileLifetime);
-    //}
-
-
-    //protected void AimToTarget()
-    //{
-    //    float x = targetPos.x - transform.position.x;
-    //    float y = targetPos.y - transform.position.y;
-    //    rotZ = Mathf.Atan2(y, x) * Mathf.Rad2Deg;
-    //    transform.rotation = Quaternion.Euler(new Vector3(0, 0, rotZ + 90));
-    //}
 
 
     public void StartShooting()
@@ -85,7 +58,7 @@ public class Canon : MonoBehaviour
         isShoting = false;
     }
 
-    protected virtual IEnumerator AimToTarget1()
+    protected virtual IEnumerator AimToTarget()
     {
         float x = targetPos.x - transform.position.x;
         float y = targetPos.y - transform.position.y;
@@ -94,7 +67,7 @@ public class Canon : MonoBehaviour
         yield return null;
     }
 
-    protected IEnumerator ShootingLoop1()
+    protected IEnumerator ShootingLoop()
     {
         while (true)
         {
@@ -102,9 +75,11 @@ public class Canon : MonoBehaviour
             Projectile shot = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
             Rigidbody2D shotRB = shot.GetComponent<Rigidbody2D>();
             shotRB.gravityScale = projectileGravityScale;
-            Vector3 target = targetPos - transform.position;
-            target.Normalize();
-            shotRB.AddForce(target * shotForce);
+
+            // Надо изменить direction так, чтобы оно зависело от rotZ
+            Vector3 direction = targetPos - transform.position;
+            direction.Normalize();
+            shotRB.AddForce(direction * shotForce);
 
             // не уверен что пушка должна знать когда уничтожаются снаряды
             // надо как-то передать эту ответственность самому прожектайлу
