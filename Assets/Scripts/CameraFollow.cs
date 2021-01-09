@@ -5,23 +5,33 @@ using UnityEngine;
 public class CameraFollow : MonoBehaviour
 {
     [Header("Set in Inspector")]
-    [SerializeField] private PlayerMover player;
     [SerializeField] private GameObject poi;
     [SerializeField] private float easing;
-    [SerializeField] private float cameraShift;
+    [SerializeField] private float cameraDisplacement;
+
+
+    private PlayerMover player;
+
+
+    private void Awake()
+    {
+        player = poi.GetComponent<PlayerMover>();
+    }
 
 
     private void FixedUpdate()
     {
-        if (poi == null)
-        {
-            FollowPlayer();
-        }
-        else if (poi != null)
+        if (player == null)
         {
             FollowPOI();
         }
+        else
+        {
+            FollowPlayer();
+        }
     }
+
+
     public void FollowPOI()
     {
         Vector3 destination = poi.transform.position;
@@ -29,19 +39,22 @@ public class CameraFollow : MonoBehaviour
         destination = Vector3.Lerp(transform.position, destination, easing);
         transform.position = destination;
     }
+
+
     private void FollowPlayer()
     {
-        if (player.TurnRight)
+        Vector3 destination;
+
+        if (player.facingRight)
         {
-            Vector3 destination = new Vector3(player.transform.position.x + cameraShift, player.transform.position.y, transform.position.z);
-            destination = Vector3.Lerp(transform.position, destination, easing);
-            transform.position = destination;
+            destination = new Vector3(player.transform.position.x + cameraDisplacement, player.transform.position.y, transform.position.z);
         }
-        if (!player.TurnRight)
+        else
         {
-            Vector3 destination = new Vector3(player.transform.position.x - cameraShift, player.transform.position.y, transform.position.z);
-            destination = Vector3.Lerp(transform.position, destination, easing);
-            transform.position = destination;
+            destination = new Vector3(player.transform.position.x - cameraDisplacement, player.transform.position.y, transform.position.z);
         }
+
+        destination = Vector3.Lerp(transform.position, destination, easing);
+        transform.position = destination;
     }
 }

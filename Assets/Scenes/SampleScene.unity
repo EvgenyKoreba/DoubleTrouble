@@ -286,10 +286,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 927704a78b27fba4793f736256826af2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 1273738786}
-  poi: {fileID: 0}
+  poi: {fileID: 1273738782}
   easing: 0.05
-  cameraShift: 3.5
+  cameraDisplacement: 3.5
 --- !u!1 &902914049
 GameObject:
   m_ObjectHideFlags: 0
@@ -1407,13 +1406,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1273738785}
-  - component: {fileID: 1273738787}
   - component: {fileID: 1273738786}
   - component: {fileID: 1273738784}
+  - component: {fileID: 1273738787}
   - component: {fileID: 1273738788}
   - component: {fileID: 1273738789}
   - component: {fileID: 1273738790}
-  - component: {fileID: 1273738791}
+  - component: {fileID: 1273738783}
   m_Layer: 10
   m_Name: Player
   m_TagString: Player
@@ -1421,6 +1420,63 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!66 &1273738783
+CompositeCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1273738782}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_GeometryType: 0
+  m_GenerationType: 0
+  m_EdgeRadius: 0
+  m_ColliderPaths:
+  - m_Collider: {fileID: 1273738790}
+    m_ColliderPaths:
+    - - X: 143837
+        Y: 6634782
+      - X: -938400
+        Y: 4759237
+      - X: -1875726
+        Y: 3619591
+      - X: -1803622
+        Y: -1225906
+      - X: -1598024
+        Y: -4886546
+      - X: -808407
+        Y: -6637056
+      - X: 698035
+        Y: -7624019
+      - X: 1955264
+        Y: -6670034
+      - X: 2330293
+        Y: -4824168
+      - X: 3678441
+        Y: 2667213
+      - X: 3750543
+        Y: 6706882
+  m_CompositePaths:
+    m_Paths:
+    - - {x: 0.0697873, y: -0.7623912}
+      - {x: 0.1955284, y: -0.6669938}
+      - {x: 0.2330292, y: -0.4824174}
+      - {x: 0.3678442, y: 0.2667231}
+      - {x: 0.3750237, y: 0.6706875}
+      - {x: 0.0143762, y: 0.6634651}
+      - {x: -0.0938408, y: 0.4759228}
+      - {x: -0.1875724, y: 0.3619498}
+      - {x: -0.1803622, y: -0.122593}
+      - {x: -0.1598006, y: -0.4886587}
+      - {x: -0.0808344, y: -0.6637098}
+  m_VertexDistance: 0.0005
+  m_OffsetDistance: 0.00005
 --- !u!114 &1273738784
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1433,9 +1489,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 278fa75e4153b63449f5c9e3a0e8ea6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lives: 0
-  respawnPos: {x: 0, y: 0}
+  maxLives: 3
+  respawnPos: {x: -6, y: 1}
   rb: {fileID: 0}
+  _currentLives: 0
 --- !u!4 &1273738785
 Transform:
   m_ObjectHideFlags: 0
@@ -1463,7 +1520,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
-  turnRight: 1
   jumpButton: 32
   weakJumpForce: 400
   maxJumpForce: 600
@@ -1471,6 +1527,7 @@ MonoBehaviour:
   strongJumpTimeScaling: 1000
   maxNumberExtraJumps: 2
   airJumpForceScale: 50
+  _facingRight: 1
   jumpType: 0
   currentNumExtraJumps: 0
   jumpButtonHoldingTime: 0
@@ -1600,63 +1657,6 @@ PolygonCollider2D:
       - {x: 0.15535292, y: -0.32161123}
       - {x: 0.2452294, y: 0.17781425}
       - {x: 0.25003624, y: 0.4471255}
---- !u!66 &1273738791
-CompositeCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1273738782}
-  m_Enabled: 1
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_UsedByComposite: 0
-  m_Offset: {x: 0, y: 0}
-  m_GeometryType: 0
-  m_GenerationType: 0
-  m_EdgeRadius: 0
-  m_ColliderPaths:
-  - m_Collider: {fileID: 1273738790}
-    m_ColliderPaths:
-    - - X: 143837
-        Y: 6634782
-      - X: -938400
-        Y: 4759237
-      - X: -1875726
-        Y: 3619591
-      - X: -1803622
-        Y: -1225906
-      - X: -1598024
-        Y: -4886546
-      - X: -808407
-        Y: -6637056
-      - X: 698035
-        Y: -7624019
-      - X: 1955264
-        Y: -6670034
-      - X: 2330293
-        Y: -4824168
-      - X: 3678441
-        Y: 2667213
-      - X: 3750543
-        Y: 6706882
-  m_CompositePaths:
-    m_Paths:
-    - - {x: 0.0697873, y: -0.7623912}
-      - {x: 0.1955284, y: -0.6669938}
-      - {x: 0.2330292, y: -0.4824174}
-      - {x: 0.3678442, y: 0.2667231}
-      - {x: 0.3750237, y: 0.6706875}
-      - {x: 0.0143762, y: 0.6634651}
-      - {x: -0.0938408, y: 0.4759228}
-      - {x: -0.1875724, y: 0.3619498}
-      - {x: -0.1803622, y: -0.122593}
-      - {x: -0.1598006, y: -0.4886587}
-      - {x: -0.0808344, y: -0.6637098}
-  m_VertexDistance: 0.0005
-  m_OffsetDistance: 0.00005
 --- !u!1001 &1414694453
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1838,6 +1838,21 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1904118250679302804, guid: 4987d0eb0015ae94480b4de9adde295d,
+        type: 3}
+      propertyPath: _isShoting
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1904118250679302804, guid: 4987d0eb0015ae94480b4de9adde295d,
+        type: 3}
+      propertyPath: rotateSpeed
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 1904118250679302804, guid: 4987d0eb0015ae94480b4de9adde295d,
+        type: 3}
+      propertyPath: shootingSpeed
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1904118250679302805, guid: 4987d0eb0015ae94480b4de9adde295d,
         type: 3}
       propertyPath: m_Radius
@@ -1956,7 +1971,7 @@ PrefabInstance:
     - target: {fileID: 7890838049920787548, guid: 2ec8922dc08f4f94192573b02ca54def,
         type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: -0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 7890838049920787548, guid: 2ec8922dc08f4f94192573b02ca54def,
         type: 3}
@@ -1966,12 +1981,12 @@ PrefabInstance:
     - target: {fileID: 7890838049920787548, guid: 2ec8922dc08f4f94192573b02ca54def,
         type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 7890838049920787548, guid: 2ec8922dc08f4f94192573b02ca54def,
         type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: 0.7071068
       objectReference: {fileID: 0}
     - target: {fileID: 7890838049920787548, guid: 2ec8922dc08f4f94192573b02ca54def,
         type: 3}
@@ -1986,7 +2001,22 @@ PrefabInstance:
     - target: {fileID: 7890838049920787548, guid: 2ec8922dc08f4f94192573b02ca54def,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
+      value: 270
+      objectReference: {fileID: 0}
+    - target: {fileID: 7890838049920787549, guid: 2ec8922dc08f4f94192573b02ca54def,
+        type: 3}
+      propertyPath: targetPos.x
+      value: -5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7890838049920787549, guid: 2ec8922dc08f4f94192573b02ca54def,
+        type: 3}
+      propertyPath: targetPos.y
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7890838049920787549, guid: 2ec8922dc08f4f94192573b02ca54def,
+        type: 3}
+      propertyPath: shootingSpeed
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2ec8922dc08f4f94192573b02ca54def, type: 3}

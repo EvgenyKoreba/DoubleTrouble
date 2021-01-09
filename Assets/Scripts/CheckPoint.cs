@@ -4,22 +4,22 @@ using UnityEngine;
 
 public class CheckPoint : MonoBehaviour
 {
-
+    [Header("Set Dynamically")]
     [SerializeField] private bool       isAchived = false;
 
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        PlayerStatus ps = collision.gameObject.GetComponent<PlayerStatus>();
-        if (ps != null && !isAchived)
-            Achiev(ps);
+        Player player = collision.gameObject.GetComponent<Player>();
+        if (player != null && !isAchived)
+            Achiev(player);
     }
 
 
-    private void Achiev(PlayerStatus player)
+    private void Achiev(Player player)
     {
         isAchived = true;
-        player.SetRespawnPos(new Vector2(transform.position.x, transform.position.y));
+        player.SetRespawnPos(transform.position);
     }
 
 }

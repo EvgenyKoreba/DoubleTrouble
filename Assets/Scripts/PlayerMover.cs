@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Rigidbody2D), typeof(Animator))]
 public class PlayerMover : MonoBehaviour
 {
 
@@ -17,8 +17,6 @@ public class PlayerMover : MonoBehaviour
     #region Fields
     [Header("Set in Inspector: Move Options")]
     [SerializeField] private float speed;
-    [SerializeField] private bool turnRight = true;
-    public bool TurnRight { get { return turnRight; } }
 
     [Header("Set in Inspector: Jump Options"), Space(10)]
     [SerializeField] private KeyCode jumpButton = KeyCode.Space;
@@ -31,22 +29,28 @@ public class PlayerMover : MonoBehaviour
 
 
     [Header("Set Dynamically"), Space(10)]
+    [SerializeField] private bool _facingRight = true;
     [SerializeField] private JumpType jumpType = JumpType.idle;
     [SerializeField] private int currentNumExtraJumps;
     [SerializeField] private float jumpButtonHoldingTime = 0.0f;
 
 
-
-
     private Rigidbody2D _rigidBody;
-    private Animator playerAnimator;
+    private Animator animator;
     #endregion
+
+
+    public bool facingRight { 
+        get { return _facingRight; } 
+        private set { _facingRight = value; }
+    }
+
 
     private void Awake()
     {
         _rigidBody = GetComponent<Rigidbody2D>();
 
-        playerAnimator = GetComponent<Animator>();
+        animator = GetComponent<Animator>();
 
     }
 
@@ -114,20 +118,19 @@ public class PlayerMover : MonoBehaviour
 
         if (moveInput > 0)
         {
-            turnRight = true;
+            facingRight = true;
             transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
-            playerAnimator.Play("RunAnimation");
+            animator.Play("RunAnimation");
         }
         else if (moveInput < 0)
         {
-            turnRight = false;
+            facingRight = false;
             transform.rotation = Quaternion.Euler(new Vector3(0, -180, 0));
-            playerAnimator.Play("RunAnimation");
-
+            animator.Play("RunAnimation");
         }
-        if (moveInput == 0)
+        else
         {
-            playerAnimator.Play("IdleAnimation");
+            animator.Play("IdleAnimation");
         }
     }
     #endregion
