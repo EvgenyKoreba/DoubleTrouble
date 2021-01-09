@@ -6,7 +6,7 @@ public class CanonHoming : Canon
 {
     [Header("Set Dynamically")]
     [SerializeField] private float rotateSpeed = 100f;
-
+    private Vector2 shootingDirection;
 
     protected override void Awake()
     {
@@ -53,14 +53,18 @@ public class CanonHoming : Canon
         {
             float x = targetPos.x - transform.position.x;
             float y = targetPos.y - transform.position.y;
-            float rotZ = Mathf.Atan2(y, x);
+            float rotZ = Mathf.Atan2(y, x) * Mathf.Rad2Deg;
 
-            // ВОТ ТУТ ИСПРАВИТЬ, ХУЁВО ПОВОРАЧИВАЕТСЯ
-            Quaternion newRotation = Quaternion.LookRotation(new Vector3(x,y,0));
-            transform.rotation = Quaternion.RotateTowards(transform.rotation, newRotation, rotateSpeed * Time.deltaTime);
-            //transform.rotation = Quaternion.Euler(new Vector3(0, 0, rotZ + 90));
+
+            Quaternion newRotation = Quaternion.Euler(new Vector3(0, 0, rotZ + 90));
+            Quaternion RotationInTime = Quaternion.RotateTowards(transform.rotation, newRotation, rotateSpeed * Time.deltaTime);
+            transform.rotation = RotationInTime;
             yield return null;
         }
+    }
+    private void Start()
+    {
+
     }
 
 }

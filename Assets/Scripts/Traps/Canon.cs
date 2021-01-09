@@ -46,7 +46,7 @@ public class Canon : MonoBehaviour
 
     private void Start()
     {
-        //StartShooting();
+        StartShooting();
     }
 
 
