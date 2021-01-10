@@ -7,10 +7,11 @@ public enum JumpModifier
 {
     // Модификаторы прыжка
     None,
-    DoubleJump,
+    MultiJump,
     Parachute,
 }
 
+[RequireComponent(typeof(Rigidbody2D),typeof(FixedJoint2D), typeof(PlayerMover))]
 public class PlayerJumpController : MonoBehaviour
 {
 
@@ -22,41 +23,76 @@ public class PlayerJumpController : MonoBehaviour
         Strong
     }
 
-
-    [Header("Set in Inspector"), Space(10)]
+    #region Fields
+    [Header("Simple Jump Options"), Space(5)]
+    [Header("       Set in Inspector")]
     [SerializeField] private KeyCode jumpButton = KeyCode.Space;
     [SerializeField] private float weakJumpForce;
     [SerializeField] private float maxJumpForce;
     [SerializeField] private float maxWeakJumpButtonHoldingTime;
     [SerializeField] private float strongJumpTimeScaling;
-    [SerializeField] private int maxNumberExtraJumps = 2;
+
+
+    [Header("MultiJump modifier options"), Space(10)]
+    [SerializeField] private int maxNumberMultiJumps = 2;
     [SerializeField] private float multiJumpForceScale = 50f;
 
 
-    [Header("Set Dynamically"), Space(10)]
+    [Header("Parachute modifier options"), Space(10)]
+    [SerializeField] private Parachute parachutePrefab;
+
+
+    [Header("All modifiers"), Space(5)]
+    [Header("       Set Dynamically"), Space(30)]
     [SerializeField] private JumpState jumpType = JumpState.Idle;
-    [SerializeField] private JumpModifier modifier = JumpModifier.None;
+    [SerializeField] private JumpModifier _modifier = JumpModifier.None;
     [SerializeField] private float jumpButtonHoldingTime = 0.0f;
 
 
-    [Header("Set Dynamically: MultiJump modifier"), Space(10)]
-    [SerializeField] private int currentNumExtraJumps;
-
-    [Header("Set in Inspector: Parachute modifier"), Space(10)]
-    [SerializeField] private GameObject parachutePrefab;
+    [Header("MultiJump modifier options"), Space(10)]
+    [SerializeField] private int currentNumOfJumps;
 
 
     private Rigidbody2D _rigidBody;
+    private FixedJoint2D _fixedJoint;
+    private PlayerMover _mover;
+    #endregion
+    #region Properties
+    public JumpModifier modifier
+    {
+        get { return _modifier; }
+        set
+        {
+            _modifier = value;
+            switch (modifier)
+            {
+                case JumpModifier.None:
+                    currentNumOfJumps = 1;
+                    break;
+                case JumpModifier.MultiJump:
+                    currentNumOfJumps = maxNumberMultiJumps;
+                    break;
+                case JumpModifier.Parachute:
+                    currentNumOfJumps = 1;
+                    break;
+            }
+        }
+    }
+    #endregion
+
+    private void Awake()
+    {
+        _rigidBody = GetComponent<Rigidbody2D>();
+        _fixedJoint = GetComponent<FixedJoint2D>();
+        _mover = GetComponent<PlayerMover>();
+    }
 
 
     private void Update()
     {
         if (Input.GetKeyDown(jumpButton))
         {
-            if (jumpType == JumpState.Idle)
-            {
-                jumpType = JumpState.Weak;
-            }
+            jumpType = JumpState.Weak;
         }
 
 
@@ -70,10 +106,39 @@ public class PlayerJumpController : MonoBehaviour
         }
 
 
-        if (Input.GetKeyUp(jumpButton) && currentNumExtraJumps > 0)
+        if (Input.GetKeyUp(jumpButton))
         {
-            Jump();
-            currentNumExtraJumps--;
+            if (currentNumOfJumps > 0)
+            {
+                Jump();
+                currentNumOfJumps--;
+            }
+            else
+            {
+                JumpSelectionByModifierType();
+            }
+        }
+    }
+
+
+    private void JumpSelectionByModifierType()
+    {
+        switch (modifier)
+        {
+            case JumpModifier.Parachute:
+                _fixedJoint.enabled = true;
+                Parachute parachute = Instantiate(parachutePrefab);
+                Vector3 pos = transform.position;
+                pos.x += _fixedJoint.anchor.x;
+                pos.y += _fixedJoint.anchor.y;
+                parachute.transform.position = pos;
+                _fixedJoint.connectedBody = parachute.rb;
+
+                _mover.enabled = false;
+                parachute.rb.velocity = _rigidBody.velocity;
+                _rigidBody.gravityScale = parachute.gravityReductionFactor;
+                parachute.rb.gravityScale = parachute.gravityReductionFactor;
+                break;
         }
     }
 
@@ -106,8 +171,10 @@ public class PlayerJumpController : MonoBehaviour
     {
         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
-            jumpType = JumpState.Idle;
-            currentNumExtraJumps = maxNumberExtraJumps;
+            // Для теста парашута, тут должно быть modifier = JumpModifier.None - 
+            // если модификатор одноразовый, если нет надо дополнительно реализовать
+            // уменьшение количество использований
+            modifier = JumpModifier.Parachute;
         }
     }
 }

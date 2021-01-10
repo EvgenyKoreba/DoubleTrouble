@@ -22,4 +22,27 @@ public class CheckPoint : MonoBehaviour
         player.SetRespawnPos(transform.position);
     }
 
+
+    //private void Start()
+    //{
+    //    EventManager.PostNotification(EVENT_TYPE.CheckpointReached, new GameObject());
+    //    EventManager.PostNotification(EVENT_TYPE.CheckpointReached);
+    //}
+
+
+    //private void OnEnable()
+    //{
+    //    EventManager.Subscribe(EVENT_TYPE.CheckpointReached, Test);
+    //}
+
+
+    //private void OnDisable()
+    //{
+    //    EventManager.Unsubscribe(EVENT_TYPE.CheckpointReached, Test);
+    //}
+
+    //private void Test(object[] pars)
+    //{
+
+    //}
 }
