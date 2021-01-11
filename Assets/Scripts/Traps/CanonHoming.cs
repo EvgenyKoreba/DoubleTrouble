@@ -20,10 +20,6 @@ public class CanonHoming : Canon
         if (other.GetComponent<Player>() != null)
         {
 
-            //targetPos.x = other.gameObject.transform.position.x;
-            //targetPos.y = other.gameObject.transform.position.y;
-            //AimToTarget();
-
             targetPos = other.gameObject.transform.position;
         }
     }
@@ -47,7 +43,7 @@ public class CanonHoming : Canon
     }
 
 
-    protected override IEnumerator AimToTarget1()
+    protected override IEnumerator AimToTarget()
     {
         while (true)
         {
@@ -59,6 +55,7 @@ public class CanonHoming : Canon
             Quaternion newRotation = Quaternion.Euler(new Vector3(0, 0, rotZ + 90));
             Quaternion RotationInTime = Quaternion.RotateTowards(transform.rotation, newRotation, rotateSpeed * Time.deltaTime);
             transform.rotation = RotationInTime;
+
             yield return null;
         }
     }

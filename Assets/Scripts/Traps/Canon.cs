@@ -13,9 +13,14 @@ public class Canon : MonoBehaviour
     [SerializeField] protected float projectileLifetime;
     [SerializeField] private bool _isShoting = false;
 
+    [Header("Projectile Settings")]
+    [SerializeField] protected float bounciness;
+    [SerializeField] protected float lifeTime;
+
 
     protected Animator animator;
-
+    private float rotZ;
+    private Transform shootDir;
 
     public bool isShoting
     {
@@ -38,6 +43,7 @@ public class Canon : MonoBehaviour
 
     protected virtual void Awake()
     {
+        shootDir = gameObject.transform.GetChild(0);
         animator = GetComponent<Animator>();
     }
 
@@ -45,6 +51,8 @@ public class Canon : MonoBehaviour
     private void Start()
     {
         StartShooting();
+        print(this.transform.up + transform.position);
+        print(transform.position);
     }
 
 
@@ -62,8 +70,8 @@ public class Canon : MonoBehaviour
     {
         float x = targetPos.x - transform.position.x;
         float y = targetPos.y - transform.position.y;
-        float rotZ = Mathf.Atan2(y, x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(new Vector3(0, 0, rotZ + 90));
+        rotZ = Mathf.Atan2(y, x) * Mathf.Rad2Deg + 90;
+        transform.rotation = Quaternion.Euler(new Vector3(0, 0, rotZ));
         yield return null;
     }
 
@@ -76,24 +84,25 @@ public class Canon : MonoBehaviour
             Rigidbody2D shotRB = shot.GetComponent<Rigidbody2D>();
             shotRB.gravityScale = projectileGravityScale;
 
-            // Надо изменить direction так, чтобы оно зависело от rotZ
-            Vector3 direction = targetPos - transform.position;
+            Vector2 direction = shootDir.transform.position - transform.position;
             direction.Normalize();
             shotRB.AddForce(direction * shotForce);
 
-            // не уверен что пушка должна знать когда уничтожаются снаряды
-            // надо как-то передать эту ответственность самому прожектайлу
-            Destroy(shot.gameObject, projectileLifetime);
+
+            shot.ProjectileSettings(bounciness , lifeTime);
 
             yield return new WaitForSeconds(1 / shootingSpeed);
         }
     }
+    
 
 
     private void OnDrawGizmosSelected()
     {
         Gizmos.DrawLine(transform.position, new Vector3(targetPos.x, targetPos.y, transform.position.z));
     }
+
+
 
 
     protected virtual void ShotAnimation()
