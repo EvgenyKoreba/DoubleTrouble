@@ -4,9 +4,33 @@ using UnityEngine;
 
 public class CanonHoming : Canon
 {
-    [Header("Set Dynamically")]
+    [Header("Set in Inspector: CanonHoming")]
+    [SerializeField] protected Vector3 targetPos;
+
+
+    [Header("Set Dynamically: CanonHoming"), Space(10)]
     [SerializeField] private float rotateSpeed = 100f;
-    private Vector2 shootingDirection;
+
+
+    public override bool isShoting
+    {
+        get => base.isShoting;
+        set
+        {
+            _isShoting = value;
+            if (isShoting)
+            {
+                StartCoroutine(AimToTarget());
+                StartCoroutine(ShootingLoop());
+            }
+            else
+            {
+                StopAllCoroutines();
+            }
+        }
+    }
+
+
 
     protected override void Awake()
     {
@@ -43,7 +67,7 @@ public class CanonHoming : Canon
     }
 
 
-    protected override IEnumerator AimToTarget()
+    private IEnumerator AimToTarget()
     {
         while (true)
         {

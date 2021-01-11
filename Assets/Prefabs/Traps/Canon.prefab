@@ -26,14 +26,14 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4637186251352334844}
-  m_LocalRotation: {x: 0, y: -0, z: 0.7071068, w: -0.7071068}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 1}
   m_Children:
   - {fileID: 4637186251765628876}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 270}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &4637186251352334843
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -98,15 +98,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shootingSpeed: 1
+  shotForce: 200
+  target: {fileID: 4637186251765628876}
   projectilePrefab: {fileID: -6049700550520734099, guid: b5f841d0539cf0540a51690a83d276f5,
     type: 3}
-  targetPos: {x: 4.48, y: -0.21, z: 0}
   projectileGravityScale: 0
-  shotForce: 200
   projectileLifetime: 5
-  _isShoting: 1
   bounciness: 0
   lifeTime: 0
+  _isShoting: 1
 --- !u!95 &4637186251352334845
 Animator:
   serializedVersion: 3
@@ -136,7 +136,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4637186251765628876}
   m_Layer: 0
-  m_Name: ShootDirection
+  m_Name: Target
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

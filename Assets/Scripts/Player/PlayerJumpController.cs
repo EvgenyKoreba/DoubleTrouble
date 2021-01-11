@@ -134,8 +134,10 @@ public class PlayerJumpController : MonoBehaviour
                 parachute.transform.position = pos;
                 _fixedJoint.connectedBody = parachute.rb;
 
-                _mover.enabled = false;
-                parachute.rb.velocity = _rigidBody.velocity;
+                Vector3 vel = _rigidBody.velocity;
+                vel.y = 0;
+                _rigidBody.velocity = vel;
+                _rigidBody.AddForce(new Vector2(0, 50));
                 _rigidBody.gravityScale = parachute.gravityReductionFactor;
                 parachute.rb.gravityScale = parachute.gravityReductionFactor;
                 break;

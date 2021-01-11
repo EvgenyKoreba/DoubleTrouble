@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5769587362503001883}
   m_Layer: 0
-  m_Name: ShootDirection
+  m_Name: Target
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -145,15 +145,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   shootingSpeed: 1
+  shotForce: 400
+  target: {fileID: 5769587362503001883}
   projectilePrefab: {fileID: -6049700550520734099, guid: b5f841d0539cf0540a51690a83d276f5,
     type: 3}
-  targetPos: {x: 0, y: 0, z: 0}
   projectileGravityScale: 0
-  shotForce: 400
   projectileLifetime: 5
-  _isShoting: 0
   bounciness: 0
   lifeTime: 0
+  _isShoting: 0
+  targetPos: {x: 0, y: 0, z: 0}
   rotateSpeed: 50
 --- !u!95 &5769587363040110172
 Animator:
