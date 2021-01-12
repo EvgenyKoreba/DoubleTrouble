@@ -7,23 +7,24 @@ public class Player : MonoBehaviour
     [Header("Set in Inspector")]
     [SerializeField] private int maxLives;
     [SerializeField] private Vector2 respawnPos;
-    [SerializeField] private Rigidbody2D rb;
 
 
     [Header("Set Dynamically")]
     [SerializeField] private int _currentLives;
 
 
+    [HideInInspector] public Rigidbody2D rigidBody;
+
     private void Awake()
     {
-        currentLives = maxLives;
+        currentLives = maxLives; 
+        rigidBody = GetComponent<Rigidbody2D>();
     }
 
 
     private void Start()
     {
         SetRespawnPos(new Vector2(transform.position.x, transform.position.y));
-        rb = GetComponent<Rigidbody2D>();
     }
 
 
@@ -51,9 +52,9 @@ public class Player : MonoBehaviour
     {
         currentLives--;
         transform.position = respawnPos;
-        rb.bodyType = RigidbodyType2D.Static;
+        rigidBody.bodyType = RigidbodyType2D.Static;
         yield return new WaitForSeconds(2f);
-        rb.bodyType = RigidbodyType2D.Dynamic;
+        rigidBody.bodyType = RigidbodyType2D.Dynamic;
     }
 
 

@@ -1472,13 +1472,12 @@ GameObject:
   - component: {fileID: 1273738785}
   - component: {fileID: 1273738784}
   - component: {fileID: 1273738786}
-  - component: {fileID: 1273738791}
+  - component: {fileID: 1273738793}
   - component: {fileID: 1273738787}
   - component: {fileID: 1273738788}
   - component: {fileID: 1273738789}
   - component: {fileID: 1273738790}
   - component: {fileID: 1273738783}
-  - component: {fileID: 1273738792}
   m_Layer: 10
   m_Name: Player
   m_TagString: Player
@@ -1493,7 +1492,7 @@ CompositeCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1273738782}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -1557,8 +1556,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxLives: 3
   respawnPos: {x: -6, y: 1}
-  rb: {fileID: 0}
   _currentLives: 0
+  rigidBody: {fileID: 0}
 --- !u!4 &1273738785
 Transform:
   m_ObjectHideFlags: 0
@@ -1713,7 +1712,7 @@ PolygonCollider2D:
       - {x: 0.15535292, y: -0.32161123}
       - {x: 0.2452294, y: 0.17781425}
       - {x: 0.25003624, y: 0.4471255}
---- !u!114 &1273738791
+--- !u!114 &1273738793
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1722,7 +1721,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1273738782}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee5778312469a9c4c8585f58b647f8f0, type: 3}
+  m_Script: {fileID: 11500000, guid: c45767bdf03c0704fa37bd4c141f50cb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   jumpButton: 32
@@ -1730,32 +1729,12 @@ MonoBehaviour:
   maxJumpForce: 600
   maxWeakJumpButtonHoldingTime: 0.2
   strongJumpTimeScaling: 1000
-  maxNumberMultiJumps: 2
+  maxNumberMultiJumps: 1
   multiJumpForceScale: 50
-  parachutePrefab: {fileID: 1886111029088102257, guid: a6a94702e1a8dc84f98715c954122550,
-    type: 3}
   jumpType: 0
-  _modifier: 0
+  _modifier: {fileID: 2046479982}
   jumpButtonHoldingTime: 0
   currentNumOfJumps: 0
---- !u!255 &1273738792
-FixedJoint2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1273738782}
-  m_Enabled: 0
-  serializedVersion: 4
-  m_EnableCollision: 0
-  m_ConnectedRigidBody: {fileID: 0}
-  m_BreakForce: Infinity
-  m_BreakTorque: Infinity
-  m_AutoConfigureConnectedAnchor: 1
-  m_Anchor: {x: 0, y: 2}
-  m_ConnectedAnchor: {x: -4.75, y: 3.57}
-  m_DampingRatio: 0
-  m_Frequency: 0
 --- !u!1001 &1414694453
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1929,6 +1908,103 @@ Transform:
   - {fileID: 915766221}
   m_Father: {fileID: 0}
   m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &2046479981
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2046479986}
+  - component: {fileID: 2046479985}
+  - component: {fileID: 2046479984}
+  - component: {fileID: 2046479982}
+  m_Layer: 0
+  m_Name: Boost
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &2046479982
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2046479981}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 117c248b1ee42fb42928e3c857f525bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useButton: 32
+  parachutePrefab: {fileID: 8412142206036255291, guid: a6a94702e1a8dc84f98715c954122550,
+    type: 3}
+  gravityReductionFactor: 0.1
+  lifeTime: 5
+--- !u!23 &2046479984
+MeshRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2046479981}
+  m_Enabled: 1
+  m_CastShadows: 1
+  m_ReceiveShadows: 1
+  m_DynamicOccludee: 1
+  m_MotionVectors: 1
+  m_LightProbeUsage: 1
+  m_ReflectionProbeUsage: 1
+  m_RayTracingMode: 2
+  m_RenderingLayerMask: 1
+  m_RendererPriority: 0
+  m_Materials:
+  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  m_StaticBatchInfo:
+    firstSubMesh: 0
+    subMeshCount: 0
+  m_StaticBatchRoot: {fileID: 0}
+  m_ProbeAnchor: {fileID: 0}
+  m_LightProbeVolumeOverride: {fileID: 0}
+  m_ScaleInLightmap: 1
+  m_ReceiveGI: 1
+  m_PreserveUVs: 0
+  m_IgnoreNormalsForChartDetection: 0
+  m_ImportantGI: 0
+  m_StitchLightmapSeams: 1
+  m_SelectedEditorRenderState: 3
+  m_MinimumChartSize: 4
+  m_AutoUVMaxDistance: 0.5
+  m_AutoUVMaxAngle: 89
+  m_LightmapParameters: {fileID: 0}
+  m_SortingLayerID: 0
+  m_SortingLayer: 0
+  m_SortingOrder: 0
+--- !u!33 &2046479985
+MeshFilter:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2046479981}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!4 &2046479986
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2046479981}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 8.156443, y: 8.31, z: -8.193746}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &5769587361837513350
 PrefabInstance:
