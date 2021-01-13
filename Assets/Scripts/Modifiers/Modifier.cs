@@ -18,4 +18,10 @@ public class Modifier: MonoBehaviour
 
 
     public virtual void Activate() { }
+
+
+    public virtual void Disable()
+    {
+        StopAllCoroutines();
+    }
 }

@@ -59,14 +59,17 @@ public class PlayerJumpAgregator : MonoBehaviour
         }
 
 
-        if (Input.GetKeyUp(jumpButton))
+        if (currentNumOfJumps > 0)
         {
-            if (currentNumOfJumps > 0)
+            if (Input.GetKeyUp(jumpButton))
             {
                 Jump();
                 currentNumOfJumps--;
             }
-            else
+        }
+        else if (currentNumOfJumps == 0)
+        {
+            if (Input.GetKeyDown(_modifier.useButton))
             {
                 _modifier.Activate();
             }
@@ -99,10 +102,13 @@ public class PlayerJumpAgregator : MonoBehaviour
     }
 
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    public void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
+         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
+            // Нужно исправить, что прыжок копится при удержании кнопки прыжка во время
+            // парашута уже на земле, а при отпускании прыгает
+            _modifier.Disable();
             currentNumOfJumps = maxNumberMultiJumps;
         }
     }

@@ -11,24 +11,48 @@ public class Parachute : Modifier
     [SerializeField] private float lifeTime = 5f;
 
 
+    private GameObject parachute;
 
     public override void Activate()
     {
-        GameObject go = Instantiate(parachutePrefab);
-        FixedJoint2D goFixedJoint = go.GetComponent<FixedJoint2D>();
-        goFixedJoint.connectedBody = player.rigidBody;
+        parachute = Instantiate(parachutePrefab);
+        FixedJoint2D parachuteFixedJoint = parachute.GetComponent<FixedJoint2D>();
+        parachuteFixedJoint.connectedBody = player.rigidBody;
 
         Vector3 pos = player.transform.position;
-        pos.x += goFixedJoint.anchor.x;
-        pos.y += goFixedJoint.anchor.y;
-        go.transform.position = pos;
+        pos.x += parachuteFixedJoint.anchor.x;
+        pos.y += parachuteFixedJoint.anchor.y;
+        parachute.transform.position = pos;
 
-        Vector3 vel = player.rigidBody.velocity;
-        vel.y = 0;
-        Rigidbody2D goRigidBody = go.GetComponent<Rigidbody2D>();
-        goRigidBody.velocity = vel;
-        goRigidBody.AddForce(new Vector2(0, 50));
-        goRigidBody.gravityScale = gravityReductionFactor;
+        Vector3 velocity = player.rigidBody.velocity;
+        velocity.y = 0;
+        Rigidbody2D parachuteRigidBody = parachute.GetComponent<Rigidbody2D>();
+        parachuteRigidBody.velocity = velocity;
+        parachuteRigidBody.AddForce(new Vector2(0, 50));
+        parachuteRigidBody.gravityScale = gravityReductionFactor;
         player.rigidBody.gravityScale = gravityReductionFactor;
+
+        StartCoroutine(ButtonsClickCheck());
+    }
+
+
+    private IEnumerator ButtonsClickCheck()
+    {
+        while (true)
+        {
+            if (Input.GetKeyUp(useButton))
+            {
+                Disable();
+            }
+            yield return null;
+        }
+    }
+
+
+    public override void Disable()
+    {
+        base.Disable();
+        player.rigidBody.gravityScale = 1;
+        Destroy(parachute);    
     }
 }
