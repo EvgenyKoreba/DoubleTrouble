@@ -8,12 +8,12 @@ public class Modifier: MonoBehaviour
     public KeyCode useButton;
 
 
-    protected Player player;
+    protected PlayerJumpAgregator player;
 
 
     protected virtual void Awake()
     {
-        player = FindObjectOfType<Player>();
+        player = FindObjectOfType<PlayerJumpAgregator>();
     }
 
 

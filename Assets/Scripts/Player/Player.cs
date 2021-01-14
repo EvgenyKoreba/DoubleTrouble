@@ -13,7 +13,7 @@ public class Player : MonoBehaviour
     [SerializeField] private int _currentLives;
 
 
-    [HideInInspector] public Rigidbody2D rigidBody;
+    private Rigidbody2D rigidBody;
 
     private void Awake()
     {
