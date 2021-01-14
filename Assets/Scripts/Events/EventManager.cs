@@ -7,7 +7,8 @@ using System;
 public enum EVENT_TYPE
 {
     // Сюда добавлять все возможные события
-    CheckpointReached
+    CheckpointReached,
+    PlayerDamaged
 }
 
 public class EventManager : MonoBehaviour
