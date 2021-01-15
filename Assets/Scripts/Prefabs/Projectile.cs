@@ -6,6 +6,13 @@ public class Projectile : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D projectileMat;
     private float lifeTime;
+    private bool isExploding;
+
+    
+    public void Start()
+    {
+        Destroy(gameObject, lifeTime);
+    }
 
 
     public void ProjectileSettings(float bounciness, float lifeTime)
@@ -13,8 +20,11 @@ public class Projectile : MonoBehaviour
         projectileMat.sharedMaterial.bounciness = bounciness;
         this.lifeTime = lifeTime;
     }
-    public void Start()
+
+    public void ProjectileSettings(float bounciness, float lifeTime, bool isExploding)
     {
-        Destroy(gameObject, lifeTime);
+        projectileMat.sharedMaterial.bounciness = bounciness;
+        this.lifeTime = lifeTime;
+        this.isExploding = isExploding;
     }
 }

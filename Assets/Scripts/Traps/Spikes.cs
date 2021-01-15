@@ -12,6 +12,7 @@ public class Spikes : MonoBehaviour
     [Header("Set for use")]
     [SerializeField] private Transform spikes;
     [SerializeField] private Transform spikesPushPosition;
+    private bool isTriggered = false;
 
     private Vector3 startSpikesPos;
 
@@ -57,14 +58,7 @@ public class Spikes : MonoBehaviour
         }
 
     }
-    private IEnumerator HideSpikes()
-    {
-        while (spikes.position != startSpikesPos)
-        {
-            spikes.position = Vector2.MoveTowards(spikes.position, startSpikesPos, 0.1f);
-            yield return null;
-        }
-    }
+    
     private IEnumerator LoopSpikesMove()
     {
         while (true)
@@ -88,24 +82,41 @@ public class Spikes : MonoBehaviour
             yield return new WaitForSeconds(loopTime);
         }
     }
-    private IEnumerator TriggerPush()
+    private IEnumerator TriggeredPush()
     {
         yield return new WaitForSeconds(triggerReactionTime);
-        StartCoroutine(PushSpikes());
+
+        while (spikes.position != spikesPushPosition.position)
+        {
+            spikes.position = Vector2.MoveTowards(spikes.position, spikesPushPosition.position, 0.1f);
+            yield return null;
+        }
+
+        while (isTriggered)
+        {
+            yield return new WaitForSeconds(0.1f);
+        }
+        yield return new WaitForSeconds(activatingTime);
+
+        while (spikes.position != startSpikesPos)
+        {
+            spikes.position = Vector2.MoveTowards(spikes.position, startSpikesPos, 0.1f);
+            yield return null;
+        }
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.GetComponent<Player>() != null)
         {
-            StartCoroutine(TriggerPush());
+            isTriggered = true;
+            StartCoroutine(TriggeredPush());
         }
     }
     private void OnTriggerExit2D(Collider2D other)
     {
         if (other.GetComponent<Player>() != null)
         {
-            StopAllCoroutines();
-            StartCoroutine(HideSpikes());
+            isTriggered = false;
         }
     }
 }

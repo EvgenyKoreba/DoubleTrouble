@@ -14,7 +14,6 @@ public class Canon : MonoBehaviour
     [Header("Projectile Settings"), Space(10)]
     [SerializeField] protected Projectile projectilePrefab;
     [SerializeField] protected float projectileGravityScale;
-    [SerializeField] protected float projectileLifetime;
     [SerializeField] protected float bounciness;
     [SerializeField] protected float lifeTime;
 
@@ -67,7 +66,7 @@ public class Canon : MonoBehaviour
     }
 
 
-    protected IEnumerator ShootingLoop()
+    protected virtual IEnumerator ShootingLoop()
     {
         while (true)
         {
@@ -94,7 +93,7 @@ public class Canon : MonoBehaviour
     }
 
 
-    private void OnDrawGizmosSelected()
+    protected virtual void OnDrawGizmosSelected()
     {
         Gizmos.DrawLine(transform.position, new Vector3(target.position.x,
             target.position.y, transform.position.z));
