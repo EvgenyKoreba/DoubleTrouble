@@ -8,7 +8,8 @@ public class Canon : MonoBehaviour
     [Header("Set in Inspector: Canon")]
     [SerializeField] protected float shootingSpeed;
     [SerializeField] protected float shotForce;
-    [SerializeField] private Transform target;
+    [SerializeField] private int amountOfShots;
+    [SerializeField] private float coneOfAffectInDeg;
 
 
     [Header("Projectile Settings"), Space(10)]
@@ -23,6 +24,7 @@ public class Canon : MonoBehaviour
 
 
     protected Animator animator;
+    protected GameObject[] targets;
 
     public virtual bool isShoting
     {
@@ -50,6 +52,7 @@ public class Canon : MonoBehaviour
 
     private void Start()
     {
+        TargetsSpawn();
         StartShooting();
     }
 
@@ -66,21 +69,49 @@ public class Canon : MonoBehaviour
     }
 
 
+    private void TargetsSpawn()
+    {
+        float shift = Mathf.Tan(coneOfAffectInDeg * Mathf.Deg2Rad / 2);
+        float step = 0;
+        if (amountOfShots == 1)
+        {
+            shift = 0;
+        }
+        else
+        {
+            step = shift * 2 / (amountOfShots - 1);
+
+        }
+
+        targets = new GameObject[amountOfShots];
+
+        for (int i = 0; i < amountOfShots; i++)
+        {
+            GameObject target = new GameObject("Target");
+            targets[i] = target;
+            target.transform.parent = transform;
+            targets[i].transform.localPosition = new Vector2(step * i - shift, -1);
+        }
+    }
+
+
     protected virtual IEnumerator ShootingLoop()
     {
         while (true)
         {
-            ShotAnimation();
-            Projectile shot = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
-            Rigidbody2D shotRB = shot.GetComponent<Rigidbody2D>();
-            shotRB.gravityScale = projectileGravityScale;
+            for (int i = 0; i < amountOfShots; i++)
+            {
+                ShotAnimation();
+                Projectile shot = Instantiate(projectilePrefab, transform.position, Quaternion.identity);
+                Rigidbody2D shotRB = shot.GetComponent<Rigidbody2D>();
+                shotRB.gravityScale = projectileGravityScale;
 
-            Vector2 direction = target.transform.position - transform.position;
-            direction.Normalize();
-            shotRB.AddForce(direction * shotForce);
+                Vector2 direction = targets[i].transform.position - transform.position;
+                direction.Normalize();
+                shotRB.AddForce(direction * shotForce);
 
-
-            shot.ProjectileSettings(bounciness , lifeTime);
+                shot.ProjectileSettings(bounciness, lifeTime);
+            }
 
             yield return new WaitForSeconds(1 / shootingSpeed);
         }
@@ -95,8 +126,15 @@ public class Canon : MonoBehaviour
 
     protected virtual void OnDrawGizmosSelected()
     {
-        Gizmos.DrawLine(transform.position, new Vector3(target.position.x,
-            target.position.y, transform.position.z));
+        try
+        {
+            for (int i = 0; i < amountOfShots; i++)
+            {
+                Gizmos.DrawLine(transform.position, new Vector3(targets[i].transform.position.x,
+                    targets[i].transform.position.y, transform.position.z));
+            }
+        }
+        catch { }
     }
 
 }
