@@ -1878,7 +1878,7 @@ Animator:
   m_GameObject: {fileID: 1273738782}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 7759d98be6c3b73439047265a6627fce, type: 2}
+  m_Controller: {fileID: 9100000, guid: 325ece0665f14274a92c133b267d9e4a, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -1942,7 +1942,7 @@ MonoBehaviour:
   strongJumpTimeScaling: 1000
   maxNumberMultiJumps: 1
   multiJumpForceScale: 50
-  jumpType: 0
+  jumpState: 0
   _modifier: {fileID: 2046479982}
   jumpButtonHoldingTime: 0
   currentNumOfJumps: 0

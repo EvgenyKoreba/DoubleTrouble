@@ -16,7 +16,7 @@ public class PlayerMover : MonoBehaviour
 
 
     private Rigidbody2D _rigidBody;
-    private Animator animator;
+    private Animator _animator;
     #endregion
 
 
@@ -29,7 +29,7 @@ public class PlayerMover : MonoBehaviour
     private void Awake()
     {
         _rigidBody = GetComponent<Rigidbody2D>();
-        animator = GetComponent<Animator>();
+        _animator = GetComponent<Animator>();
 
     }
 
@@ -44,17 +44,19 @@ public class PlayerMover : MonoBehaviour
         {
             facingRight = true;
             transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
-            animator.Play("RunAnimation");
+            //_animator.Play("RunAnimation");
         }
         else if (moveInput < 0)
         {
             facingRight = false;
             transform.rotation = Quaternion.Euler(new Vector3(0, -180, 0));
-            animator.Play("RunAnimation");
+            //_animator.Play("RunAnimation");
         }
         else
         {
-            animator.Play("IdleAnimation");
+            //_animator.Play("IdleAnimation");
         }
+        _animator.SetFloat("Speed", _rigidBody.velocity.magnitude);
+        _animator.SetFloat("VerticalSpeed", _rigidBody.velocity.y);
     }
 }

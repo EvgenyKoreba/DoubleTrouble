@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(Rigidbody2D), typeof(Animator))]
 public class PlayerJumpAgregator : MonoBehaviour
 {
     private enum JumpState
@@ -25,19 +25,22 @@ public class PlayerJumpAgregator : MonoBehaviour
 
 
     [Header("       Set Dynamically"), Space(30)]
-    [SerializeField] private JumpState jumpType = JumpState.Idle;
+    [SerializeField] private JumpState jumpState = JumpState.Idle;
     [SerializeField] private Modifier _modifier;
     [SerializeField] private float jumpButtonHoldingTime = 0.0f;
     [SerializeField] private int currentNumOfJumps;
 
 
     [HideInInspector] public Rigidbody2D rigidBody;
+
+    private Animator _animator;
     #endregion
 
 
     private void Awake()
     {
         rigidBody = GetComponent<Rigidbody2D>();
+        _animator = GetComponent<Animator>();
     }
 
 
@@ -45,18 +48,18 @@ public class PlayerJumpAgregator : MonoBehaviour
     {
         if (Input.GetKeyDown(jumpButton))
         {
-            jumpType = JumpState.Weak;
+            jumpState = JumpState.Weak;
         }
 
 
-        if (jumpType != JumpState.Idle)
+        if (jumpState != JumpState.Idle)
         {
             if (Input.GetKey(jumpButton))
             {
                 jumpButtonHoldingTime += Time.deltaTime;
                 if (jumpButtonHoldingTime > maxWeakJumpButtonHoldingTime)
                 {
-                    jumpType = JumpState.Strong;
+                    jumpState = JumpState.Strong;
                 }
             }
 
@@ -66,6 +69,13 @@ public class PlayerJumpAgregator : MonoBehaviour
                 if (Input.GetKeyUp(jumpButton))
                 {
                     Jump();
+                    if (currentNumOfJumps == maxNumberMultiJumps)
+                    {
+                        _animator.SetBool("Jumping", true);
+                    } else
+                    {
+                        _animator.SetBool("DoubleJumping", true);
+                    }
                     currentNumOfJumps--;
                 }
             }
@@ -83,7 +93,7 @@ public class PlayerJumpAgregator : MonoBehaviour
     private void Jump()
     {
         Vector2 jumpForce = Vector2.zero;
-        switch (jumpType)
+        switch (jumpState)
         {
             case JumpState.Weak:
                 jumpForce.y = weakJumpForce;
@@ -101,7 +111,7 @@ public class PlayerJumpAgregator : MonoBehaviour
         rigidBody.AddForce(jumpForce);
 
         jumpButtonHoldingTime = 0;
-        jumpType = JumpState.Idle;
+        jumpState = JumpState.Idle;
     }
 
 
@@ -125,6 +135,6 @@ public class PlayerJumpAgregator : MonoBehaviour
     {
         currentNumOfJumps = maxNumberMultiJumps;
         jumpButtonHoldingTime = 0;
-        jumpType = JumpState.Idle;
+        jumpState = JumpState.Idle;
     }
 }
