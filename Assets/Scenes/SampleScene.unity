@@ -1639,6 +1639,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Canon
       objectReference: {fileID: 0}
+    - target: {fileID: 4637186251352334844, guid: 2ec8922dc08f4f94192573b02ca54def,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2ec8922dc08f4f94192573b02ca54def, type: 3}
 --- !u!1 &1025131968 stripped
