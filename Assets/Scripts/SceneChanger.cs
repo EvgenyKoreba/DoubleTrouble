@@ -7,8 +7,26 @@ using UnityEngine.UI;
 public class SceneChanger : MonoBehaviour
 {
 
+    private static SceneChanger _S;
+
+    static public SceneChanger S
+    {
+        get { return _S; }
+        private set { _S = value; }
+    }
+
     private void Awake()
     {
+        if (S == null)
+        {
+            S = this;
+        }
+        else
+        {
+            Destroy(S.gameObject);
+            S = this;
+        }
+
         DontDestroyOnLoad(gameObject);
     }
 

@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6175953922796090540}
   - component: {fileID: 6175953922796090531}
   - component: {fileID: 6175953922796090530}
+  - component: {fileID: -8604547509719847829}
   m_Layer: 5
   m_Name: LevelFinishInsert
   m_TagString: Untagged
@@ -99,6 +100,19 @@ MonoBehaviour:
   m_BlockingMask:
     serializedVersion: 2
     m_Bits: 4294967295
+--- !u!114 &-8604547509719847829
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6175953922796090529}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a3dedc827a4136d4f92b3b794ddd72b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  lifetime: 0
 --- !u!1 &6175953923061630823
 GameObject:
   m_ObjectHideFlags: 0
@@ -176,7 +190,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Start next level
+  m_Text: Next level
 --- !u!1 &6175953923739793451
 GameObject:
   m_ObjectHideFlags: 0
@@ -265,7 +279,7 @@ GameObject:
   - component: {fileID: 6175953923841334792}
   - component: {fileID: 6175953923841334799}
   m_Layer: 5
-  m_Name: Button
+  m_Name: ButtonLF
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -370,4 +384,15 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6175953923841334792}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_MethodName: NextScene
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2

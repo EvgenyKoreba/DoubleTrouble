@@ -135,6 +135,5 @@ public class PlayerJumpAgregator : MonoBehaviour
     {
         currentNumOfJumps = maxNumberMultiJumps;
         jumpButtonHoldingTime = 0;
-        jumpState = JumpState.Idle;
     }
 }

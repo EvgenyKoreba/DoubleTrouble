@@ -28,8 +28,24 @@ public class Checkpoint : MonoBehaviour
         Player player = collision.gameObject.GetComponent<Player>();
         if (player != null)
         {
-            isReached = true;   
-            EventManager.PostNotification(EVENT_TYPE.CheckpointReached, this);
+            isReached = true;
+            switch (type)
+            {
+                case CheckpointType.Intermediate:
+                    EventManager.PostNotification(EVENT_TYPE.CheckpointReached, this);
+                    ShowInsert(InsertsContainer.S.checkpointReach);
+                    break;
+                case CheckpointType.Final:
+                    EventManager.PostNotification(EVENT_TYPE.LevelFinished, this);
+                    ShowInsert(InsertsContainer.S.levelFinish);
+                    break;
+            }
         }
+    }
+
+
+    private void ShowInsert(Canvas insert)
+    {
+        Instantiate(insert);
     }
 }

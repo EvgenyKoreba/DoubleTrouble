@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class UI_InsertsContainer : MonoBehaviour
+public class InsertsContainer : MonoBehaviour
 {
     [Header("Set in Inspector")]
-    [SerializeField] private Canvas checkpointReach;
-    [SerializeField] private Canvas levelFinish;
+    public Canvas checkpointReach;
+    public Canvas levelFinish;
 
 
-    private static UI_InsertsContainer _S;
+    private static InsertsContainer _S;
 
-    static public UI_InsertsContainer S
+    static public InsertsContainer S
     {
         get { return _S; }
         private set { _S = value; }
