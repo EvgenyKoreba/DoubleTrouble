@@ -85,7 +85,7 @@ public class CanonHoming : Canon
     }
     private void Start()
     {
-
+        TargetsSpawn();
     }
 
 }

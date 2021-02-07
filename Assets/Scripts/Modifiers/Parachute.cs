@@ -51,9 +51,8 @@ public class Parachute : Modifier
 
     public override void Disable()
     {
-        base.Disable();
-        player.ResetJumps();
         player.rigidBody.gravityScale = 1;
-        Destroy(parachute);    
+        Destroy(parachute);
+        base.Disable();
     }
 }

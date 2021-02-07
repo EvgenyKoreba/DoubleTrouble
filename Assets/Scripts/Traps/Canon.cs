@@ -69,7 +69,7 @@ public class Canon : MonoBehaviour
     }
 
 
-    private void TargetsSpawn()
+    protected void TargetsSpawn()
     {
         float shift = Mathf.Tan(coneOfAffectInDeg * Mathf.Deg2Rad / 2);
         float step = 0;

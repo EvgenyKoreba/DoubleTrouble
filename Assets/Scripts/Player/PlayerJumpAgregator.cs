@@ -44,6 +44,12 @@ public class PlayerJumpAgregator : MonoBehaviour
     }
 
 
+    private void Start()
+    {
+        ResetJumps();
+    }
+
+
     private void Update()
     {
         if (Input.GetKeyDown(jumpButton))
@@ -84,6 +90,7 @@ public class PlayerJumpAgregator : MonoBehaviour
                 if (Input.GetKeyDown(_modifier.useButton))
                 {
                     _modifier.Activate();
+                    currentNumOfJumps--;
                 }
             }
         }
@@ -119,11 +126,8 @@ public class PlayerJumpAgregator : MonoBehaviour
     {
          if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
         {
-            if (_modifier == null)
-            {
-                ResetJumps();
-            }
-            else
+            ResetJumps();
+            if (_modifier != null)
             {
                 _modifier.Disable();
             }

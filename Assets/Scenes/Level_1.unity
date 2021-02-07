@@ -276,6 +276,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Checkpoint_2
       objectReference: {fileID: 0}
+    - target: {fileID: 7612659436969090950, guid: 6e5d9066584dec64f8c7b42f5b23c656,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7612659436969090952, guid: 6e5d9066584dec64f8c7b42f5b23c656,
         type: 3}
       propertyPath: m_RootOrder
@@ -2670,16 +2675,6 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 75629720}
     m_Modifications:
-    - target: {fileID: 5769587363040110160, guid: 4987d0eb0015ae94480b4de9adde295d,
-        type: 3}
-      propertyPath: lifeTime
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 5769587363040110160, guid: 4987d0eb0015ae94480b4de9adde295d,
-        type: 3}
-      propertyPath: bounciness
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 5769587363040110163, guid: 4987d0eb0015ae94480b4de9adde295d,
         type: 3}
       propertyPath: m_Name
