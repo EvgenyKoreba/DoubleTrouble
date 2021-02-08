@@ -10,10 +10,9 @@ public class PlayerInteractions : MonoBehaviour
     [SerializeField] private float maxThrowBtnHoldingTime = 2f;
     [SerializeField] GameObject throwChargeBarPrefab;
 
-    private bool isAnyItemsInZone = false;
-    private bool isAnyItemInArms = false;
+
     private GameObject itemInZone;
-    private GameObject itemInArms;
+    private GameObject equippedItem;
     private float throwBtnHoldingTime = 0f;
     private GameObject throwChargeBarGO;
 
@@ -21,7 +20,6 @@ public class PlayerInteractions : MonoBehaviour
     {
         if (collision.GetComponent<ItemsForGrab>() != null && itemInZone == null)
         {
-            isAnyItemsInZone = true;
             itemInZone = collision.gameObject;
         }
     }
@@ -29,7 +27,6 @@ public class PlayerInteractions : MonoBehaviour
     {
         if (collision.GetComponent<ItemsForGrab>() != null && collision.gameObject == itemInZone)
         {
-            isAnyItemsInZone = false;
             itemInZone = null;
         }
     }
@@ -37,32 +34,30 @@ public class PlayerInteractions : MonoBehaviour
     {
         if (Input.GetKeyUp(grabButton))
         {
-            if (isAnyItemInArms)
+            if (equippedItem != null)
             {
-                DropItem(itemInArms);
+                DropItem(equippedItem);
             }
-            else if (isAnyItemsInZone)
+            else if (itemInZone != null)
             {
                 GrabItem(itemInZone);
             }
         }
-        if (Input.GetKeyDown(throwButton) && itemInArms != null)
+        if (Input.GetKeyDown(throwButton) && equippedItem != null)
         {
-            throwChargeBarGO = Instantiate(throwChargeBarPrefab);
-            throwChargeBarGO.transform.SetParent(transform);
+            throwChargeBarGO = Instantiate(throwChargeBarPrefab,transform);
             throwChargeBarGO.transform.localPosition = new Vector2(0, 2);
         }
-        if (Input.GetKey(throwButton) && itemInArms != null)
+        if (Input.GetKey(throwButton) && equippedItem != null)
         {
 
             throwBtnHoldingTime += Time.deltaTime;
-            if (throwBtnHoldingTime > maxThrowBtnHoldingTime)
-                throwBtnHoldingTime = maxThrowBtnHoldingTime;
+            throwBtnHoldingTime = Mathf.Min(throwBtnHoldingTime, maxThrowBtnHoldingTime);
             throwChargeBarGO.transform.localScale = new Vector3(1, throwBtnHoldingTime / maxThrowBtnHoldingTime, 1);
         }
-        if (Input.GetKeyUp(throwButton) && itemInArms != null)
+        if (Input.GetKeyUp(throwButton) && equippedItem != null)
         {
-            ThrowItem(itemInArms);
+            ThrowItem(equippedItem);
             throwBtnHoldingTime = 0;
             Destroy(throwChargeBarGO);
         }
@@ -85,8 +80,7 @@ public class PlayerInteractions : MonoBehaviour
         tr.rotation = new Quaternion(0, 0, 0, 0);
 
 
-        isAnyItemInArms = true;
-        itemInArms = itemInZone;
+        equippedItem = itemInZone;
 
     }
     private void DropItem(GameObject item)
@@ -95,19 +89,17 @@ public class PlayerInteractions : MonoBehaviour
         Rigidbody2D rb = item.GetComponent<Rigidbody2D>();
 
         rb.simulated = true;
-        isAnyItemInArms = false;
 
 
         transform.parent.gameObject.GetComponent<Rigidbody2D>().mass -= rb.mass;
 
-        itemInArms = null;
+        equippedItem = null;
     }
     private void ThrowItem(GameObject item)
     {
         transform.DetachChildren();
         Rigidbody2D rb = item.GetComponent<Rigidbody2D>();
         rb.simulated = true;
-        isAnyItemInArms = false;
 
 
         transform.parent.gameObject.GetComponent<Rigidbody2D>().mass -= rb.mass;
@@ -121,6 +113,6 @@ public class PlayerInteractions : MonoBehaviour
 
 
 
-        itemInArms = null;
+        equippedItem = null;
     }
 }
