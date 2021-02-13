@@ -5,13 +5,6 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody2D), typeof(Animator))]
 public class PlayerJumpAgregator : MonoBehaviour
 {
-    private enum JumpState
-    {
-        // Состояние прыжка в зависимости от зажатия клавиши прыжка
-        Idle,
-        Weak,
-        Strong
-    }
 
     #region Fields
     [Header("       Set in Inspector")]
@@ -21,19 +14,47 @@ public class PlayerJumpAgregator : MonoBehaviour
     [SerializeField] private float maxWeakJumpButtonHoldingTime;
     [SerializeField] private float strongJumpTimeScaling;
     [SerializeField] private int maxNumberMultiJumps = 2;
-    [SerializeField] private float multiJumpForceScale = 50f;
+
+    [Header("       Set in Inspector: ground")]
+    [SerializeField] private Transform groundCheck;
+    [SerializeField] private float groundRadius;
+    [SerializeField] private LayerMask ground;
+    [SerializeField] private float groundRememberTime = 0.2f;
 
 
     [Header("       Set Dynamically"), Space(30)]
-    [SerializeField] private JumpState jumpState = JumpState.Idle;
     [SerializeField] private Modifier _modifier;
+    [SerializeField] private int currentNumberOfJumps;
     [SerializeField] private float jumpButtonHoldingTime = 0.0f;
-    [SerializeField] private int currentNumOfJumps;
+    [SerializeField] private bool _isGrounded = false;
+    [SerializeField] private float groundedRemember = 0;
+
 
 
     [HideInInspector] public Rigidbody2D rigidBody;
-
     private Animator _animator;
+    #endregion
+
+    #region properties
+    public bool isGrounded
+    {
+        get { return _isGrounded; }
+        set
+        {
+            if (isGrounded == false && value == true)
+            {
+                if (_modifier != null && _modifier.isActive)
+                {
+                    _modifier.Disable();
+                }
+                else
+                {
+                    ResetJumps();
+                }
+            }
+            _isGrounded = value;
+        }
+    }
     #endregion
 
 
@@ -52,46 +73,42 @@ public class PlayerJumpAgregator : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(jumpButton))
+        isGrounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, ground);
+
+        groundedRemember -= Time.deltaTime;
+        if (isGrounded)
         {
-            jumpState = JumpState.Weak;
+            groundedRemember = groundRememberTime;
         }
 
 
-        if (jumpState != JumpState.Idle)
+        if (Input.GetKey(jumpButton))
         {
-            if (Input.GetKey(jumpButton))
-            {
-                jumpButtonHoldingTime += Time.deltaTime;
-                if (jumpButtonHoldingTime > maxWeakJumpButtonHoldingTime)
-                {
-                    jumpState = JumpState.Strong;
-                }
-            }
+            jumpButtonHoldingTime += Time.deltaTime;
+        }
 
 
-            if (currentNumOfJumps > 0)
+        if (Input.GetKeyUp(jumpButton))
+        {
+            if (currentNumberOfJumps == maxNumberMultiJumps && groundedRemember > 0)
             {
-                if (Input.GetKeyUp(jumpButton))
-                {
-                    Jump();
-                    if (currentNumOfJumps == maxNumberMultiJumps)
-                    {
-                        _animator.SetBool("Jumping", true);
-                    } else
-                    {
-                        _animator.SetBool("DoubleJumping", true);
-                    }
-                    currentNumOfJumps--;
-                }
+                Jump();
+                _animator.SetBool("Jumping", true);
             }
-            else if (currentNumOfJumps == 0)
+            else if (currentNumberOfJumps > 0 && currentNumberOfJumps < maxNumberMultiJumps 
+                && groundedRemember <= 0)
             {
-                if (Input.GetKeyDown(_modifier.useButton))
-                {
-                    _modifier.Activate();
-                    currentNumOfJumps--;
-                }
+                Jump();
+                _animator.SetBool("DoubleJumping", true);
+            }
+        }
+
+        if (Input.GetKeyDown(_modifier.useButton))
+        {
+            if (currentNumberOfJumps == 0)
+            {
+                _modifier.Activate();
+                currentNumberOfJumps--;
             }
         }
     }
@@ -99,45 +116,26 @@ public class PlayerJumpAgregator : MonoBehaviour
 
     private void Jump()
     {
-        Vector2 jumpForce = Vector2.zero;
-        switch (jumpState)
-        {
-            case JumpState.Weak:
-                jumpForce.y = weakJumpForce;
-                break;
-            case JumpState.Strong:
-                jumpForce.y = Mathf.Min(maxJumpForce, weakJumpForce + jumpButtonHoldingTime * strongJumpTimeScaling);
-                break;
-        }
+        float jumpForce = jumpButtonHoldingTime > maxWeakJumpButtonHoldingTime ?
+            Mathf.Min(maxJumpForce, weakJumpForce + jumpButtonHoldingTime * strongJumpTimeScaling) :
+            weakJumpForce;
 
-        float speedY = rigidBody.velocity.y;
-        if (speedY < 0)
-        {
-            jumpForce.y += Mathf.Abs(speedY * multiJumpForceScale);
-        }
-        rigidBody.AddForce(jumpForce);
+        rigidBody.velocity = new Vector2(rigidBody.velocity.x, jumpForce);
 
         jumpButtonHoldingTime = 0;
-        jumpState = JumpState.Idle;
-    }
-
-
-    public void OnCollisionEnter2D(Collision2D collision)
-    {
-         if (collision.gameObject.layer == LayerMask.NameToLayer("Ground"))
-        {
-            ResetJumps();
-            if (_modifier != null)
-            {
-                _modifier.Disable();
-            }
-        }
+        currentNumberOfJumps--;
     }
 
 
     public void ResetJumps()
     {
-        currentNumOfJumps = maxNumberMultiJumps;
+        currentNumberOfJumps = maxNumberMultiJumps;
         jumpButtonHoldingTime = 0;
+    }
+
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawWireSphere(groundCheck.position, groundRadius);
     }
 }

@@ -8,29 +8,31 @@ public class Parachute : Modifier
     [Header("Set in Inspector")]
     [SerializeField] private GameObject parachutePrefab;
     [SerializeField] public float gravityReductionFactor = 0.1f;
-    [SerializeField] private float lifeTime = 5f;
 
 
     private GameObject parachute;
+    private float gravityRemember = 1;
 
     public override void Activate()
-    {
+      {
+        base.Activate();
+        gravityRemember = playerJumpAgregator.rigidBody.gravityScale;
         parachute = Instantiate(parachutePrefab);
         FixedJoint2D parachuteFixedJoint = parachute.GetComponent<FixedJoint2D>();
-        parachuteFixedJoint.connectedBody = player.rigidBody;
+        parachuteFixedJoint.connectedBody = playerJumpAgregator.rigidBody;
 
-        Vector3 pos = player.transform.position;
+        Vector3 pos = playerJumpAgregator.transform.position;
         pos.x += parachuteFixedJoint.anchor.x;
         pos.y += parachuteFixedJoint.anchor.y;
         parachute.transform.position = pos;
 
-        Vector3 velocity = player.rigidBody.velocity;
+        Vector3 velocity = playerJumpAgregator.rigidBody.velocity;
         velocity.y = 0;
+        playerJumpAgregator.rigidBody.velocity = velocity;
         Rigidbody2D parachuteRigidBody = parachute.GetComponent<Rigidbody2D>();
         parachuteRigidBody.velocity = velocity;
-        parachuteRigidBody.AddForce(new Vector2(0, 50));
         parachuteRigidBody.gravityScale = gravityReductionFactor;
-        player.rigidBody.gravityScale = gravityReductionFactor;
+        playerJumpAgregator.rigidBody.gravityScale = gravityReductionFactor;
 
         StartCoroutine(ButtonsClickCheck());
     }
@@ -42,7 +44,12 @@ public class Parachute : Modifier
         {
             if (Input.GetKeyUp(useButton))
             {
+                if (playerJumpAgregator.isGrounded == true)
+                {
+                    playerJumpAgregator.ResetJumps();
+                }
                 Disable();
+                StopAllCoroutines();
             }
             yield return null;
         }
@@ -51,7 +58,7 @@ public class Parachute : Modifier
 
     public override void Disable()
     {
-        player.rigidBody.gravityScale = 1;
+        playerJumpAgregator.rigidBody.gravityScale = gravityRemember;
         Destroy(parachute);
         base.Disable();
     }

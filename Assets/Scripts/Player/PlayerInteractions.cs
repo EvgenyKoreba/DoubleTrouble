@@ -2,6 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// Переделать ItemInZone в список, подбор осуществить ближайшего предмета, а не первого
+// вошедшего в триггер
+
 public class PlayerInteractions : MonoBehaviour
 {
     [SerializeField] private KeyCode grabButton = KeyCode.E;
@@ -11,21 +14,23 @@ public class PlayerInteractions : MonoBehaviour
     [SerializeField] GameObject throwChargeBarPrefab;
 
 
-    private GameObject itemInZone;
-    private GameObject equippedItem;
+    private Item itemInZone;
+    private Item equippedItem;
     private float throwBtnHoldingTime = 0f;
     private GameObject throwChargeBarGO;
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.GetComponent<ItemsForGrab>() != null && itemInZone == null)
+        Item foundedItem = collision.gameObject.GetComponent<Item>();
+        if (foundedItem != null && itemInZone == null)
         {
-            itemInZone = collision.gameObject;
+            itemInZone = foundedItem;
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.GetComponent<ItemsForGrab>() != null && collision.gameObject == itemInZone)
+        Item foundedItem = collision.gameObject.GetComponent<Item>();
+        if (foundedItem != null && foundedItem == itemInZone)
         {
             itemInZone = null;
         }
@@ -65,7 +70,7 @@ public class PlayerInteractions : MonoBehaviour
 
 
 
-    private void GrabItem(GameObject item)
+    private void GrabItem(Item item)
     {
         Transform tr = item.GetComponent<Transform>();
         Rigidbody2D rb = item.GetComponent<Rigidbody2D>();
@@ -83,7 +88,7 @@ public class PlayerInteractions : MonoBehaviour
         equippedItem = itemInZone;
 
     }
-    private void DropItem(GameObject item)
+    private void DropItem(Item item)
     {
         transform.DetachChildren();
         Rigidbody2D rb = item.GetComponent<Rigidbody2D>();
@@ -95,7 +100,7 @@ public class PlayerInteractions : MonoBehaviour
 
         equippedItem = null;
     }
-    private void ThrowItem(GameObject item)
+    private void ThrowItem(Item item)
     {
         transform.DetachChildren();
         Rigidbody2D rb = item.GetComponent<Rigidbody2D>();

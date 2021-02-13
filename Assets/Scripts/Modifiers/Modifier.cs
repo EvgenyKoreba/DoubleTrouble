@@ -8,20 +8,27 @@ public class Modifier: MonoBehaviour
     public KeyCode useButton;
 
 
-    protected PlayerJumpAgregator player;
+    [Header("Set Dynamically: Modifier")]
+    public bool isActive = false;
+
+
+    protected PlayerJumpAgregator playerJumpAgregator;
 
 
     protected virtual void Awake()
     {
-        player = FindObjectOfType<PlayerJumpAgregator>();
+        playerJumpAgregator = FindObjectOfType<PlayerJumpAgregator>();
     }
 
 
-    public virtual void Activate() { }
+    public virtual void Activate() 
+    {
+        isActive = true;
+    }
 
 
     public virtual void Disable()
     {
-        StopAllCoroutines();
+        isActive = false;
     }
 }
