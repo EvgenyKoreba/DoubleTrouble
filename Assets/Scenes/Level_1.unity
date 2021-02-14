@@ -133,7 +133,7 @@ GameObject:
   - component: {fileID: 19289465}
   - component: {fileID: 19289466}
   m_Layer: 0
-  m_Name: PlayerInteractionZone
+  m_Name: InteractionZone
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1657,17 +1657,16 @@ MonoBehaviour:
   maxWeakJumpButtonHoldingTime: 0.2
   strongJumpTimeScaling: 20
   maxNumberMultiJumps: 1
-  multiJumpForceScale: 1
   groundCheck: {fileID: 808203928}
   groundRadius: 0.4
   ground:
     serializedVersion: 2
     m_Bits: 256
-  _modifier: {fileID: 2046479982}
-  jumpButtonHoldingTime: 0
-  currentNumberOfJumps: 1
-  _isGrounded: 0
   groundRememberTime: 0.15
+  _modifier: {fileID: 2046479982}
+  currentNumberOfJumps: 1
+  jumpButtonHoldingTime: 0
+  _isGrounded: 0
   groundedRemember: 0.2
   rigidBody: {fileID: 1273738787}
 --- !u!1 &1395522829

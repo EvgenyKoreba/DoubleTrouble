@@ -475,8 +475,8 @@ public class Utils : MonoBehaviour {
 		}
 		return max;
 	}
-
 }
+
 
 
 //============================ Easing Classes ============================
