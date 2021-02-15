@@ -13,7 +13,7 @@ public class PlayerJumpAgregator : MonoBehaviour
     [SerializeField] private float maxJumpForce;
     [SerializeField] private float maxWeakJumpButtonHoldingTime;
     [SerializeField] private float strongJumpTimeScaling;
-    [SerializeField] private int maxNumberMultiJumps = 2;
+    public int maxNumberMultiJumps = 2;
 
     [Header("       Set in Inspector: ground")]
     [SerializeField] private Transform groundCheck;
@@ -56,6 +56,32 @@ public class PlayerJumpAgregator : MonoBehaviour
         }
     }
     #endregion
+
+
+    private void OnEnable()
+    {
+        EventManager.Subscribe(EVENT_TYPE.FoundModifier, SetModifier);
+    }
+
+
+    private void OnDisable()
+    {
+        EventManager.Unsubscribe(EVENT_TYPE.FoundModifier, SetModifier);
+    }
+
+
+    private void SetModifier(object[] parameters)
+    {
+        try
+        {
+            Modifier modifier = (Modifier)parameters[0];
+            _modifier = modifier;
+        }
+        catch (System.InvalidCastException)
+        {
+            throw new System.Exception("Sended not a modifier");
+        }
+    }
 
 
     private void Awake()
@@ -101,6 +127,11 @@ public class PlayerJumpAgregator : MonoBehaviour
                 Jump();
                 _animator.SetBool("DoubleJumping", true);
             }
+        }
+
+        if (_modifier == null)
+        {
+            return;
         }
 
         if (Input.GetKeyDown(_modifier.useButton))

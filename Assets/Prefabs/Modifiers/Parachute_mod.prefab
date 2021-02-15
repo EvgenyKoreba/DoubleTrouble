@@ -9,9 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7098053585539989394}
+  - component: {fileID: 7098053585539989390}
   - component: {fileID: 7098053585539989393}
   - component: {fileID: 7098053585539989392}
-  - component: {fileID: 7098053585539989390}
+  - component: {fileID: 8829055418206996460}
   m_Layer: 0
   m_Name: Parachute_mod
   m_TagString: Untagged
@@ -33,6 +34,23 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7098053585539989390
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7098053585539989389}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 117c248b1ee42fb42928e3c857f525bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useButton: 32
+  isActive: 0
+  parachutePrefab: {fileID: 8412142206036255291, guid: a6a94702e1a8dc84f98715c954122550,
+    type: 3}
+  gravityReductionFactor: 0.3
 --- !u!33 &7098053585539989393
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -80,20 +98,29 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!114 &7098053585539989390
-MonoBehaviour:
+--- !u!61 &8829055418206996460
+BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7098053585539989389}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 117c248b1ee42fb42928e3c857f525bc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  useButton: 32
-  isActive: 0
-  parachutePrefab: {fileID: 8412142206036255291, guid: a6a94702e1a8dc84f98715c954122550,
-    type: 3}
-  gravityReductionFactor: 0.3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 0, y: 0}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1}
+  m_EdgeRadius: 0

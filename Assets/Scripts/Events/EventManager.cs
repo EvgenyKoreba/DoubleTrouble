@@ -9,7 +9,8 @@ public enum EVENT_TYPE
     // Сюда добавлять все возможные события
     CheckpointReached,
     LevelFinished,
-    PlayerDamaged
+    PlayerDamaged,
+    FoundModifier
 }
 
 public class EventManager : MonoBehaviour

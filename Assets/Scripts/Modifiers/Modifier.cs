@@ -31,4 +31,15 @@ public class Modifier: MonoBehaviour
     {
         isActive = false;
     }
+
+
+    protected virtual void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.GetComponent<Player>() != null)
+        {
+            EventManager.PostNotification(EVENT_TYPE.FoundModifier, this);
+            MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
+            meshRenderer.enabled = false;
+        }
+    }
 }

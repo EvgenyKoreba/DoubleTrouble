@@ -192,11 +192,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grabButton: 101
+  dropButton: 101
   throwButton: 114
   maxThrowForce: 400
   maxThrowBtnHoldingTime: 0.5
   throwChargeBarPrefab: {fileID: 2125297690778907749, guid: a4b7b7b014ce1d345bf310a17b172049,
     type: 3}
+  itemsInZone: []
+  equippedItem: {fileID: 0}
+  throwButtonHoldingTime: 0
 --- !u!1 &75629719
 GameObject:
   m_ObjectHideFlags: 0
@@ -1663,7 +1667,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 256
   groundRememberTime: 0.15
-  _modifier: {fileID: 2046479982}
+  _modifier: {fileID: 0}
   currentNumberOfJumps: 1
   jumpButtonHoldingTime: 0
   _isGrounded: 0
@@ -2338,18 +2342,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b6926c9d2c8423847bd2cdea3c846a2d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &2046479982 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7098053585539989390, guid: 9115a528554cceb47815990ac1eb4492,
-    type: 3}
-  m_PrefabInstance: {fileID: 7098053587560215008}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 117c248b1ee42fb42928e3c857f525bc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &2046479986 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7098053585539989394, guid: 9115a528554cceb47815990ac1eb4492,
@@ -2481,7 +2473,7 @@ PrefabInstance:
     - target: {fileID: 7098053585539989394, guid: 9115a528554cceb47815990ac1eb4492,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: 1.2956648
+      value: -8.9
       objectReference: {fileID: 0}
     - target: {fileID: 7098053585539989394, guid: 9115a528554cceb47815990ac1eb4492,
         type: 3}
