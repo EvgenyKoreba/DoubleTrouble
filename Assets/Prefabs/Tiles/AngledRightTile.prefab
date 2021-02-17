@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 180536142093134416}
   - component: {fileID: 180536142093134418}
   - component: {fileID: 305732286434677514}
+  - component: {fileID: 6755905445784462830}
   m_Layer: 8
   m_Name: AngledRightTile
   m_TagString: Untagged
@@ -136,3 +137,24 @@ PolygonCollider2D:
       - {x: 0.5, y: -0.5}
       - {x: 0.4846888, y: -0.48261395}
       - {x: -0.46070993, y: 0.4639716}
+--- !u!50 &6755905445784462830
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 180536142093134428}
+  m_BodyType: 2
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 6200000, guid: 34c919cf954b68243ab0719dc8921133, type: 2}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0

@@ -961,8 +961,11 @@ MonoBehaviour:
   countOfChunks: 10
   chunks:
   - {fileID: 5039048472272413099, guid: 8f735f7f25ecf4a44b69b04849eca6d0, type: 3}
-  - {fileID: 5039048472272413099, guid: 9581e7b581730274bad783c3f1f06175, type: 3}
+  - {fileID: 5039048472272413099, guid: 90cde72e49a7c3d44a746f6bf29f67c9, type: 3}
   - {fileID: 5039048472272413099, guid: c9b885da16f3f6240b4a11a596c395c8, type: 3}
+  - {fileID: 5039048472272413099, guid: e16ad22fb5490f84fbe4c81a6b6015f2, type: 3}
+  - {fileID: 5039048472272413099, guid: 767940a391385064a9c4f114cbf657bc, type: 3}
+  - {fileID: 5039048472272413099, guid: aa36b1146a8feec4ab25973ded4e89e6, type: 3}
 --- !u!4 &1077896804
 Transform:
   m_ObjectHideFlags: 0
@@ -1440,7 +1443,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1559193009
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1790,7 +1793,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1980168889}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 32.15, y: 13.81, z: 0}
+  m_LocalPosition: {x: 4.19, y: 13.81, z: 0}
   m_LocalScale: {x: 0.82, y: 1.21, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

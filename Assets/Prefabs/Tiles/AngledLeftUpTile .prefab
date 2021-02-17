@@ -12,9 +12,9 @@ GameObject:
   - component: {fileID: 7056943605118800194}
   - component: {fileID: 7056943605118800192}
   - component: {fileID: 545082459936750191}
-  - component: {fileID: -3092866008597992565}
+  - component: {fileID: 2555617711575474066}
   m_Layer: 8
-  m_Name: AngledLeftTile
+  m_Name: 'AngledLeftUpTile '
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -73,7 +73,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 1522692162571605667, guid: e56fa9df5717f1045aae85dcbaf806a2,
+  m_Sprite: {fileID: 9027096220495895361, guid: e56fa9df5717f1045aae85dcbaf806a2,
     type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -97,15 +97,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 810f8ff25ecc86346b82b1cbff8f63e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  squareSpritesSet:
-  - {fileID: 1522692162571605667, guid: e56fa9df5717f1045aae85dcbaf806a2, type: 3}
-  - {fileID: 6540866388575053267, guid: e56fa9df5717f1045aae85dcbaf806a2, type: 3}
-  - {fileID: -8043781953424817593, guid: e56fa9df5717f1045aae85dcbaf806a2, type: 3}
-  - {fileID: -1156658676942707842, guid: e56fa9df5717f1045aae85dcbaf806a2, type: 3}
-  - {fileID: -8289948391738185236, guid: e56fa9df5717f1045aae85dcbaf806a2, type: 3}
-  - {fileID: 4171850427279781265, guid: e56fa9df5717f1045aae85dcbaf806a2, type: 3}
-  - {fileID: 1887221133749861930, guid: e56fa9df5717f1045aae85dcbaf806a2, type: 3}
-  - {fileID: 4954995870478513835, guid: e56fa9df5717f1045aae85dcbaf806a2, type: 3}
+  squareSpritesSet: []
   typeOfTile: 1
 --- !u!60 &545082459936750191
 PolygonCollider2D:
@@ -132,12 +124,10 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0.43753576, y: 0.44024116}
-      - {x: -0.44543755, y: -0.44273216}
+    - - {x: -0.5000086, y: 0.5000072}
+      - {x: 0.5001681, y: 0.49994886}
       - {x: -0.5, y: -0.5}
-      - {x: 0.5, y: -0.5}
-      - {x: 0.5, y: 0.5}
---- !u!50 &-3092866008597992565
+--- !u!50 &2555617711575474066
 Rigidbody2D:
   serializedVersion: 4
   m_ObjectHideFlags: 0

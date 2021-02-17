@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8716318054188536306}
   - component: {fileID: 8716318054188536305}
   - component: {fileID: 8716318054188536304}
+  - component: {fileID: -4896037152667934494}
   m_Layer: 8
   m_Name: SquareTile
   m_TagString: Untagged
@@ -134,3 +135,24 @@ MonoBehaviour:
   - {fileID: -5850619211489418537, guid: e56fa9df5717f1045aae85dcbaf806a2, type: 3}
   - {fileID: -7954124850013443306, guid: e56fa9df5717f1045aae85dcbaf806a2, type: 3}
   typeOfTile: 0
+--- !u!50 &-4896037152667934494
+Rigidbody2D:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8716318054188536318}
+  m_BodyType: 2
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDrag: 0
+  m_AngularDrag: 0.05
+  m_GravityScale: 0
+  m_Material: {fileID: 6200000, guid: 34c919cf954b68243ab0719dc8921133, type: 2}
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
