@@ -97,7 +97,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 810f8ff25ecc86346b82b1cbff8f63e1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  squareSpritesSet: []
+  squareSpritesSet:
+  - {fileID: 1941797877997190973, guid: e56fa9df5717f1045aae85dcbaf806a2, type: 3}
+  - {fileID: 9027096220495895361, guid: e56fa9df5717f1045aae85dcbaf806a2, type: 3}
+  - {fileID: 6820359594901021630, guid: e56fa9df5717f1045aae85dcbaf806a2, type: 3}
+  - {fileID: -313174807916930849, guid: e56fa9df5717f1045aae85dcbaf806a2, type: 3}
+  - {fileID: -4324464156774679800, guid: e56fa9df5717f1045aae85dcbaf806a2, type: 3}
+  - {fileID: 5531685825320381340, guid: e56fa9df5717f1045aae85dcbaf806a2, type: 3}
+  - {fileID: -2888478643092905673, guid: e56fa9df5717f1045aae85dcbaf806a2, type: 3}
+  - {fileID: -6678859206863479769, guid: e56fa9df5717f1045aae85dcbaf806a2, type: 3}
   typeOfTile: 1
 --- !u!60 &545082459936750191
 PolygonCollider2D:
