@@ -48,6 +48,10 @@ public class MovingBehaviour : MonoBehaviour
     protected virtual IEnumerator Moving()
     {
         points = new List<Vector3>() { position };
+        for (int i = 0; i < pts.Count; i++)
+        {
+            pts[i] += transform.position;
+        }
         points.AddRange(pts);
         float u = 0;
         timeStart = Time.time;
@@ -62,6 +66,10 @@ public class MovingBehaviour : MonoBehaviour
     protected virtual IEnumerator LoopMoving()
     {
         points = new List<Vector3>() { position };
+        for (int i = 0; i < pts.Count; i++)
+        {
+            pts[i] += transform.position;
+        }
         points.AddRange(pts);
         float u;
 
