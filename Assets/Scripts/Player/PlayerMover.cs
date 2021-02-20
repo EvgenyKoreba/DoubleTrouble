@@ -56,7 +56,8 @@ public class PlayerMover : MonoBehaviour
         {
             //_animator.Play("IdleAnimation");
         }
-        _animator.SetFloat("Speed", _rigidBody.velocity.magnitude);
+
+        _animator.SetFloat("HorizontalSpeed", Mathf.Abs(_rigidBody.velocity.x));
         _animator.SetFloat("VerticalSpeed", _rigidBody.velocity.y);
     }
 }

@@ -13,7 +13,7 @@ public class PlayerJumpAgregator : MonoBehaviour
     [SerializeField] private float maxJumpForce;
     [SerializeField] private float maxWeakJumpButtonHoldingTime;
     [SerializeField] private float strongJumpTimeScaling;
-    public int maxNumberMultiJumps = 2;
+    [SerializeField] private int _maxNumberMultiJumps = 2;
 
     [Header("       Set in Inspector: ground")]
     [SerializeField] private Transform groundCheck;
@@ -53,6 +53,16 @@ public class PlayerJumpAgregator : MonoBehaviour
                 }
             }
             _isGrounded = value;
+        }
+    }
+
+
+    public int maxNumberMultiJumps
+    {
+        get { return _maxNumberMultiJumps; }
+        set { 
+            _maxNumberMultiJumps = value;
+            currentNumberOfJumps = value;
         }
     }
     #endregion
@@ -106,6 +116,7 @@ public class PlayerJumpAgregator : MonoBehaviour
         {
             groundedRemember = groundRememberTime;
         }
+        _animator.SetBool("isGrounded", groundedRemember > 0);
 
 
         if (Input.GetKey(jumpButton))
@@ -116,16 +127,17 @@ public class PlayerJumpAgregator : MonoBehaviour
 
         if (Input.GetKeyUp(jumpButton))
         {
+            // обычный прыжок
             if (currentNumberOfJumps == maxNumberMultiJumps && groundedRemember > 0)
             {
                 Jump();
-                _animator.SetBool("Jumping", true);
             }
+            // прыжок в воздухе
             else if (currentNumberOfJumps > 0 && currentNumberOfJumps < maxNumberMultiJumps 
                 && groundedRemember <= 0)
             {
                 Jump();
-                _animator.SetBool("DoubleJumping", true);
+                _animator.SetTrigger("MultiJump");
             }
         }
 
@@ -163,6 +175,7 @@ public class PlayerJumpAgregator : MonoBehaviour
         currentNumberOfJumps = maxNumberMultiJumps;
         jumpButtonHoldingTime = 0;
     }
+
 
 
     private void OnDrawGizmos()

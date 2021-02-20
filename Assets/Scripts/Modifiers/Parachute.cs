@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Parachute : Modifier
 {
-    [Header("Set in Inspector")]
+    [Header("Set in Inspector: Parachute")]
     [SerializeField] private GameObject parachutePrefab;
     [SerializeField] public float gravityReductionFactor = 0.1f;
 

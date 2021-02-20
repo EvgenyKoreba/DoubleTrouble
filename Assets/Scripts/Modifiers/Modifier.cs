@@ -15,6 +15,7 @@ public class Modifier: MonoBehaviour
     protected PlayerJumpAgregator playerJumpAgregator;
 
 
+
     protected virtual void Awake()
     {
         playerJumpAgregator = FindObjectOfType<PlayerJumpAgregator>();
@@ -37,9 +38,21 @@ public class Modifier: MonoBehaviour
     {
         if (collision.gameObject.GetComponent<Player>() != null)
         {
-            EventManager.PostNotification(EVENT_TYPE.FoundModifier, this);
-            MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
-            meshRenderer.enabled = false;
+            PickUp();
         }
+    }
+
+
+    protected virtual void PickUp()
+    {
+        EventManager.PostNotification(EVENT_TYPE.FoundModifier, this);
+        MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
+        meshRenderer.enabled = false;
+    }
+
+
+    public virtual void ThrowOut()
+    {
+        Destroy(gameObject);
     }
 }

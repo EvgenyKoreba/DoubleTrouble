@@ -11,17 +11,17 @@ public class MultiJump : Modifier
     private int originNumberOfJumps = 1;
 
 
-    //public override void Activate()
-    //{
-    //    base.Activate();
-    //    originNumberOfJumps = playerJumpAgregator.maxNumberMultiJumps;
-    //    playerJumpAgregator.maxNumberMultiJumps = numberOfJumps;
-    //}
+    protected override void PickUp()
+    {
+        base.PickUp();
+        originNumberOfJumps = playerJumpAgregator.maxNumberMultiJumps;
+        playerJumpAgregator.maxNumberMultiJumps = numberOfJumps;
+    }
 
 
-    //public override void Disable()
-    //{
-    //    base.Disable();
-    //    playerJumpAgregator.maxNumberMultiJumps = originNumberOfJumps;
-    //}
+    public override void ThrowOut()
+    {
+        playerJumpAgregator.maxNumberMultiJumps = originNumberOfJumps;
+        base.ThrowOut();
+    }
 }
