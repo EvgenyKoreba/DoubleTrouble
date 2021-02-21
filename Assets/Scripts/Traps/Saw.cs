@@ -2,15 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Saw : MovingBehaviour
+public class Saw : MonoBehaviour
 {
     [Header("Set in Inspector")]
     [SerializeField] private float          damage;
 
 
+    private MovingBehaviour movingBehaviour;
+
+
     private void Start()
     {
-        Move();
+        movingBehaviour = GetComponent<MovingBehaviour>();
+        movingBehaviour.Move();
         StartCoroutine(SawAnimation());
     }
 
