@@ -22,7 +22,7 @@ public class MovingBehaviour : MonoBehaviour
         set
         {
             _isLooping = value;
-            if (value)
+            if (isLooping)
             {
                 StopAllCoroutines();
                 StartCoroutine(LoopMoving());
@@ -31,7 +31,7 @@ public class MovingBehaviour : MonoBehaviour
     }
     #endregion
 
-    protected virtual void Start()
+    protected virtual void Awake()
     {
         for (int i = 0; i < points.Count; i++)
         {
@@ -60,21 +60,60 @@ public class MovingBehaviour : MonoBehaviour
         yield break;
     }
 
+
     protected virtual IEnumerator LoopMoving()
     {
         yield break;
     }
 
 
-    protected void ChangeDirection()
+    protected virtual void ChangeDirection()
     {
-        List<Vector3> revercePts = new List<Vector3>();
-
-        for (int i = pts.Count - 1; i >= 0; i--)
-        {
-            revercePts.Add(pts[i]);
-        }
-        pts = revercePts;
+        pts.Reverse();
     }
 
+
+    protected virtual void PrepareLists()
+    {
+        if (points is null || points.Count < 2)
+        {
+            Debug.LogError("The number of points cannot be less than 2 ");
+            return;
+        }
+    }
+
+
+    protected void PrepareList<T>(ref List<T> list, T defaultElement)
+    {
+        if (list is null)
+        {
+            list = new List<T>(points.Count + 1);
+        }
+
+        else if (list.Count != points.Count)
+        {
+            List<T> temp = new List<T>(points.Count);
+            for (int i = 0; i < list.Count; i++)
+            {
+                temp.Add(list[i]);
+                if (temp.Count == points.Count)
+                {
+                    break;
+                }
+            }
+            while (temp.Count < points.Count)
+            {
+                temp.Add(defaultElement);
+            }
+            list = temp;
+        }
+
+        for (int i = 0; i < list.Count; i++)
+        {
+            if (list[i] == null)
+            {
+                list[i] = defaultElement;
+            }
+        }
+    }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class PlatformMover : MovingBehaviour
 {
-    private void Start()
+    protected override void Awake()
     {
         Move();
     }

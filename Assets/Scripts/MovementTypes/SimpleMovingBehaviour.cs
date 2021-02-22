@@ -8,15 +8,17 @@ public class SimpleMovingBehaviour : MovingBehaviour
 {
     #region Fields
     [Header("Set in Inspector: SimpleMovingBehaviour")]
-    [SerializeField] private List<string> easingCurves;
-    [SerializeField] private List<float> durations;
+    [SerializeField] protected List<float> durations;
+    [SerializeField] protected List<string> easingCurves;
+    [SerializeField] protected List<float> delayDurations;
     #endregion
 
 
-    protected override void Start()
+    protected override void Awake()
     {
-        CheckLists();
-        base.Start();
+        // обязательно в таком порядке!!!
+        PrepareLists();
+        base.Awake();
     }
 
 
@@ -33,6 +35,10 @@ public class SimpleMovingBehaviour : MovingBehaviour
                 yield return null;
             }
 
+            if (u == 1)
+            {
+                yield return new WaitForSeconds(delayDurations[i - 1]);
+            }
 
             // Если интерполяция закончена, сменить направление
             if (i == pts.Count - 1 && u == 1)
@@ -81,46 +87,26 @@ public class SimpleMovingBehaviour : MovingBehaviour
         float u = (Time.time - timeStart) / durations[pointNumber - 1];
         u = Mathf.Clamp01(u);
         float uC = Easing.Ease(u, easingCurves[pointNumber - 1]);
-        Vector3 newPosition = Vector3.Lerp(pts[pointNumber - 1], pts[pointNumber], uC);
+        Vector3 newPosition = Utils.Lerp(pts[pointNumber - 1], pts[pointNumber], uC);
         transform.position = newPosition;
         return u;
     }
 
 
-    protected void CheckLists()
+    protected override void PrepareLists()
     {
-        if (points == null || points.Count < 2)
-        {
-            Debug.LogError("The number of points cannot be less than 2 ");
-            return;
-        }
+        base.PrepareLists();
+        PrepareList(ref easingCurves, "Linear");
+        PrepareList(ref durations, 1f);
+        PrepareList(ref delayDurations, 0);
+    }
 
 
-        if (easingCurves == null)
-        {
-            easingCurves = new List<string>(points.Count + 1);
-        }
-
-        for (int i = 0; i < easingCurves.Count; i++)
-        {
-            if (easingCurves[i].Equals(null))
-            {
-                easingCurves[i] = "Linear";
-            }
-        }
-
-
-        if (durations == null)
-        {
-            durations = new List<float>(points.Count + 1);
-        }
-
-        for (int i = 0; i < durations.Count; i++)
-        {
-            if (durations[i] == 0f)
-            {
-                durations[i] = 1f;
-            }
-        }
+    protected override void ChangeDirection()
+    {
+        base.ChangeDirection();
+        durations.Reverse();
+        easingCurves.Reverse();
+        delayDurations.Reverse();
     }
 }

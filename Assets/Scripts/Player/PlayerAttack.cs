@@ -7,7 +7,7 @@ public class PlayerAttack : MonoBehaviour
         [Header("Set in Inspector: Attack Options")]
     [SerializeField] private KeyCode        attackButton = KeyCode.E;
     [SerializeField] private bool           canAttack = true;
-    [SerializeField] private float          attackDelay = 1f;
+    //[SerializeField] private float          attackDelay = 1f;
 
         [Header("Animation"), Space(10)]
     [SerializeField] private Animator       playerBodyAnimator;

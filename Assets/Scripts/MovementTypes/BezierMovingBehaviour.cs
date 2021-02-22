@@ -2,12 +2,21 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+// внедрить delayDurations из SimpleMovingBehaviour
+
 public class BezierMovingBehaviour : MovingBehaviour
 {
     [Header("Set in Inspector: MovingBehaviour")]
     [SerializeField] private string easingCurve = Easing.Linear;
     [SerializeField] private float duration;
 
+
+    protected override void Awake()
+    {
+        // обязательно в таком порядке!!!
+        PrepareLists();
+        base.Awake();
+    }
 
 
     protected override IEnumerator Moving()
@@ -18,6 +27,10 @@ public class BezierMovingBehaviour : MovingBehaviour
         while (u < 1)
         {
             u = Interpolate();
+            if (true)
+            {
+
+            }
             yield return null;
         }
     }
@@ -25,7 +38,7 @@ public class BezierMovingBehaviour : MovingBehaviour
     protected override IEnumerator LoopMoving()
     {
 
-        while (true)
+        while (isLooping)
         {
             float u = 0;
             timeStart = Time.time;
@@ -48,6 +61,7 @@ public class BezierMovingBehaviour : MovingBehaviour
         }
     }
 
+
     private float Interpolate()
     {
         // Стандартная линейная интерполяция
@@ -58,5 +72,4 @@ public class BezierMovingBehaviour : MovingBehaviour
         transform.position = newPosition;
         return u;
     }
-    
 }

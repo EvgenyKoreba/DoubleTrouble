@@ -499,7 +499,7 @@ PrefabInstance:
     - target: {fileID: 1071871747460113469, guid: a30a4ca2ad26f2d448f8b6f799ee06af,
         type: 3}
       propertyPath: m_Name
-      value: testSaw
+      value: testSaw_SMB
       objectReference: {fileID: 0}
     - target: {fileID: 1071871747460113469, guid: a30a4ca2ad26f2d448f8b6f799ee06af,
         type: 3}
@@ -2817,7 +2817,7 @@ GameObject:
   - component: {fileID: 3476757342025154030}
   - component: {fileID: 9027663816883370917}
   m_Layer: 9
-  m_Name: testSaw (1)
+  m_Name: testSaw _BMB
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2871,9 +2871,9 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0}
   _isLooping: 1
   changeDirection: 1
-  changeDirectionDelay: 0
-  easingCurve: In
-  duration: 2.5
+  changeDirectionDelay: 1
+  easingCurve: ',Linear|'
+  duration: 1
 --- !u!1001 &5769587361837513350
 PrefabInstance:
   m_ObjectHideFlags: 0
