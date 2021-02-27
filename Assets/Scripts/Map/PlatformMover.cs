@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlatformMover : MovingBehaviour
+public class PlatformMover : PointsMovingBehaviour
 {
     protected override void Awake()
     {

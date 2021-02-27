@@ -14,7 +14,10 @@ public class Saw : MonoBehaviour
     private void Start()
     {
         movingBehaviour = GetComponent<MovingBehaviour>();
-        movingBehaviour.Move();
+        if (movingBehaviour != null)
+        {
+            movingBehaviour.Move();
+        }
         StartCoroutine(SawAnimation());
     }
 

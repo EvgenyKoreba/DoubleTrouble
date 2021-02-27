@@ -4,13 +4,14 @@ using UnityEngine;
 
 // Переопределить ChangeDirection - развернуть списки easingCurves и durations
 
-public class SimpleMovingBehaviour : MovingBehaviour
+public class SimpleMovingBehaviour : PointsMovingBehaviour
 {
     #region Fields
     [Header("Set in Inspector: SimpleMovingBehaviour")]
-    [SerializeField] protected List<float> durations;
-    [SerializeField] protected List<string> easingCurves;
-    [SerializeField] protected List<float> delayDurations;
+    [SerializeField] private List<float> durations;
+    [SerializeField] private List<string> easingCurves;
+    [SerializeField] private List<float> easeMods;
+    [SerializeField] private List<float> delayDurations;
     #endregion
 
 
@@ -99,6 +100,7 @@ public class SimpleMovingBehaviour : MovingBehaviour
         PrepareList(ref easingCurves, "Linear");
         PrepareList(ref durations, 1f);
         PrepareList(ref delayDurations, 0);
+        PrepareList(ref easeMods, 2);
     }
 
 
