@@ -192,11 +192,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   grabButton: 101
+  dropButton: 101
   throwButton: 114
   maxThrowForce: 400
   maxThrowBtnHoldingTime: 0.5
   throwChargeBarPrefab: {fileID: 2125297690778907749, guid: a4b7b7b014ce1d345bf310a17b172049,
     type: 3}
+  itemsInZone: []
+  equippedItem: {fileID: 0}
+  throwButtonHoldingTime: 0
 --- !u!1 &75629719
 GameObject:
   m_ObjectHideFlags: 0
@@ -568,7 +572,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 711469202}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -10}
+  m_LocalPosition: {x: -6.71, y: 11.27, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -792,6 +796,7 @@ MonoBehaviour:
   - {fileID: 5039048472272413099, guid: e16ad22fb5490f84fbe4c81a6b6015f2, type: 3}
   - {fileID: 5039048472272413099, guid: 767940a391385064a9c4f114cbf657bc, type: 3}
   - {fileID: 5039048472272413099, guid: aa36b1146a8feec4ab25973ded4e89e6, type: 3}
+  branchedChunks: []
   countsOfEasy: 10
   countsOfMedium: 10
   countsOfHard: 10
@@ -872,7 +877,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1273738782}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -12.46, y: 14.27, z: 0}
+  m_LocalPosition: {x: -11.28, y: 10.57, z: 0}
   m_LocalScale: {x: 4, y: 4, z: 1}
   m_Children:
   - {fileID: 19289464}
@@ -1002,7 +1007,7 @@ MonoBehaviour:
   maxJumpForce: 50
   maxWeakJumpButtonHoldingTime: 0.2
   strongJumpTimeScaling: 20
-  maxNumberMultiJumps: 1
+  _maxNumberMultiJumps: 2
   groundCheck: {fileID: 808203928}
   groundRadius: 0.4
   ground:
