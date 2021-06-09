@@ -8,6 +8,7 @@ public class Player : MonoBehaviour, ICheckpointReachReturnHandler, IHealthChang
     [Header("Set in Inspector")]
     public int _maxLifes;
     [SerializeField] private float _returnDelay;
+    [SerializeField] private CheckpointsHandler _checkpointsHandler;
 
 
     [Header("Set Dynamically")]
@@ -40,6 +41,8 @@ public class Player : MonoBehaviour, ICheckpointReachReturnHandler, IHealthChang
         {
             DamagingBehaviour dB = collision.gameObject.GetComponent<DamagingBehaviour>();
             EventsHandler.RaiseEvent<IHealthChangeHandler>(h => h.HandleRecieveDamage(dB.damage));
+            EventsHandler.RaiseEvent<ICheckpointReachReturnHandler>(h => 
+                h.HandleReturnToCheckpoint(_checkpointsHandler.LastCheckpoint));
         }
     }
 
@@ -86,8 +89,9 @@ public class Player : MonoBehaviour, ICheckpointReachReturnHandler, IHealthChang
     {
         currentLifes--;
         transform.position = checkpoint.transform.position;
-        Time.timeScale = 0;
-        yield return new WaitForSeconds(_returnDelay);
-        Time.timeScale = 1;
+        yield return null;
+        //Time.timeScale = 0;
+        //yield return new WaitForSeconds(_returnDelay);
+        //Time.timeScale = 1;
     }
 }

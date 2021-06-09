@@ -9,12 +9,12 @@ public class CheckpointsHandler : MonoBehaviour, ICheckpointReachReturnHandler, 
     [SerializeField] private Checkpoint _levelStartCheckpoint;
 
     [Header("Set Dynamically")]
-    [SerializeField] private Checkpoint _lastCheckpoint;
+    public Checkpoint LastCheckpoint;
 
 
     private void Awake()
     {
-        _lastCheckpoint = _levelStartCheckpoint;
+        LastCheckpoint = _levelStartCheckpoint;
     }
 
 
@@ -32,7 +32,7 @@ public class CheckpointsHandler : MonoBehaviour, ICheckpointReachReturnHandler, 
 
     public void HandleCheckpointReach(Checkpoint checkpoint)
     {
-        _lastCheckpoint = checkpoint;
+        LastCheckpoint = checkpoint;
     }
 
     public void HandleReturnToCheckpoint(Checkpoint checkpoint)
@@ -42,6 +42,6 @@ public class CheckpointsHandler : MonoBehaviour, ICheckpointReachReturnHandler, 
 
     public void RespawnLevel()
     {
-        _lastCheckpoint = _levelStartCheckpoint;
+        LastCheckpoint = _levelStartCheckpoint;
     }
 }
