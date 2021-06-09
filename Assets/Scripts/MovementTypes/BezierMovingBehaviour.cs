@@ -12,9 +12,9 @@ public class BezierMovingBehaviour : PointsMovingBehaviour
     [SerializeField] private float duration;
 
 
+
     protected override void Awake()
     {
-        // обязательно в таком порядке!!!
         PrepareLists();
         PrepareFields();
         base.Awake();
@@ -46,7 +46,7 @@ public class BezierMovingBehaviour : PointsMovingBehaviour
     protected override IEnumerator LoopMoving()
     {
 
-        while (isLooping)
+        while (IsLooping)
         {
             float u = 0;
             timeStart = Time.time;

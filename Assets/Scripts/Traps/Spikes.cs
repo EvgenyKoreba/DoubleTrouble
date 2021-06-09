@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spikes : MonoBehaviour
+public class Spikes : DamagingBehaviour
 {
     [SerializeField] private float loopTime;
     [SerializeField] private float activatingTime;

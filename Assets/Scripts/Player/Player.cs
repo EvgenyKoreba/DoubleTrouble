@@ -1,111 +1,93 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using CustomEventSystem;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, ICheckpointReachReturnHandler, IHealthChangeHandler, IRespawnLevelHandler
 {
     [Header("Set in Inspector")]
-    [SerializeField] private int maxLives;
-    [SerializeField] private Checkpoint lastCheckpoint;
-    [SerializeField] private float respawnDelay;
+    public int _maxLifes;
+    [SerializeField] private float _returnDelay;
 
 
     [Header("Set Dynamically")]
     [SerializeField] private int _currentLives;
 
 
-    private Rigidbody2D _rigidBody;
-
-
-    public int currentLives
+    public int currentLifes
     {
         get { return _currentLives; }
-        set { 
-            if (value < 0)
+        private set { 
+            if (value <= 0)
             {
-                Die();
+                EventsHandler.RaiseEvent<IRespawnLevelHandler>(r => r.RespawnLevel());
             }
 
-            _currentLives = Mathf.Clamp(value, 1, maxLives);
+            _currentLives = Mathf.Clamp(value, 1, _maxLifes);
         }
-    }
-
-
-    private void Awake()
-    {
-        currentLives = maxLives;
-        _rigidBody = GetComponent<Rigidbody2D>();
     }
 
 
     private void Start()
     {
-        //SetRespawnPos(new Vector2(transform.position.x, transform.position.y));
+        currentLifes = _maxLifes;
     }
-
-
-    //private void OnTriggerEnter2D(Collider2D collision)
-    //{
-    //    if (collision.gameObject.layer == LayerMask.NameToLayer("DamageObject"))
-    //        StartCoroutine(TakeDamage());
-    //}
 
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.layer == LayerMask.NameToLayer("DamageObject"))
-            StartCoroutine(RespawnOnCheckpoint());
-    }
-
-
-    //private IEnumerator TakeDamage()
-    //{
-    //    currentLives--;
-    //    transform.position = respawnPos;
-    //    _rigidBody.bodyType = RigidbodyType2D.Static;
-    //    yield return new WaitForSeconds(2f);
-    //    _rigidBody.bodyType = RigidbodyType2D.Dynamic;
-    //}
-
-
-    private IEnumerator RespawnOnCheckpoint()
-    {
-        currentLives--;
-        transform.position = lastCheckpoint.transform.position;
-        Time.timeScale = 0;
-        yield return new WaitForSeconds(respawnDelay);
-        Time.timeScale = 1;
-    }
-
-
-    private void Die()
-    {
-
+        if (collision.gameObject.GetComponent<DamagingBehaviour>() != null)
+        {
+            DamagingBehaviour dB = collision.gameObject.GetComponent<DamagingBehaviour>();
+            EventsHandler.RaiseEvent<IHealthChangeHandler>(h => h.HandleRecieveDamage(dB.damage));
+        }
     }
 
 
     private void OnEnable()
     {
-        EventManager.Subscribe(EVENT_TYPE.CheckpointReached, ReachCheckpoint);
+        EventsHandler.Subscribe(this);
     }
 
 
     private void OnDisable()
     {
-        EventManager.Unsubscribe(EVENT_TYPE.CheckpointReached, ReachCheckpoint);
+        EventsHandler.Unsubscribe(this);
     }
 
 
-    private void ReachCheckpoint(object[] parameters)
+    public void HandleHealing(int value = 1)
     {
-        try
-        {
-            Checkpoint newCP = (Checkpoint)parameters[0];
-            lastCheckpoint = newCP;
-        }
-        catch (System.InvalidCastException)
-        {
-            throw new System.Exception("Sended not a checkpoint");
-        }
+        currentLifes += value;
+    }
+
+    public void HandleRecieveDamage(int damage = 1)
+    {
+        currentLifes -= damage;
+    }
+
+    public void RespawnLevel()
+    {
+        currentLifes = _maxLifes;
+    }
+
+
+    public void HandleCheckpointReach(Checkpoint checkpoint)
+    {
+
+    }
+
+    public void HandleReturnToCheckpoint(Checkpoint checkpoint)
+    {
+        StartCoroutine(RespawnOnCheckpoint(checkpoint));
+    }
+
+    private IEnumerator RespawnOnCheckpoint(Checkpoint checkpoint)
+    {
+        currentLifes--;
+        transform.position = checkpoint.transform.position;
+        Time.timeScale = 0;
+        yield return new WaitForSeconds(_returnDelay);
+        Time.timeScale = 1;
     }
 }

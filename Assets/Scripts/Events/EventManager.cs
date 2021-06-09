@@ -10,7 +10,8 @@ public enum EVENT_TYPE
     CheckpointReached,
     LevelFinished,
     PlayerDamaged,
-    FoundModifier
+    FoundModifier,
+
 }
 
 public class EventManager : MonoBehaviour
@@ -19,31 +20,31 @@ public class EventManager : MonoBehaviour
     public class GameEvent: UnityEvent<object[]> {};
 
 
-    private static EventManager _S;
+    private static EventManager _instance;
     private Dictionary<EVENT_TYPE, GameEvent> _eventDictionary;
 
 
-    static public EventManager S
+    static public EventManager Instance
     {
-        get { return _S; }
-        private set { _S = value; }
+        get { return _instance; }
+        private set { _instance = value; }
     }
 
 
     private void Awake()
     {
-        if (S == null)
+        if (Instance == null)
         {
-            S = this;
+            Instance = this;
         }
         else
         {
-            Destroy(S.gameObject);
-            S = this;
+            Destroy(Instance.gameObject);
+            Instance = this;
         }
         _eventDictionary = new Dictionary<EVENT_TYPE, GameEvent>();
 
-        DontDestroyOnLoad(S.gameObject);
+        DontDestroyOnLoad(Instance.gameObject);
     }
 
     /// <summary>
@@ -54,7 +55,7 @@ public class EventManager : MonoBehaviour
     public static void Subscribe(EVENT_TYPE eventType, UnityAction<object[]> listener)
     {
         GameEvent thisEvent;
-        if (S._eventDictionary.TryGetValue(eventType, out thisEvent))
+        if (Instance._eventDictionary.TryGetValue(eventType, out thisEvent))
         {
             thisEvent.AddListener(listener);
         }
@@ -62,7 +63,7 @@ public class EventManager : MonoBehaviour
         {
             thisEvent = new GameEvent();
             thisEvent.AddListener(listener);
-            S._eventDictionary.Add(eventType, thisEvent);
+            Instance._eventDictionary.Add(eventType, thisEvent);
         }
     }
 
@@ -74,7 +75,7 @@ public class EventManager : MonoBehaviour
     static public void Unsubscribe(EVENT_TYPE eventType, UnityAction<object[]> listener)
     {
         GameEvent thisEvent;
-        if (S._eventDictionary.TryGetValue(eventType, out thisEvent))
+        if (Instance._eventDictionary.TryGetValue(eventType, out thisEvent))
         {
             thisEvent.RemoveListener(listener);
 
@@ -89,7 +90,7 @@ public class EventManager : MonoBehaviour
     static public void PostNotification(EVENT_TYPE eventType, params object[] parameters)
     {
         GameEvent thisEvent;
-        if (S._eventDictionary.TryGetValue(eventType, out thisEvent))
+        if (Instance._eventDictionary.TryGetValue(eventType, out thisEvent))
         {
             thisEvent.Invoke(parameters);
         }

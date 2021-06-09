@@ -7,11 +7,11 @@ public class CircleMovingBehaviour : MovingBehaviour
     #region Fields
     [Header("Set in Inspector: CircleMovingBehaviour")]
     [SerializeField] private bool _clockwise = false;
-    [SerializeField] private float duration;
-    [SerializeField] private Vector3 circleCenter;
+    [SerializeField] private float _duration = 1f;
+    [SerializeField] private Vector3 _circleCenter = Vector3.one;
     [SerializeField] private float _endAngle;
-    [SerializeField] private string easingCurve = "In";
-    [SerializeField] private float easeMod = 2f;
+    [SerializeField] private string _easingCurve = "In";
+    [SerializeField] private float _easeMod = 2f;
 
 
     [Header("Set Dynamically: CircleMovingBehaviour")]
@@ -108,7 +108,7 @@ public class CircleMovingBehaviour : MovingBehaviour
     {
         timeStart = Time.time;
         angle = startAngle;
-        while (isLooping)
+        while (IsLooping)
         {
             angle = TransformOnCircle();
 
@@ -130,13 +130,13 @@ public class CircleMovingBehaviour : MovingBehaviour
     private float TransformOnCircle()
     {
         // Стандартная линейная интерполяция
-        float u = (Time.time - timeStart) / duration;
-        float uC = Easing.Ease(u, easingCurve, easeMod) * 360;
+        float u = (Time.time - timeStart) / _duration;
+        float uC = Easing.Ease(u, _easingCurve, _easeMod) * 360;
         uC += startAngle;
         float x = Mathf.Cos(Mathf.Deg2Rad * uC) * radius * clockwiseDirectionFactor;
         float y = Mathf.Sin(Mathf.Deg2Rad * uC) * radius;
         Vector3 newPosition = new Vector3(x, y, 0);
-        newPosition += circleCenter;
+        newPosition += _circleCenter;
         transform.position = newPosition;
         return uC;
     }
@@ -154,7 +154,7 @@ public class CircleMovingBehaviour : MovingBehaviour
 
     private void FindStartAngle()
     {
-        Vector3 posOnCircle = transform.position - circleCenter;
+        Vector3 posOnCircle = transform.position - _circleCenter;
         float angleU = Mathf.Atan2(posOnCircle.y, posOnCircle.x) * Mathf.Rad2Deg;
 
         if (clockwise)
@@ -178,14 +178,27 @@ public class CircleMovingBehaviour : MovingBehaviour
 
     private void PrepareFields()
     {
-        if (easeMod == 0)
+        if (_duration < 0.01f)
         {
-            easeMod = 2;
+            _duration = 1f;
         }
 
+        _circleCenter += transform.position;
+        if (Vector3.Distance(_circleCenter, transform.position) < 0.1f)
+        {
+            _circleCenter += Vector3.one;
+        }
+
+        if (_easeMod == 0)
+        {
+            _easeMod = 2;
+        }
+
+
+        radius = Vector3.Distance(transform.position, _circleCenter);
+
+
         CheckBound();
-        circleCenter += transform.position;
-        radius = Vector3.Distance(transform.position, circleCenter);
     }
 
 
@@ -203,7 +216,7 @@ public class CircleMovingBehaviour : MovingBehaviour
     {
         if (!Application.isPlaying)
         {
-            Gizmos.DrawWireSphere(circleCenter + transform.position, circleCenter.magnitude);
+            Gizmos.DrawWireSphere(_circleCenter + transform.position, _circleCenter.magnitude);
         }
     }
 }

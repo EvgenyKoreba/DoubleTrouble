@@ -6,21 +6,21 @@ public class MovingBehaviour : MonoBehaviour
 {
     #region Fields
     [Header("Set in Inspector: MovingBehaviour")]
-    [SerializeField] protected bool _isLooping = false;
+    [SerializeField] protected bool isLooping = false;
     [SerializeField] protected bool changeDirection = false;
-    [SerializeField] protected float changeDirectionDelay;
+    [SerializeField] protected float changeDirectionDelay = 0f;
 
     protected float timeStart = -1;
     #endregion
 
     #region properties
-    public bool isLooping
+    public bool IsLooping
     {
-        get { return _isLooping; }
+        get { return isLooping; }
         set
         {
-            _isLooping = value;
-            if (isLooping)
+            isLooping = value;
+            if (IsLooping)
             {
                 StopAllCoroutines();
                 StartCoroutine(LoopMoving());
@@ -32,7 +32,7 @@ public class MovingBehaviour : MonoBehaviour
 
     public void Move()
     {
-        if (isLooping)
+        if (IsLooping)
         {
             StartCoroutine(LoopMoving());
         }

@@ -8,16 +8,15 @@ public class SimpleMovingBehaviour : PointsMovingBehaviour
 {
     #region Fields
     [Header("Set in Inspector: SimpleMovingBehaviour")]
-    [SerializeField] private List<float> durations;
-    [SerializeField] private List<string> easingCurves;
-    [SerializeField] private List<float> easeMods;
-    [SerializeField] private List<float> delayDurations;
+    [SerializeField] private List<float> _durations;
+    [SerializeField] private List<string> _easingCurves;
+    [SerializeField] private List<float> _easeMods;
+    [SerializeField] private List<float> _delayDurations;
     #endregion
 
 
     protected override void Awake()
     {
-        // обязательно в таком порядке!!!
         PrepareLists();
         base.Awake();
     }
@@ -38,7 +37,7 @@ public class SimpleMovingBehaviour : PointsMovingBehaviour
 
             if (u == 1)
             {
-                yield return new WaitForSeconds(delayDurations[i - 1]);
+                yield return new WaitForSeconds(_delayDurations[i - 1]);
             }
 
             // Если интерполяция закончена, сменить направление
@@ -55,7 +54,7 @@ public class SimpleMovingBehaviour : PointsMovingBehaviour
 
     protected override IEnumerator LoopMoving()
     {
-        while (isLooping)
+        while (IsLooping)
         {
             for (int i = 1; i < pts.Count; i++)
             {
@@ -85,9 +84,9 @@ public class SimpleMovingBehaviour : PointsMovingBehaviour
     private float Interpolate(int pointNumber)
     {
         // Стандартная линейная интерполяция
-        float u = (Time.time - timeStart) / durations[pointNumber - 1];
+        float u = (Time.time - timeStart) / _durations[pointNumber - 1];
         u = Mathf.Clamp01(u);
-        float uC = Easing.Ease(u, easingCurves[pointNumber - 1]);
+        float uC = Easing.Ease(u, _easingCurves[pointNumber - 1]);
         Vector3 newPosition = Utils.Lerp(pts[pointNumber - 1], pts[pointNumber], uC);
         transform.position = newPosition;
         return u;
@@ -97,18 +96,18 @@ public class SimpleMovingBehaviour : PointsMovingBehaviour
     protected override void PrepareLists()
     {
         base.PrepareLists();
-        PrepareList(ref easingCurves, "Linear");
-        PrepareList(ref durations, 1f);
-        PrepareList(ref delayDurations, 0);
-        PrepareList(ref easeMods, 2);
+        PrepareList(ref _easingCurves, "Linear");
+        PrepareList(ref _durations, 1f);
+        PrepareList(ref _delayDurations, 0);
+        PrepareList(ref _easeMods, 2);
     }
 
 
     protected override void ChangeDirection()
     {
         base.ChangeDirection();
-        durations.Reverse();
-        easingCurves.Reverse();
-        delayDurations.Reverse();
+        _durations.Reverse();
+        _easingCurves.Reverse();
+        _delayDurations.Reverse();
     }
 }

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Projectile : MonoBehaviour
+public class Projectile : DamagingBehaviour
 {
     [SerializeField] private Rigidbody2D projectileMat;
     private float lifeTime;

@@ -10,7 +10,7 @@ public class LevelFinishInsert : Insert
         Button nextLevel = GameObject.Find("ButtonLF").GetComponent<Button>();
         nextLevel.onClick.AddListener(() =>
         {
-            SceneChanger.S.NextScene();
+            ScenesHandler.Instance.NextScene();
         });
     }
 }

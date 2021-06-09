@@ -2,12 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Saw : MonoBehaviour
+public class Saw : DamagingBehaviour
 {
-    [Header("Set in Inspector")]
-    [SerializeField] private float          damage;
-
-
     private MovingBehaviour movingBehaviour;
 
 

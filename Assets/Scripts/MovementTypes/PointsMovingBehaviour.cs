@@ -13,6 +13,7 @@ public class PointsMovingBehaviour : MovingBehaviour
     #endregion
 
 
+
     protected virtual void Awake()
     {
         for (int i = 0; i < points.Count; i++)

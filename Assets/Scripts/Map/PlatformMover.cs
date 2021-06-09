@@ -6,6 +6,7 @@ public class PlatformMover : PointsMovingBehaviour
 {
     protected override void Awake()
     {
+        base.Awake();
         Move();
     }
     private void OnCollisionStay2D(Collision2D collision)
