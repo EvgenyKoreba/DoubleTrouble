@@ -20,8 +20,9 @@ public class PlayerMover : MonoBehaviour
     #endregion
 
 
-    public bool facingRight { 
-        get { return _facingRight; } 
+    public bool facingRight
+    {
+        get { return _facingRight; }
         private set { _facingRight = value; }
     }
 
@@ -60,6 +61,6 @@ public class PlayerMover : MonoBehaviour
         _animator.SetFloat("HorizontalSpeed", Mathf.Abs(_rigidBody.velocity.x));
         _animator.SetFloat("VerticalSpeed", _rigidBody.velocity.y);
 
-        Debug.Log(moveInput > 0);
+        //Debug.Log(moveInput > 0);
     }
 }

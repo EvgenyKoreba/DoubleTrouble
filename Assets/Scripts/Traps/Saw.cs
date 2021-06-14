@@ -9,11 +9,11 @@ public class Saw : DamagingBehaviour
 
     private void Start()
     {
-        movingBehaviour = GetComponent<MovingBehaviour>();
-        if (movingBehaviour != null)
-        {
-            movingBehaviour.Move();
-        }
+        //movingBehaviour = GetComponent<MovingBehaviour>();
+        //if (movingBehaviour != null)
+        //{
+        //    movingBehaviour.Move();
+        //}
         StartCoroutine(SawAnimation());
     }
 
