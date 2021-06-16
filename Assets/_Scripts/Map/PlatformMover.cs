@@ -2,13 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlatformMover : PointsMovingBehaviour
+public class PlatformMover : MonoBehaviour
 {
-    protected override void Awake()
-    {
-        base.Awake();
-        Move();
-    }
+
     private void OnCollisionStay2D(Collision2D collision)
     {
         if (collision.gameObject.GetComponent<Player>() != null || collision.gameObject.GetComponent<Item>() != null)

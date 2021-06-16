@@ -29,6 +29,10 @@ public class MovingBehaviour : MonoBehaviour
     }
     #endregion
 
+    private void Start()
+    {
+        Move();
+    }
 
     public void Move()
     {
