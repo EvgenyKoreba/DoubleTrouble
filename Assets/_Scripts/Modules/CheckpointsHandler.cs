@@ -23,17 +23,16 @@ public class CheckpointsHandler : MonoBehaviour, ICheckpointReachHandler
     [SerializeField] private Checkpoint _lastCheckpoint;
     #endregion
 
-    #region Geters
-    static public void SetReturnToCheckpointDelay(float delay)
-    {
-        INSTANCE._returnToCheckpointDelay = delay;
-    }
+    #region Getters
+    static public float GetReturnToCheckpointDelay() => INSTANCE._returnToCheckpointDelay;
+
+    static public Checkpoint GetLastCheckpoint() => INSTANCE._lastCheckpoint;
     #endregion
 
     #region Setters
-    static public float GetReturnToCheckpointDelay()
+    static public void SetReturnToCheckpointDelay(float delay)
     {
-        return INSTANCE._returnToCheckpointDelay;
+        INSTANCE._returnToCheckpointDelay = delay;
     }
     #endregion
 

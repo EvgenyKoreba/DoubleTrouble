@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using CustomEventSystem;
 
-public class Player : MonoBehaviour, ICheckpointReachHandler, IHealthChangeHandler, IStartLevelHandler
+public class Player : MonoBehaviour, ICheckpointReachHandler, IHealthChangeHandler, IStartLevelHandler, 
+    IReturnToCheckpointHandler
 {
     #region Fields
     [Header("Set in Inspector")]
     [SerializeField] private int _maxLifes;
     [SerializeField] private float _returnDelay;
-    [SerializeField] private CheckpointsHandler _checkpointsHandler;
 
 
     [Header("Set Dynamically")]
@@ -36,23 +36,6 @@ public class Player : MonoBehaviour, ICheckpointReachHandler, IHealthChangeHandl
         private set { _maxLifes = value; }
     }
     #endregion
-
-    private void Start()
-    {
-        currentLifes = _maxLifes;
-    }
-
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.GetComponent<DamagingBehaviour>() != null)
-        {
-            DamagingBehaviour dB = collision.gameObject.GetComponent<DamagingBehaviour>();
-            EventsHandler.RaiseEvent<IHealthChangeHandler>(h => h.RecieveDamage(dB.damage));
-            //EventsHandler.RaiseEvent<IReturnToCheckpointHandler>(h => 
-            //    h.ReturnToCheckpoint(_checkpointsHandler.LastCheckpoint));
-        }
-    }
 
     #region Events
     private void OnEnable()
@@ -85,6 +68,22 @@ public class Player : MonoBehaviour, ICheckpointReachHandler, IHealthChangeHandl
 
     }
     #endregion
+
+    private void Start()
+    {
+        currentLifes = _maxLifes;
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.GetComponent<DamagingBehaviour>() != null)
+        {
+            DamagingBehaviour dB = collision.gameObject.GetComponent<DamagingBehaviour>();
+            EventsHandler.RaiseEvent<IHealthChangeHandler>(h => h.RecieveDamage(dB.damage));
+            EventsHandler.RaiseEvent<IReturnToCheckpointHandler>(h => 
+                h.ReturnToCheckpoint(CheckpointsHandler.GetLastCheckpoint()));
+        }
+    }
 
     public void ReturnToCheckpoint(Checkpoint checkpoint)
     {

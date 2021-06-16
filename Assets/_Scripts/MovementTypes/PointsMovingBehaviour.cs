@@ -33,7 +33,7 @@ public class PointsMovingBehaviour : MovingBehaviour
 
     protected virtual void PrepareLists()
     {
-        if (points is null || points.Count < 2)
+        if (points is null || points.Count == 0)
         {
             Debug.LogError("The number of points cannot be less than 2 ");
             return;
