@@ -6,7 +6,6 @@ using CustomEventSystem;
 [RequireComponent(typeof(Rigidbody2D), typeof(Animator))]
 public class PlayerJumpAggregator : MonoBehaviour, IPickUpModifierHandler, IPickUpItemHandler
 {
-
     #region Fields
     [Header("       Set in Inspector")]
     [SerializeField] private KeyCode _jumpButton = KeyCode.Space;
@@ -21,7 +20,7 @@ public class PlayerJumpAggregator : MonoBehaviour, IPickUpModifierHandler, IPick
     [Header("       Set Dynamically"), Space(30)]
     [SerializeField] private Modifier _modifier;
     [SerializeField] private int _currentNumberOfJumps;
-    [SerializeField] private float _jumpButtonHoldingTime = 0.0f;
+    [SerializeField] private float _holdTimeOfTheJumpButton = 0.0f;
     [SerializeField] private bool _isGrounded;
 
 
@@ -29,21 +28,29 @@ public class PlayerJumpAggregator : MonoBehaviour, IPickUpModifierHandler, IPick
     private Animator _animator;
     #endregion
 
-    #region properties
     public bool IsGrounded
     {
         get => _isGrounded;
         set
         {
-            if (IsGrounded == false && value == true)
+            if (IsTouchedGroundWhenFall(value))
             {
                 ResetJumps();
-
+                EventsHandler.RaiseEvent<ITouchingGroundWhenFall>(t => t.PlayerTouchedGround());
             }
             _isGrounded = value;
         }
     }
-    #endregion
+
+    private bool IsOnAir() => IsGrounded == false;
+
+    private bool IsTouchedGroundWhenFall(bool isGroundedSet) => IsOnAir() && isGroundedSet;
+
+    public void ResetJumps()
+    {
+        _currentNumberOfJumps = _maxNumberMultiJumps;
+        _holdTimeOfTheJumpButton = 0;
+    }
 
     #region Events
     private void OnEnable()
@@ -88,25 +95,19 @@ public class PlayerJumpAggregator : MonoBehaviour, IPickUpModifierHandler, IPick
         IsGrounded = _groundCheck.IsGrounded;
         _animator.SetBool("isGrounded", IsGrounded);
 
-
-        if (Input.GetKey(_jumpButton))
+        if (IsJumpButtonHeldDown())
         {
-            _jumpButtonHoldingTime += Time.deltaTime;
+            _holdTimeOfTheJumpButton += Time.deltaTime;
         }
 
-
-        if (Input.GetKeyUp(_jumpButton))
+        if (IsJumpButtonReleased())
         {
-            // прыжок
-            if (_currentNumberOfJumps > 0)
+            if (IsCanJump)
             {
-                if (_modifier is null || _modifier?.IsActive == false)
+                Jump();
+                if (IsOnAir())
                 {
-                    Jump();
-                    if (!IsGrounded)
-                    {
-                        _animator.SetTrigger("MultiJump");
-                    }
+                    _animator.SetTrigger("MultiJump");
                 }
             }
         }
@@ -116,28 +117,42 @@ public class PlayerJumpAggregator : MonoBehaviour, IPickUpModifierHandler, IPick
             return;
         }
 
-        if (Input.GetKeyDown(_modifier.UseButton))
+        if (IsModifierButtonPressed())
         {
             _modifier.TryActivate(IsGrounded);
         }
     }
 
+    private bool IsJumpButtonHeldDown() => Input.GetKey(_jumpButton);
+
+    private bool IsJumpButtonReleased() => Input.GetKeyUp(_jumpButton);
+
+    private bool IsCanJump => _currentNumberOfJumps > 0 && (_modifier is null || _modifier?.IsActive == false);
+
+    private bool IsModifierButtonPressed() => _modifier is null ? false : Input.GetKeyDown(_modifier.UseButton);
+
     private void Jump()
     {
-        float jumpForce = _jumpButtonHoldingTime > _maxWeakJumpButtonHoldingTime ?
-            Mathf.Min(_maxJumpForce, _weakJumpForce + _jumpButtonHoldingTime * _strongJumpTimeScaling) :
+        float jumpForce = _holdTimeOfTheJumpButton > _maxWeakJumpButtonHoldingTime ?
+            Mathf.Min(_maxJumpForce, _weakJumpForce + _holdTimeOfTheJumpButton * _strongJumpTimeScaling) :
             _weakJumpForce;
 
         RigidBody.velocity = new Vector2(RigidBody.velocity.x, jumpForce);
 
-        _jumpButtonHoldingTime = 0;
+        _holdTimeOfTheJumpButton = 0;
         _currentNumberOfJumps--;
     }
 
-    public void ResetJumps()
+    public float Gravity
     {
-        // сюда
-        _currentNumberOfJumps = _maxNumberMultiJumps;
-        _jumpButtonHoldingTime = 0;
+        get { return RigidBody.gravityScale; }
+        set { RigidBody.gravityScale = value; }
+    }
+
+    public void NullifyVerticalSpeed()
+    {
+        Vector3 velocity = RigidBody.velocity;
+        velocity.y = 0;
+        RigidBody.velocity = velocity;
     }
 }

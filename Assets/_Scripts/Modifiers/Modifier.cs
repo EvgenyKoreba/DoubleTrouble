@@ -3,70 +3,93 @@ using System.Collections.Generic;
 using UnityEngine;
 using CustomEventSystem;
 
-public class Modifier: MonoBehaviour
+
+public class Modifier: MonoBehaviour, IGlobalSubscriber
 {
     #region Fields
     [Header("Set in Inspector: Modifier")]
-    public KeyCode UseButton = KeyCode.Q;
+    [SerializeField] private KeyCode _useButton = KeyCode.Q;
     [SerializeField] private bool _availableOnGround = true;
     [SerializeField] private bool _availableOnAir = true;
-
+    [SerializeField] private int _maxNumbersOfActivations = 1;
 
     [Header("Set Dynamically: Modifier")]
     private bool _isActive = false;
+    private int _currentNumbersOfActivations = 1;
 
-    protected PlayerJumpAggregator PlayerJumpAggregator;
+    protected PlayerJumpAggregator Player;
     #endregion
 
-    #region Properties
     public bool IsActive
     {
         get => _isActive;
         private set => _isActive = value;
     }
-    #endregion
 
-    protected virtual void Awake()
-    {
-        PlayerJumpAggregator = FindObjectOfType<PlayerJumpAggregator>();
-    }
+    public KeyCode UseButton => _useButton;
 
-    public void TryActivate(bool isGrounded)
+    protected bool IsUseButtonReleased() => Input.GetKeyUp(UseButton);
+
+
+    public void TryActivate(bool playerIsGrounded)
     {
-        if (_availableOnGround == isGrounded || _availableOnAir == !isGrounded)
+        if (CanBeActivated(playerIsGrounded))
         {
             Activate();
         }
     }
 
+    private bool CanBeActivated(bool playerIsGrounded)
+    {
+        return _currentNumbersOfActivations > 0 &&
+            (_availableOnGround == playerIsGrounded || _availableOnAir == !playerIsGrounded);
+    }
+
     protected virtual void Activate() 
     {
         _isActive = true;
+        _currentNumbersOfActivations--;
     }
 
     public virtual void Disable()
     {
         _isActive = false;
-        PlayerJumpAggregator.ResetJumps();
+        Player.ResetJumps();
     }
 
-    protected virtual void OnTriggerEnter2D(Collider2D collision)
+    protected void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.GetComponent<Player>() != null)
+        if (collision.gameObject.GetComponent<PlayerJumpAggregator>() != null)
         {
-            PickUp();
+            Player = collision.gameObject.GetComponent<PlayerJumpAggregator>();
+            RaisePickUpSelf();
+            HideSelf();
         }
     }
 
-    protected virtual void PickUp()
+    private void RaisePickUpSelf()
     {
         EventsHandler.RaiseEvent<IPickUpModifierHandler>(h => h.ModifierPickUped(this));
+    }
+
+    private void HideSelf()
+    {
         MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
         meshRenderer.enabled = false;
     }
 
-    public virtual void ThrowOut()
+    public void ThrowOut()
     {
         Destroy(gameObject);
     }
+
+    public void Reset()
+    {
+        _currentNumbersOfActivations = _maxNumbersOfActivations;
+    }
+
+    
+    protected void OnEnable() => EventsHandler.Subscribe(this);
+
+    protected void OnDisable() => EventsHandler.Unsubscribe(this);
 }

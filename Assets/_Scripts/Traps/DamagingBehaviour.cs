@@ -7,5 +7,5 @@ using UnityEngine.Events;
 public abstract class DamagingBehaviour : MonoBehaviour
 {
     [Header("Set in Inspector: DamagingBehaviour")]
-    public int damage = 1;
+    public int Damage = 1;
 }

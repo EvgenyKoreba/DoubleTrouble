@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(MovingBehaviour))]
 public class Saw : DamagingBehaviour
 {
-    #region Fields
     private MovingBehaviour _movingBehaviour;
-    #endregion
 
     private void Start()
+    {
+        TurnOn();
+    }
+
+    public void TurnOn()
     {
         _movingBehaviour = GetComponent<MovingBehaviour>();
         if (_movingBehaviour != null)

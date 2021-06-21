@@ -17,7 +17,7 @@ public class Player : MonoBehaviour, ICheckpointReachHandler, IHealthChangeHandl
     #endregion
 
     #region Properties
-    public int currentLifes
+    public int CurrentLifes
     {
         get { return _currentLives; }
         private set { 
@@ -50,17 +50,17 @@ public class Player : MonoBehaviour, ICheckpointReachHandler, IHealthChangeHandl
 
     public void Heal(int value = 1)
     {
-        currentLifes += value;
+        CurrentLifes += value;
     }
 
     public void RecieveDamage(int damage = 1)
     {
-        currentLifes -= damage;
+        CurrentLifes -= damage;
     }
 
     public void StartLevel(LevelData level)
     {
-        currentLifes = _maxLifes;
+        CurrentLifes = _maxLifes;
     }
 
     public void CheckpointReach(Checkpoint checkpoint)
@@ -71,7 +71,7 @@ public class Player : MonoBehaviour, ICheckpointReachHandler, IHealthChangeHandl
 
     private void Start()
     {
-        currentLifes = _maxLifes;
+        CurrentLifes = _maxLifes;
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -79,7 +79,7 @@ public class Player : MonoBehaviour, ICheckpointReachHandler, IHealthChangeHandl
         if (collision.gameObject.GetComponent<DamagingBehaviour>() != null)
         {
             DamagingBehaviour dB = collision.gameObject.GetComponent<DamagingBehaviour>();
-            EventsHandler.RaiseEvent<IHealthChangeHandler>(h => h.RecieveDamage(dB.damage));
+            EventsHandler.RaiseEvent<IHealthChangeHandler>(h => h.RecieveDamage(dB.Damage));
             EventsHandler.RaiseEvent<IReturnToCheckpointHandler>(h => 
                 h.ReturnToCheckpoint(CheckpointsHandler.GetLastCheckpoint()));
         }
@@ -92,7 +92,7 @@ public class Player : MonoBehaviour, ICheckpointReachHandler, IHealthChangeHandl
 
     private IEnumerator RespawnOnCheckpoint(Checkpoint checkpoint)
     {
-        currentLifes--;
+        CurrentLifes--;
         transform.position = checkpoint.transform.position;
         yield return null;
         //Time.timeScale = 0;

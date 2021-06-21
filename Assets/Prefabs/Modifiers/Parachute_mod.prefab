@@ -46,13 +46,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 117c248b1ee42fb42928e3c857f525bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useButton: 113
-  availableOnGround: 0
-  availableOnAir: 1
-  isActive: 0
+  _useButton: 113
+  _availableOnGround: 0
+  _availableOnAir: 1
   _parachutePrefab: {fileID: 8412142206036255291, guid: a6a94702e1a8dc84f98715c954122550,
     type: 3}
-  _gravityReductionFactor: 0.1
+  _parachuteGravity: 0.1
 --- !u!33 &7098053585539989393
 MeshFilter:
   m_ObjectHideFlags: 0

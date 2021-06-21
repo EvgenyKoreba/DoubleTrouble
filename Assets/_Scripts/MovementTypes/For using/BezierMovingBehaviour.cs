@@ -1,15 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Custom;
 
 // внедрить delayDurations из SimpleMovingBehaviour
 
 public class BezierMovingBehaviour : PointsMovingBehaviour
 {
     [Header("Set in Inspector: MovingBehaviour")]
-    [SerializeField] private string easingCurve = Easing.Linear;
-    [SerializeField] private float easeMod = 2f;
-    [SerializeField] private float duration;
+    [SerializeField] private EasingCurve _easingCurve = EasingCurve.Linear;
+    [SerializeField] private float _easeMod = 2f;
+    [SerializeField] private float _duration;
 
 
 
@@ -21,7 +22,7 @@ public class BezierMovingBehaviour : PointsMovingBehaviour
     }
 
 
-    protected override IEnumerator Moving()
+    protected override IEnumerator Movement()
     {
         float u = 0;
         timeStart = Time.time;
@@ -35,7 +36,7 @@ public class BezierMovingBehaviour : PointsMovingBehaviour
         // Если интерполяция закончена, сменить направление
         if (u == 1)
         {
-            if (changeDirection)
+            if (isChangeDirection)
             {
                 ChangeDirection();
                 yield return new WaitForSeconds(changeDirectionDelay);
@@ -43,7 +44,7 @@ public class BezierMovingBehaviour : PointsMovingBehaviour
         }
     }
 
-    protected override IEnumerator LoopMoving()
+    protected override IEnumerator LoopedMovement()
     {
 
         while (IsLooping)
@@ -60,7 +61,7 @@ public class BezierMovingBehaviour : PointsMovingBehaviour
             // Если интерполяция закончена, сменить направление
             if (u == 1)
             {
-                if (changeDirection)
+                if (isChangeDirection)
                 {
                     ChangeDirection();
                     yield return new WaitForSeconds(changeDirectionDelay);
@@ -73,10 +74,10 @@ public class BezierMovingBehaviour : PointsMovingBehaviour
     private float Interpolate()
     {
         // Стандартная линейная интерполяция
-        float u = (Time.time - timeStart) / duration;
+        float u = (Time.time - timeStart) / _duration;
         u = Mathf.Clamp01(u);
-        float uC = Easing.Ease(u, easingCurve, easeMod);
-        Vector3 newPosition = Utils.Bezier(uC, pts);
+        float uC = Easing.Ease(u, _easingCurve, _easeMod);
+        Vector3 newPosition = Interpolation.Bezier(uC, points);
         transform.position = newPosition;
         return u;
     }
@@ -84,9 +85,9 @@ public class BezierMovingBehaviour : PointsMovingBehaviour
 
     private void PrepareFields()
     {
-        if (easeMod == 0)
+        if (_easeMod == 0)
         {
-            easeMod = 2;
+            _easeMod = 2;
         }
     }
 }

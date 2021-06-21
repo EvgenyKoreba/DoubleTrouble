@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Custom;
 
 public class CircleMovingBehaviour : MovingBehaviour
 {
@@ -10,20 +11,20 @@ public class CircleMovingBehaviour : MovingBehaviour
     [SerializeField] private float _duration = 1f;
     [SerializeField] private Vector3 _circleCenter = Vector3.one;
     [SerializeField] private float _endAngle;
-    [SerializeField] private string _easingCurve = "In";
+    [SerializeField] private EasingCurve _easingCurve = EasingCurve.Linear;
     [SerializeField] private float _easeMod = 2f;
 
 
     [Header("Set Dynamically: CircleMovingBehaviour")]
     [SerializeField] private float _angle;
-    [SerializeField] private float radius;
+    [SerializeField] private float _radius;
     [SerializeField] private float _startAngle;
     
      
-    private int clockwiseDirectionFactor = 1;
+    private int _clockwiseDirectionFactor = 1;
     #endregion
     #region Properties
-    public float angle
+    public float Angle
     {
         get { return _angle; }
         set
@@ -32,7 +33,7 @@ public class CircleMovingBehaviour : MovingBehaviour
         }
     }
 
-    public float endAngle
+    public float EndEngle
     {
         get { return _endAngle; }
         set
@@ -41,8 +42,7 @@ public class CircleMovingBehaviour : MovingBehaviour
         }
     }
 
-
-    public float startAngle
+    public float StartAngle
     {
         get { return _startAngle; }
         set
@@ -55,22 +55,20 @@ public class CircleMovingBehaviour : MovingBehaviour
         }
     }
 
-
-    public bool clockwise
+    public bool Clockwise
     {
         get { return _clockwise; }
         set
         {
             if (_clockwise != value)
             {
-                clockwiseDirectionFactor *= -1;
+                _clockwiseDirectionFactor *= -1;
             }
 
             _clockwise = value;
         }
     }
     #endregion
-
 
 
     private void Awake()
@@ -81,17 +79,17 @@ public class CircleMovingBehaviour : MovingBehaviour
 
 
 
-    protected override IEnumerator Moving()
+    protected override IEnumerator Movement()
     {
         timeStart = Time.time;
-        angle = startAngle;
-        while (angle < 360)
+        Angle = StartAngle;
+        while (Angle < 360)
         {
-            angle = TransformOnCircle();
+            Angle = TransformOnCircle();
 
-            if (changeDirection)
+            if (isChangeDirection)
             {
-                if (angle >= endAngle)
+                if (Angle >= EndEngle)
                 {
                     yield return new WaitForSeconds(changeDirectionDelay);
                     ChangeDirection();
@@ -104,17 +102,17 @@ public class CircleMovingBehaviour : MovingBehaviour
 
 
 
-    protected override IEnumerator LoopMoving()
+    protected override IEnumerator LoopedMovement()
     {
         timeStart = Time.time;
-        angle = startAngle;
+        Angle = StartAngle;
         while (IsLooping)
         {
-            angle = TransformOnCircle();
+            Angle = TransformOnCircle();
 
-            if (changeDirection)
+            if (isChangeDirection)
             {
-                if (angle >= endAngle)
+                if (Angle >= EndEngle)
                 {
                     yield return new WaitForSeconds(changeDirectionDelay);
                     ChangeDirection();
@@ -132,9 +130,9 @@ public class CircleMovingBehaviour : MovingBehaviour
         // Стандартная линейная интерполяция
         float u = (Time.time - timeStart) / _duration;
         float uC = Easing.Ease(u, _easingCurve, _easeMod) * 360;
-        uC += startAngle;
-        float x = Mathf.Cos(Mathf.Deg2Rad * uC) * radius * clockwiseDirectionFactor;
-        float y = Mathf.Sin(Mathf.Deg2Rad * uC) * radius;
+        uC += StartAngle;
+        float x = Mathf.Cos(Mathf.Deg2Rad * uC) * _radius * _clockwiseDirectionFactor;
+        float y = Mathf.Sin(Mathf.Deg2Rad * uC) * _radius;
         Vector3 newPosition = new Vector3(x, y, 0);
         newPosition += _circleCenter;
         transform.position = newPosition;
@@ -145,7 +143,7 @@ public class CircleMovingBehaviour : MovingBehaviour
 
     protected override void ChangeDirection()
     {
-        clockwise = !clockwise;
+        Clockwise = !Clockwise;
         timeStart = Time.time;
         FindStartAngle();
     }
@@ -157,20 +155,20 @@ public class CircleMovingBehaviour : MovingBehaviour
         Vector3 posOnCircle = transform.position - _circleCenter;
         float angleU = Mathf.Atan2(posOnCircle.y, posOnCircle.x) * Mathf.Rad2Deg;
 
-        if (clockwise)
+        if (Clockwise)
         {
             if (posOnCircle.y >= 0)
             {
-                startAngle = 180 - Mathf.Abs(angleU);
+                StartAngle = 180 - Mathf.Abs(angleU);
             }
             else
             {
-                startAngle = Mathf.Abs(angleU) + 180;
+                StartAngle = Mathf.Abs(angleU) + 180;
             }
         }
         else
         {
-            startAngle = angleU;
+            StartAngle = angleU;
         }
     }
 
@@ -195,7 +193,7 @@ public class CircleMovingBehaviour : MovingBehaviour
         }
 
 
-        radius = Vector3.Distance(transform.position, _circleCenter);
+        _radius = Vector3.Distance(transform.position, _circleCenter);
 
 
         CheckBound();
@@ -205,9 +203,9 @@ public class CircleMovingBehaviour : MovingBehaviour
 
     private void CheckBound()
     {
-        if (endAngle >= angle)
+        if (EndEngle >= Angle)
         {
-            endAngle += 180;
+            EndEngle += 180;
         }
     }
 
