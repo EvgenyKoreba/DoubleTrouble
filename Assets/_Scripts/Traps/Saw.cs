@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(MovingBehaviour))]
+[RequireComponent(typeof(MovementBehaviour))]
 public class Saw : DamagingBehaviour
 {
-    private MovingBehaviour _movingBehaviour;
+    private MovementBehaviour _movingBehaviour;
 
     private void Start()
     {
@@ -14,7 +14,7 @@ public class Saw : DamagingBehaviour
 
     public void TurnOn()
     {
-        _movingBehaviour = GetComponent<MovingBehaviour>();
+        _movingBehaviour = GetComponent<MovementBehaviour>();
         if (_movingBehaviour != null)
         {
             _movingBehaviour.Move();

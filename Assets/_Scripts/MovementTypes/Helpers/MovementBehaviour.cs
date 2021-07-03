@@ -2,15 +2,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public abstract class MovingBehaviour : MonoBehaviour
+public abstract class MovementBehaviour : MonoBehaviour
 {
     #region Fields
     [Header("Set in Inspector: MovingBehaviour")]
     [SerializeField] protected bool isLooping = false;
     [SerializeField] protected bool isChangeDirection = false;
-    [SerializeField] protected float changeDirectionDelay = 0f;
 
     protected float timeStart = -1;
+    protected float amountOfInterpolation;
     #endregion
 
     #region properties
@@ -45,7 +45,7 @@ public abstract class MovingBehaviour : MonoBehaviour
 
     protected virtual IEnumerator LoopedMovement()
     {
-        yield break;
+        yield return null;
     }
 
     private void StraightMove()
@@ -55,7 +55,18 @@ public abstract class MovingBehaviour : MonoBehaviour
 
     protected virtual IEnumerator Movement()
     {
-        yield break;
+        yield return null;
+    }
+
+    protected void TryChangeDirection()
+    {
+        if (isChangeDirection)
+        {
+            if (amountOfInterpolation == 1)
+            {
+                ChangeDirection();
+            }   
+        }
     }
 
     protected virtual void ChangeDirection() { }

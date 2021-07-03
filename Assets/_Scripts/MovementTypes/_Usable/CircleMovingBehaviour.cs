@@ -3,15 +3,19 @@ using System.Collections.Generic;
 using UnityEngine;
 using Custom;
 
-public class CircleMovingBehaviour : MovingBehaviour
+public class CircleMovingBehaviour : MovementBehaviour
 {
     #region Fields
     [Header("Set in Inspector: CircleMovingBehaviour")]
     [SerializeField] private bool _clockwise = false;
+    
+    [Range(0.01f, 10)]
     [SerializeField] private float _duration = 1f;
-    [SerializeField] private Vector3 _circleCenter = Vector3.one;
+    [SerializeField] private Vector2 _circleCenter = Vector2.one;
     [SerializeField] private float _endAngle;
     [SerializeField] private EasingCurve _easingCurve = EasingCurve.Linear;
+
+    [Range(1, 10)]
     [SerializeField] private float _easeMod = 2f;
 
 
@@ -77,6 +81,36 @@ public class CircleMovingBehaviour : MovingBehaviour
         FindStartAngle();
     }
 
+    private void PrepareFields()
+    {
+        LocalCenterToWorld();
+        CheckCenter();
+        _radius = Vector3.Distance(transform.position, _circleCenter);
+        CheckBound();
+    }
+
+    private void LocalCenterToWorld()
+    {
+        _circleCenter.x += transform.position.x;
+        _circleCenter.y += transform.position.y;
+    }
+
+    private void CheckCenter()
+    {
+        if (Vector3.Distance(_circleCenter, transform.position) < 0.1f)
+        {
+            _circleCenter += Vector2.one;
+        }
+    }
+
+    private void CheckBound()
+    {
+        if (EndEngle >= Angle)
+        {
+            EndEngle += 180;
+        }
+    }
+
 
 
     protected override IEnumerator Movement()
@@ -86,16 +120,6 @@ public class CircleMovingBehaviour : MovingBehaviour
         while (Angle < 360)
         {
             Angle = TransformOnCircle();
-
-            if (isChangeDirection)
-            {
-                if (Angle >= EndEngle)
-                {
-                    yield return new WaitForSeconds(changeDirectionDelay);
-                    ChangeDirection();
-                }
-            }
-
             yield return null;
         }
     }
@@ -114,7 +138,6 @@ public class CircleMovingBehaviour : MovingBehaviour
             {
                 if (Angle >= EndEngle)
                 {
-                    yield return new WaitForSeconds(changeDirectionDelay);
                     ChangeDirection();
                 }
             }
@@ -133,13 +156,11 @@ public class CircleMovingBehaviour : MovingBehaviour
         uC += StartAngle;
         float x = Mathf.Cos(Mathf.Deg2Rad * uC) * _radius * _clockwiseDirectionFactor;
         float y = Mathf.Sin(Mathf.Deg2Rad * uC) * _radius;
-        Vector3 newPosition = new Vector3(x, y, 0);
+        Vector2 newPosition = new Vector3(x, y);
         newPosition += _circleCenter;
         transform.position = newPosition;
         return uC;
     }
-
-
 
     protected override void ChangeDirection()
     {
@@ -148,16 +169,14 @@ public class CircleMovingBehaviour : MovingBehaviour
         FindStartAngle();
     }
 
-
-
     private void FindStartAngle()
     {
-        Vector3 posOnCircle = transform.position - _circleCenter;
-        float angleU = Mathf.Atan2(posOnCircle.y, posOnCircle.x) * Mathf.Rad2Deg;
+        Vector2 direction = Position() - _circleCenter;
+        float angleU = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
 
         if (Clockwise)
         {
-            if (posOnCircle.y >= 0)
+            if (direction.y >= 0)
             {
                 StartAngle = 180 - Mathf.Abs(angleU);
             }
@@ -173,40 +192,20 @@ public class CircleMovingBehaviour : MovingBehaviour
     }
 
 
-
-    private void PrepareFields()
+    private Vector3 GetWorldCircleCenter()
     {
-        if (_duration < 0.01f)
-        {
-            _duration = 1f;
-        }
-
-        _circleCenter += transform.position;
-        if (Vector3.Distance(_circleCenter, transform.position) < 0.1f)
-        {
-            _circleCenter += Vector3.one;
-        }
-
-        if (_easeMod == 0)
-        {
-            _easeMod = 2;
-        }
-
-
-        _radius = Vector3.Distance(transform.position, _circleCenter);
-
-
-        CheckBound();
+        Vector3 worldCenter = Vector3.zero;
+        worldCenter.x = _circleCenter.x;
+        worldCenter.y = _circleCenter.y;
+        return worldCenter;
     }
 
-
-
-    private void CheckBound()
+    private Vector2 Position()
     {
-        if (EndEngle >= Angle)
-        {
-            EndEngle += 180;
-        }
+        Vector2 position = Vector2.zero;
+        position.x = transform.position.x;
+        position.y = transform.position.y;
+        return position;
     }
 
 
@@ -214,7 +213,7 @@ public class CircleMovingBehaviour : MovingBehaviour
     {
         if (!Application.isPlaying)
         {
-            Gizmos.DrawWireSphere(_circleCenter + transform.position, _circleCenter.magnitude);
+            Gizmos.DrawWireSphere(GetWorldCircleCenter() + transform.position, _circleCenter.magnitude);
         }
     }
 }
