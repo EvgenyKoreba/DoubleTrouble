@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Custom;
 
-public class Circle : MovementBehaviour
+public class CircleMovement : MovementBehaviour
 {
     [Header("Set in Inspector: CircleMovingBehaviour")]
     [SerializeField] private bool _isClockwise = false;
@@ -12,17 +12,17 @@ public class Circle : MovementBehaviour
     [SerializeField] private float _duration = 1f;
     [SerializeField] private Vector2 _circleCenter = Vector2.one;
 
-    [SerializeField] private float _endAngle;
+    [SerializeField] private float _endAngle = 180f;
     [SerializeField] private EasingCurve _easingCurve = EasingCurve.Linear;
 
     [Range(0.01f, 10)]
     [SerializeField] private float _easeMod = 2f;
 
 
-    [Header("Set Dynamically: CircleMovingBehaviour")]
-    [SerializeField] private float _angle;
-    [SerializeField] private float _radius;
-    [SerializeField] private float _startAngle;
+    private float _angle;
+    private float _radius;
+    private float _startAngle;
+
 
     private void Awake()
     {
@@ -103,7 +103,7 @@ public class Circle : MovementBehaviour
 
     private void CheckBoundsStartAngle()
     {
-        if (_startAngle > _endAngle || _startAngle == _endAngle)
+        while (_startAngle > _endAngle || _startAngle == _endAngle)
         {
             _endAngle += 180;
         }
@@ -124,9 +124,9 @@ public class Circle : MovementBehaviour
     private void TransformOnCircle()
     {
         amountOfInterpolation = (Time.time - timeStart) / _duration;
+        amountOfInterpolation = Mathf.Clamp01(amountOfInterpolation);
         float uC = Easing.Ease(amountOfInterpolation, _easingCurve, _easeMod) * (_endAngle - _startAngle);
         _angle = _startAngle + uC;
-        _angle = Mathf.Clamp(_angle, _startAngle, _endAngle);
         float x = Mathf.Cos(Mathf.Deg2Rad * _angle) * _radius;
         float y = Mathf.Sin(Mathf.Deg2Rad * _angle) * _radius * GetClockwiseFactor();
         Vector2 newPosition = new Vector2(x, y);
@@ -142,6 +142,7 @@ public class Circle : MovementBehaviour
     {
         while (IsLooping)
         {
+            amountOfInterpolation = 0;
             timeStart = Time.time;
             _angle = _startAngle;
 

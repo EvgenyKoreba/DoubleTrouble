@@ -239,15 +239,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 5711624770229058248}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a090dbb228e2f8e40b47bbfc87eb030b, type: 3}
+  m_Script: {fileID: 11500000, guid: d17963c6b51ef9849a81263f54fb7869, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   isLooping: 0
   isChangeDirection: 0
-  changeDirectionDelay: 1
-  _clockwise: 0
+  _isClockwise: 0
   _duration: 1
-  _circleCenter: {x: 1, y: 1, z: 1}
+  _circleCenter: {x: 1, y: 1}
   _endAngle: 180
   _easingCurve: 0
   _easeMod: 2

@@ -23,6 +23,7 @@ public abstract class PointsMovementEditor : Editor
     }
 
     protected virtual void AddInitialPositionOnEmptyPointsList() { }
+
     protected virtual void AddInitialPositionOnPointsList() { }
 
     protected virtual void ZeroFirstPoint() { }
