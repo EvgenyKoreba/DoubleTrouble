@@ -3,172 +3,141 @@ using System.Collections.Generic;
 using UnityEngine;
 using Custom;
 
-public class CircleMovement : MovementBehaviour
+namespace MovementTypes
 {
-    [Header("Set in Inspector: CircleMovingBehaviour")]
-    [SerializeField] private bool _isClockwise = false;
-
-    [Range(0.01f, 10)]
-    [SerializeField] private float _duration = 1f;
-    [SerializeField] private Vector2 _circleCenter = Vector2.one;
-
-    [SerializeField] private float _endAngle = 180f;
-    [SerializeField] private EasingCurve _easingCurve = EasingCurve.Linear;
-
-    [Range(0.01f, 10)]
-    [SerializeField] private float _easeMod = 2f;
-
-
-    private float _angle;
-    private float _radius;
-    private float _startAngle;
-
-
-    private void Awake()
+    public class CircleMovement : MovementBehaviour
     {
-        PrepareFields();
-    }
+        #region Fields
+        [Header("Set in Inspector: CircleMovingBehaviour")]
+        [SerializeField] private bool _isClockwise = false;
+        [SerializeField] private Vector2 _circleCenter = Vector2.one;
+        [SerializeField] private float _endAngle = 180f;
 
-    private void PrepareFields()
-    {
-        PrepareCenter();
-        _radius = CalculateRaduis();
-        CalculateStartAngle();
-        CheckBoundsStartAngle();
-    }
+        [Range(0, 5)]
+        [SerializeField] private float _delay = 0;
+        [SerializeField] private MovementInterpolation _interpolation;
 
-    private void PrepareCenter()
-    {
-        _circleCenter = LocalCenterToWorld();
-        CheckRadiusSize();
-    }
 
-    private Vector2 LocalCenterToWorld()
-    {
-        Vector2 worldCenter = Vector2.zero;
-        worldCenter.x = _circleCenter.x + transform.position.x;
-        worldCenter.y = _circleCenter.y + transform.position.y;
-        return worldCenter;
-    }
+        private float _angle;
+        private float _radius;
+        private float _startAngle;
+        #endregion
 
-    private void CheckRadiusSize()
-    {
-        if (CalculateRaduis() < 0.1f)
-        {
-            _circleCenter += Vector2.one;
+        public Vector2 CircleCenter 
+        { 
+            get => _circleCenter; 
+            set => _circleCenter = value; 
         }
-    }
 
-    private float CalculateRaduis()
-    {
-        return Vector2.Distance(_circleCenter, transform.position);
-    }
 
-    private void CalculateStartAngle()
-    {
-        Vector2 direction = Position() - _circleCenter;
-        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-
-        if (_isClockwise)
+        private void Awake()
         {
-            if (direction.y > 0)
+            PrepareFields();
+        }
+
+        private void PrepareFields()
+        {
+            _circleCenter = LocalCenterToWorld();
+            CalculateRaduis();
+            CalculateStartAngle();
+            IncreaseEndAngle();
+        }
+
+        private Vector2 LocalCenterToWorld()
+        {
+            Vector2 worldCenter = _circleCenter;
+            worldCenter.x += transform.position.x;
+            worldCenter.y += transform.position.y;
+            return worldCenter;
+        }
+
+        private void CalculateRaduis()
+        {
+            _radius = Vector2.Distance(_circleCenter, transform.position);
+        }
+
+        private void CalculateStartAngle()
+        {
+            Vector2 direction = GetVector2_Position() - _circleCenter;
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+
+            _startAngle = _isClockwise
+                ? direction.y > 0 ? 360 - Mathf.Abs(angle) : Mathf.Abs(angle)
+                : direction.y > 0 ? Mathf.Abs(angle) : 360 - Mathf.Abs(angle);
+        }
+
+        private void IncreaseEndAngle()
+        {
+            while (_startAngle > _endAngle || _startAngle == _endAngle)
             {
-                _startAngle = 360 - Mathf.Abs(angle);
-            }
-            else
-            {
-                _startAngle = Mathf.Abs(angle);
+                _endAngle += 180;
             }
         }
-        else
+
+        protected override IEnumerator LoopedMovement()
         {
-            if (direction.y > 0)
+            while (IsLooping)
             {
-                _startAngle = Mathf.Abs(angle);
+                _interpolation.Reset();
+
+                while (_interpolation.IsNotEnded())
+                {
+                    TransformOnCircle();
+                    yield return null;
+                }
+                yield return new WaitForSeconds(_delay);
+                TryChangeDirection();
             }
-            else
-            {
-                _startAngle = 360 - Mathf.Abs(angle);
-            }
         }
-    }
 
-    private Vector2 Position()
-    {
-        Vector2 position = Vector2.zero;
-        position.x = transform.position.x;
-        position.y = transform.position.y;
-        return position;
-    }
-
-    private void CheckBoundsStartAngle()
-    {
-        while (_startAngle > _endAngle || _startAngle == _endAngle)
+        private void TransformOnCircle()
         {
-            _endAngle += 180;
+            Vector2 newPosition = CalculatePositionOnCircle();
+            SetPosition(newPosition + _circleCenter);
         }
-    }
 
-    protected override IEnumerator Movement()
-    {
-        timeStart = Time.time;
-        _angle = _startAngle;
-
-        while (amountOfInterpolation < 1)
+        private Vector2 CalculatePositionOnCircle()
         {
-            TransformOnCircle();
-            yield return null;
+            float smoothedAmount = _interpolation.CalculateSmoothedAmount();
+            float deltaAngle = smoothedAmount * (_endAngle - _startAngle);
+            _angle = _startAngle + deltaAngle;
+            float x = Mathf.Cos(Mathf.Deg2Rad * _angle) * _radius;
+            float y = Mathf.Sin(Mathf.Deg2Rad * _angle) * _radius * GetClockwiseFactor();
+            return new Vector2(x, y);
         }
-    }
 
-    private void TransformOnCircle()
-    {
-        amountOfInterpolation = (Time.time - timeStart) / _duration;
-        amountOfInterpolation = Mathf.Clamp01(amountOfInterpolation);
-        float uC = Easing.Ease(amountOfInterpolation, _easingCurve, _easeMod) * (_endAngle - _startAngle);
-        _angle = _startAngle + uC;
-        float x = Mathf.Cos(Mathf.Deg2Rad * _angle) * _radius;
-        float y = Mathf.Sin(Mathf.Deg2Rad * _angle) * _radius * GetClockwiseFactor();
-        Vector2 newPosition = new Vector2(x, y);
-        transform.position = newPosition + _circleCenter;
-    }
-
-    private int GetClockwiseFactor()
-    {
-        return _isClockwise ? -1 : 1;
-    }
-
-    protected override IEnumerator LoopedMovement()
-    {
-        while (IsLooping)
+        private int GetClockwiseFactor()
         {
-            amountOfInterpolation = 0;
-            timeStart = Time.time;
-            _angle = _startAngle;
+            return _isClockwise ? -1 : 1;
+        }
 
-            while (amountOfInterpolation < 1)
+        protected override void ChangeDirection()
+        {
+            _isClockwise = !_isClockwise;
+            float angleOfRotation = _endAngle - _startAngle;
+            CalculateStartAngle();
+            _endAngle = _startAngle + angleOfRotation;
+            IncreaseEndAngle();
+        }
+
+        protected override IEnumerator Movement()
+        {
+            _interpolation.Reset();
+
+            while (_interpolation.IsNotEnded())
             {
                 TransformOnCircle();
                 yield return null;
             }
-            TryChangeDirection();
         }
-    }
 
-    protected override void ChangeDirection()
-    {
-        _isClockwise = !_isClockwise;
-        float angleOfRotation = _endAngle - _startAngle;
-        CalculateStartAngle();
-        _endAngle = _startAngle + angleOfRotation;
-        CheckBoundsStartAngle();
-    }
 
-    private void OnDrawGizmosSelected()
-    {
-        if (!Application.isPlaying)
+        private void OnDrawGizmosSelected()
         {
-            Gizmos.DrawWireSphere(LocalCenterToWorld(), Vector3.Distance(transform.position, LocalCenterToWorld()));
+            if (!Application.isPlaying)
+            {
+                Gizmos.DrawWireSphere(LocalCenterToWorld(), Vector3.Distance(transform.position, LocalCenterToWorld()));
+            }
         }
     }
 }

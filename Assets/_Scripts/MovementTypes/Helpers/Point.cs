@@ -1,42 +1,35 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Custom;
 using System;
 
-[System.Serializable]
-public class Point: ICloneable
+using MovementTypes;
+using Custom;
+
+[Serializable]
+public class Point
 {
     #region Fields
     [SerializeField] private Vector2 _localPosition = Vector2.zero;
 
-    [Range(0.01f,10)]
-    [SerializeField] private float _durationOfPassage = 1f;
-    [SerializeField] private EasingCurve _easingCurve = EasingCurve.Linear;
+    //[Range(0.01f,10)]
+    //[SerializeField] private float _durationOfPassage = 1f;
+    //[SerializeField] private EasingCurve _easingCurve = EasingCurve.Linear;
 
-    [Range(1,10)]
-    [SerializeField] private float _easeMultiplier = 2f;
+    //[Range(1,10)]
+    //[SerializeField] private float _easeMultiplier = 2f;
 
     [Range(0,5)]
     [SerializeField] private float _delay = 0;
+
+    [SerializeField] private MovementInterpolation _interpolation;
     #endregion
 
     public Point()
     {
+        _interpolation = new MovementInterpolation();
         _localPosition = Vector2.zero;
-        _durationOfPassage = 1f;
-        _easingCurve = EasingCurve.Linear;
-        _easeMultiplier = 2f;
         _delay = 0f;
-    }
-
-    public Point(Point clone)
-    {
-        _localPosition = Vector2.zero;
-        _durationOfPassage = clone.DurationOfPassage;
-        _easingCurve = clone.EasingCurve;
-        _easeMultiplier = clone.EaseMultiplier;
-        _delay = clone.Delay;
     }
 
     public Vector2 LocalPosition {
@@ -44,13 +37,9 @@ public class Point: ICloneable
         set => _localPosition = value;
     }
 
-    public float DurationOfPassage { get => _durationOfPassage; }
-
-    public EasingCurve EasingCurve { get => _easingCurve; }
-
-    public float EaseMultiplier { get => _easeMultiplier; }
-
     public float Delay { get => _delay; }
+
+    public MovementInterpolation Interpolation { get => _interpolation; }
 
     public void LocalPositionToWorld(Vector3 origin)
     {
@@ -60,8 +49,18 @@ public class Point: ICloneable
         _localPosition = worldPosition;
     }
 
-    public object Clone()
+    public Vector2 Interpolate(Vector2 from)
     {
-        return (Point)MemberwiseClone();
+        return _interpolation.Lerp(from, _localPosition);
+    }
+
+    public void ResetInterpolation()
+    {
+        _interpolation.Reset();
+    }
+
+    public bool IsNotInterpolated()
+    {
+        return _interpolation.IsNotEnded();
     }
 }

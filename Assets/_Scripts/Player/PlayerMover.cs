@@ -36,7 +36,10 @@ public class PlayerMover : MonoBehaviour
     {
         // Move
         float moveInput = Input.GetAxis("Horizontal");
-        _rigidBody.velocity = new Vector2(moveInput * _speed, _rigidBody.velocity.y);
+
+        float y = _rigidBody.velocity.y;
+        //float y = Mathf.Clamp(_rigidBody.velocity.y, -10f, 200f);
+        _rigidBody.velocity = new Vector2(moveInput * _speed, y);
 
 
         if (moveInput > 0)

@@ -36,7 +36,7 @@ public class PlayerJumpAggregator : MonoBehaviour, IPickUpModifierHandler, IPick
             if (IsTouchedGroundWhenFall(value))
             {
                 ResetJumps();
-                EventsHandler.RaiseEvent<ITouchingGroundWhenFall>(t => t.PlayerTouchedGround());
+                //EventsHandler.RaiseEvent<ITouchingGroundWhenFall>(t => t.PlayerTouchedGround());
             }
             _isGrounded = value;
         }

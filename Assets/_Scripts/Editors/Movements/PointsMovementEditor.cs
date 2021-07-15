@@ -4,27 +4,31 @@ using UnityEngine;
 using UnityEditor;
 using System.Text;
 
-public abstract class PointsMovementEditor : Editor
+namespace MovementEditor
 {
-    protected StringBuilder helpboxText;
-
-    protected virtual void SetHelpboxText() => helpboxText = new StringBuilder();
-
-    public override void OnInspectorGUI()
+    public abstract class PointsMovementEditor : Editor
     {
-        EditorGUILayout.HelpBox(helpboxText.ToString(), MessageType.Info, true);
-        DrawDefaultInspector();
+        protected StringBuilder helpboxText;
 
-        if (!Application.isPlaying)
+        protected virtual void SetHelpboxText() { }
+
+        public override void OnInspectorGUI()
         {
-            AddInitialPositionOnEmptyPointsList();
-            ZeroFirstPoint();
+            EditorGUILayout.HelpBox(helpboxText.ToString(), MessageType.Info, true);
+            DrawDefaultInspector();
+
+            if (!Application.isPlaying)
+            {
+                PreparePoints();
+            }
         }
+
+        protected virtual void PreparePoints() { }
+
+        protected virtual void AddInitialPointOnPointsList() { }
+
+        protected virtual void PrepareFirstPoint() { }
+
+        protected virtual void PrepareSecondPoint() { }
     }
-
-    protected virtual void AddInitialPositionOnEmptyPointsList() { }
-
-    protected virtual void AddInitialPositionOnPointsList() { }
-
-    protected virtual void ZeroFirstPoint() { }
 }

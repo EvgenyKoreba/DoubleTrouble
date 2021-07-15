@@ -10,29 +10,18 @@ public class GroundCheck : MonoBehaviour
     [SerializeField] private LayerMask _ground;
     [SerializeField] private float _groundRememberTime = 0.2f;
 
-    private bool _isGroundTouched = false;
-    private float _currentGroundRemember = 0;
+    private bool _isGround = false;
     #endregion
 
-    private void Awake()
-    {
-        _currentGroundRemember = _groundRememberTime;
-    }
 
     public bool IsGrounded
     {
-        get { return _currentGroundRemember >= 0; }
+        get { return _isGround; }
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
-        _isGroundTouched = Physics2D.OverlapCircle(transform.position, _groundRadius, _ground);
-        _currentGroundRemember -= Time.fixedDeltaTime;
-
-        if (_isGroundTouched)
-        {
-            _currentGroundRemember = _groundRememberTime;
-        }
+        _isGround = Physics2D.OverlapCircle(transform.position, _groundRadius, _ground);
     }
 
     private void OnDrawGizmos()
