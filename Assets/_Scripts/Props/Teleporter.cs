@@ -6,47 +6,69 @@ using UnityEngine;
 public class Teleporter : MonoBehaviour
 {
     [SerializeField] private Teleporter _destination;
-    [SerializeField] public Facing ExitFacing = Facing.RIGHT;
+    public Facing ExitFacing = Facing.RIGHT;
 
-    public bool IsTeleporting = false;
+    private bool _isTeleporting = false;
+
+
+    public bool IsTeleporting
+    {
+        get => _isTeleporting;
+        set => _isTeleporting = value;
+    }
 
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (IsTeleporting == false)
+        if (_isTeleporting)
+        {
+            return;
+        }
+
+        if (collision.GetComponent<PlayerMover>() != null)
         {
             Teleport(collision.transform);
         }
+
     }
 
     private void Teleport(Transform player)
     {
-        IsTeleporting = true;
+        _isTeleporting = true;
         _destination.IsTeleporting = true;
 
         Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
-        Vector2 velocity = rb.velocity;
-        velocity.x = Mathf.Abs(velocity.x);
-        velocity.y = Mathf.Abs(velocity.y);
+        Vector2 enterVelocity = rb.velocity;
 
-        float max = Mathf.Max(velocity.x, velocity.y);
-        float min = Mathf.Min(velocity.x, velocity.y);
+        rb.velocity = GetExitVelocity(enterVelocity);
+
+        player.position = _destination.transform.position;
+    }
+
+
+    private Vector2 GetExitVelocity(Vector2 enterVelocity)
+    {
+        Vector2 exitVelocity = enterVelocity;
+        exitVelocity.x = Mathf.Abs(exitVelocity.x);
+        exitVelocity.y = Mathf.Abs(exitVelocity.y);
+
+        float max = Mathf.Max(exitVelocity.x, exitVelocity.y);
+        float min = Mathf.Min(exitVelocity.x, exitVelocity.y);
 
         if (Direction.IsHorizontal(_destination.ExitFacing))
         {
-            velocity.x = max;
-            velocity.y = min;
+            exitVelocity.x = max;
+            exitVelocity.y = min;
         }
         else
         {
-            velocity.x = min;
-            velocity.y = max;
+            exitVelocity.x = min;
+            exitVelocity.y = max;
         }
 
-        velocity *= Direction.GetVector2(_destination.ExitFacing);
-        rb.velocity = velocity;
+        exitVelocity *= Direction.GetVector2(_destination.ExitFacing);
 
-        player.position = _destination.transform.position;
+        return exitVelocity;
     }
 
 

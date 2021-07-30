@@ -22,8 +22,6 @@ public class Parachute : Modifier, ITouchingGroundWhenFall
 
         Create();
         PreparePlayer();
-
-        StartCoroutine(ButtonsClickCheck());
     }
 
     private void Create()
@@ -49,21 +47,8 @@ public class Parachute : Modifier, ITouchingGroundWhenFall
 
     private void PreparePlayer()
     {
-        Player.NullifyVerticalSpeed();
+        Player.NullifyVerticalVelocity();
         Player.Gravity = _parachuteGravity;
-    }
-
-    private IEnumerator ButtonsClickCheck()
-    {
-        while (true)
-        {
-            if (IsUseButtonReleased())
-            {
-                Disable();
-                StopAllCoroutines();
-            }
-            yield return null;
-        }
     }
 
     public override void Disable()

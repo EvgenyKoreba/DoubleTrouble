@@ -3,19 +3,20 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-[RequireComponent(typeof(Rigidbody2D), typeof(Animator))]
+[RequireComponent(typeof(Rigidbody2D), typeof(PlayerInput))]
 public class PlayerMover : MonoBehaviour
 {
     #region Fields
     [Header("Set in Inspector: Move Options")]
-    [Range(0,20)]
-    [SerializeField] private float _speed;
+    [Range(0,1000)]
+    [SerializeField] private float _speed = 500f;
+    [SerializeField] private Vector2 _fallingSpeedBounds = new Vector2(100f, 100f);
 
     [Header("Set Dynamically"), Space(10)]
     [SerializeField] private bool _facingRight = true;
+    [HideInInspector] public float X_direction;
 
     private Rigidbody2D _rigidBody;
-    private Animator _animator;
     #endregion
 
     #region Properties
@@ -29,37 +30,37 @@ public class PlayerMover : MonoBehaviour
     private void Awake()
     {
         _rigidBody = GetComponent<Rigidbody2D>();
-        _animator = GetComponent<Animator>();
     }
 
-    private void FixedUpdate()
+    public void Move(float xDirection)
     {
-        // Move
-        float moveInput = Input.GetAxis("Horizontal");
+        X_direction = xDirection;
+        FacingControl(xDirection);
 
-        float y = _rigidBody.velocity.y;
-        //float y = Mathf.Clamp(_rigidBody.velocity.y, -10f, 200f);
-        _rigidBody.velocity = new Vector2(moveInput * _speed, y);
+        Vector2 velocity = _rigidBody.velocity;
+        velocity.x = xDirection * _speed * Time.fixedDeltaTime;
+        _rigidBody.velocity = velocity;
+        
+        //Vector2 offset = direction * (_speed * Time.deltaTime);
+        //_rigidBody.MovePosition(_rigidBody.position + offset);
+    }
 
-
-        if (moveInput > 0)
+    private void FacingControl(float xDirection)
+    {
+        if (xDirection > 0)
         {
             FacingRight = true;
-            transform.rotation = Quaternion.Euler(new Vector3(0, 0, 0));
-            //_animator.Play("RunAnimation");
         }
-        else if (moveInput < 0)
+        else if (xDirection < 0)
         {
             FacingRight = false;
-            transform.rotation = Quaternion.Euler(new Vector3(0, -180, 0));
-            //_animator.Play("RunAnimation");
         }
-        else
-        {
-            //_animator.Play("IdleAnimation");
-        }
+        Flip();
+    }
 
-        _animator.SetFloat("HorizontalSpeed", Mathf.Abs(_rigidBody.velocity.x));
-        _animator.SetFloat("VerticalSpeed", _rigidBody.velocity.y);
+    private void Flip()
+    {
+        Vector3 angle = FacingRight ? Vector3.zero : new Vector3(0, -180, 0);
+        transform.rotation = Quaternion.Euler(angle);
     }
 }

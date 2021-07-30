@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using CustomEventSystem;
 
-
-public class Modifier: MonoBehaviour, IGlobalSubscriber
+[RequireComponent(typeof(MeshRenderer))]
+public class Modifier : MonoBehaviour, IGlobalSubscriber
 {
     #region Fields
     [Header("Set in Inspector: Modifier")]
-    [SerializeField] private KeyCode _useButton = KeyCode.Q;
     [SerializeField] private bool _availableOnGround = true;
     [SerializeField] private bool _availableOnAir = true;
     [SerializeField] private int _maxNumbersOfActivations = 1;
@@ -26,12 +25,24 @@ public class Modifier: MonoBehaviour, IGlobalSubscriber
         private set => _isActive = value;
     }
 
-    public KeyCode UseButton => _useButton;
+    public int CurrentNumberOfActivations
+    {
+        get => _currentNumbersOfActivations;
+        set {
+            _currentNumbersOfActivations = value;
+            if (_currentNumbersOfActivations == 0)
+            {
+                ThrowOut();
+            }
+        }
+    }
 
-    protected bool IsUseButtonReleased() => Input.GetKeyUp(UseButton);
+    private void ThrowOut()
+    {
+        Destroy(gameObject);
+    }
 
-
-    public void TryActivate(bool playerIsGrounded)
+    public void ActivationAttempt(bool playerIsGrounded)
     {
         if (CanBeActivated(playerIsGrounded))
         {
@@ -48,13 +59,12 @@ public class Modifier: MonoBehaviour, IGlobalSubscriber
     protected virtual void Activate() 
     {
         _isActive = true;
-        _currentNumbersOfActivations--;
     }
 
     public virtual void Disable()
     {
         _isActive = false;
-        Player.ResetJumps();
+        _currentNumbersOfActivations--;
     }
 
     protected void OnTriggerEnter2D(Collider2D collision)
@@ -76,11 +86,6 @@ public class Modifier: MonoBehaviour, IGlobalSubscriber
     {
         MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
         meshRenderer.enabled = false;
-    }
-
-    public void ThrowOut()
-    {
-        Destroy(gameObject);
     }
 
     public void Reset()
