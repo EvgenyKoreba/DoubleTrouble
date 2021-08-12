@@ -2,21 +2,25 @@
 using System.Collections.Generic;
 using UnityEngine;
 using CustomEventSystem;
+using Project.Animations;
 
-[RequireComponent(typeof(MeshRenderer))]
+[RequireComponent(typeof(Renderer), typeof(Collider2D))]
 public class Modifier : MonoBehaviour, IGlobalSubscriber
 {
     #region Fields
     [Header("Set in Inspector: Modifier")]
+    [SerializeField] private int _maxNumbersOfActivations = 1;
     [SerializeField] private bool _availableOnGround = true;
     [SerializeField] private bool _availableOnAir = true;
-    [SerializeField] private int _maxNumbersOfActivations = 1;
 
     [Header("Set Dynamically: Modifier")]
-    private bool _isActive = false;
-    private int _currentNumbersOfActivations = 1;
+    [SerializeField] private bool _isActive = false;
+    [SerializeField] private int _currentNumbersOfActivations = 1;
 
-    protected PlayerJumpAggregator Player;
+    protected PlayerPhysics PlayerPhysics;
+    protected string AnimatorParameter = "";
+
+    private int _parameterHash;
     #endregion
 
     public bool IsActive
@@ -24,6 +28,8 @@ public class Modifier : MonoBehaviour, IGlobalSubscriber
         get => _isActive;
         private set => _isActive = value;
     }
+
+    public int ParamHash { get => _parameterHash; }
 
     public int CurrentNumberOfActivations
     {
@@ -42,6 +48,22 @@ public class Modifier : MonoBehaviour, IGlobalSubscriber
         Destroy(gameObject);
     }
 
+    private void Start()
+    {
+        ResetActivations();
+        GetParameterHash();
+    }
+
+    public void ResetActivations()
+    {
+        _currentNumbersOfActivations = _maxNumbersOfActivations;
+    }
+
+    private void GetParameterHash()
+    {
+        _parameterHash = AnimatorParametersCustomizer.GetHash(AnimatorParameter);
+    }
+
     public void ActivationAttempt(bool playerIsGrounded)
     {
         if (CanBeActivated(playerIsGrounded))
@@ -52,7 +74,7 @@ public class Modifier : MonoBehaviour, IGlobalSubscriber
 
     private bool CanBeActivated(bool playerIsGrounded)
     {
-        return _currentNumbersOfActivations > 0 &&
+        return _currentNumbersOfActivations > 0 && 
             (_availableOnGround == playerIsGrounded || _availableOnAir == !playerIsGrounded);
     }
 
@@ -69,31 +91,28 @@ public class Modifier : MonoBehaviour, IGlobalSubscriber
 
     protected void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.GetComponent<PlayerJumpAggregator>() != null)
+        var physicsComponent = collision.gameObject.GetComponentInParent<PlayerPhysics>();
+        if (physicsComponent != null)
         {
-            Player = collision.gameObject.GetComponent<PlayerJumpAggregator>();
-            RaisePickUpSelf();
+            PlayerPhysics = physicsComponent;
+            RaisePickUpEvent();
             HideSelf();
         }
     }
 
-    private void RaisePickUpSelf()
+    private void RaisePickUpEvent()
     {
         EventsHandler.RaiseEvent<IPickUpModifierHandler>(h => h.ModifierPickUped(this));
     }
 
     private void HideSelf()
     {
-        MeshRenderer meshRenderer = GetComponent<MeshRenderer>();
-        meshRenderer.enabled = false;
+        Renderer renderer = GetComponent<Renderer>();
+        renderer.enabled = false;
+        Collider2D collider = GetComponent<Collider2D>();
+        collider.enabled = false;
     }
 
-    public void Reset()
-    {
-        _currentNumbersOfActivations = _maxNumbersOfActivations;
-    }
-
-    
     protected void OnEnable() => EventsHandler.Subscribe(this);
 
     protected void OnDisable() => EventsHandler.Unsubscribe(this);

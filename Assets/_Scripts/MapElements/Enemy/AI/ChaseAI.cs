@@ -28,14 +28,14 @@ public class ChaseAI : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.GetComponent<Player>() != null)
+        if (other.GetComponent<PlayerCollector>() != null)
         {
 
         }
     }
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.GetComponent<Player>() != null)
+        if (other.GetComponent<PlayerCollector>() != null)
         {
 
             StartCoroutine(StartChase(other.gameObject));

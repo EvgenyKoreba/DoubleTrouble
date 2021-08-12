@@ -32,7 +32,7 @@ public class PlayerMover : MonoBehaviour
         _rigidBody = GetComponent<Rigidbody2D>();
     }
 
-    public void Move(float xDirection)
+    public void MoveHorizontal(float xDirection)
     {
         X_direction = xDirection;
         FacingControl(xDirection);
@@ -40,9 +40,6 @@ public class PlayerMover : MonoBehaviour
         Vector2 velocity = _rigidBody.velocity;
         velocity.x = xDirection * _speed * Time.fixedDeltaTime;
         _rigidBody.velocity = velocity;
-        
-        //Vector2 offset = direction * (_speed * Time.deltaTime);
-        //_rigidBody.MovePosition(_rigidBody.position + offset);
     }
 
     private void FacingControl(float xDirection)

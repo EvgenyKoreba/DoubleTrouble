@@ -11,16 +11,14 @@ public class MultiJump : MonoBehaviour, IPickupableItem
     #endregion
 
     #region Properties
-    public int JumpCount
-    {
-        get { return _jumpCount; }
-    }
+    public int JumpCount => _jumpCount;
     #endregion
 
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.GetComponent<PlayerJumpAggregator>() != null)
+        var midAirComponent = collision.gameObject.GetComponentInParent<PlayerMidAirAggregator>();
+        if (midAirComponent != null)    
         {
             PickUp();
         }
@@ -28,7 +26,7 @@ public class MultiJump : MonoBehaviour, IPickupableItem
 
     public void PickUp()
     {
-        EventsHandler.RaiseEvent<IPickUpItemHandler>(h => h.PickUpItem(this));
+        EventsHandler.RaiseEvent<IPickUpItem>(h => h.PickUpItem(this));
         Destroy(gameObject);
     }
 

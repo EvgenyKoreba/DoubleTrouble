@@ -4,7 +4,7 @@ using UnityEngine;
 
 
 [DefaultExecutionOrder(-100)]
-[RequireComponent(typeof(PlayerMover), typeof(PlayerJumpAggregator))]
+[RequireComponent(typeof(PlayerMover), typeof(PlayerMidAirAggregator), typeof(PlayerCollector))]
 public class PlayerInput : MonoBehaviour
 {
     #region Fields
@@ -13,13 +13,15 @@ public class PlayerInput : MonoBehaviour
     [SerializeField] private KeyCode _modifierUseButton = KeyCode.Q;
 
     private PlayerMover _mover;
-    private PlayerJumpAggregator _jumpAggregator;
+    private PlayerMidAirAggregator _midAirAggregator;
+    private PlayerCollector _collector;
     #endregion
 
     private void Awake()
     {
         _mover = GetComponent<PlayerMover>();
-        _jumpAggregator = GetComponent<PlayerJumpAggregator>();
+        _midAirAggregator = GetComponent<PlayerMidAirAggregator>();
+        _collector = GetComponent<PlayerCollector>();
     }
 
     private void FixedUpdate()
@@ -29,8 +31,8 @@ public class PlayerInput : MonoBehaviour
 
     private void MoveInput()
     {
-        float horizontal = Input.GetAxis("Horizontal");
-        _mover.Move(horizontal);
+        float horizontalOffset = Input.GetAxis("Horizontal");
+        _mover.MoveHorizontal(horizontalOffset);
     }
 
     private void Update()
@@ -44,12 +46,12 @@ public class PlayerInput : MonoBehaviour
     {
         if (IsJumpButtonHeldDown())
         {
-            _jumpAggregator.IncreaseJumpButtonHoldTime();
+            _midAirAggregator.IncreaseJumpButtonHoldTime();
         }
 
         if (IsJumpButtonReleased())
         {
-            _jumpAggregator.TryJump();
+            _midAirAggregator.TryJump();
         }
     }
 
@@ -63,14 +65,12 @@ public class PlayerInput : MonoBehaviour
     {
         if (IsModifierButtonPressed())
         {
-            _jumpAggregator.TryActivateModifier();
+            _collector.TryActivateModifier();
             StartCoroutine(WaitModifierButtonRelease());
         }
     }
 
     private bool IsModifierButtonPressed() => Input.GetKeyDown(_modifierUseButton);
-
-    private bool IsModifierButtonReleased() => Input.GetKeyUp(_modifierUseButton);
 
     private IEnumerator WaitModifierButtonRelease()
     {
@@ -78,11 +78,13 @@ public class PlayerInput : MonoBehaviour
         {
             if (IsModifierButtonReleased())
             {
-                _jumpAggregator.DisableModifier();
+                _collector.DisableModifier();
                 yield break;
             }
             yield return null;
         }
     }
+
+    private bool IsModifierButtonReleased() => Input.GetKeyUp(_modifierUseButton);
     #endregion
 }

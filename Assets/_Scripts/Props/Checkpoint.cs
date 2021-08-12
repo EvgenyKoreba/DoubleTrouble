@@ -25,7 +25,7 @@ public class Checkpoint : MonoBehaviour
             return;
         } 
 
-        Player player = collision.gameObject.GetComponent<Player>();
+        PlayerCollector player = collision.gameObject.GetComponent<PlayerCollector>();
         if (player != null)
         {
             _isReached = true;

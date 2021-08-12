@@ -8,7 +8,7 @@ public class Lifebar : MonoBehaviour, IStartLevelHandler, IHealthChangeHandler
 {
     #region Fields
     [Header("Set in Inspector")]
-    [SerializeField] private Player _player;
+    [SerializeField] private PlayerCollector _player;
     [SerializeField] private Transform _lifePrefab;
 
     [Header("Set Dynamically")]

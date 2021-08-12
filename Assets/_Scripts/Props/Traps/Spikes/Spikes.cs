@@ -105,7 +105,7 @@ public class Spikes : DamagingBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.GetComponent<Player>() != null)
+        if (other.GetComponent<PlayerCollector>() != null)
         {
             _isTriggered = true;
             StartCoroutine(TriggeredPush());
@@ -114,7 +114,7 @@ public class Spikes : DamagingBehaviour
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.GetComponent<Player>() != null)
+        if (other.GetComponent<PlayerCollector>() != null)
         {
             _isTriggered = false;
         }

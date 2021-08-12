@@ -41,7 +41,7 @@ public class CanonHoming : Canon
 
     private void OnTriggerStay2D(Collider2D other)
     {
-        if (other.GetComponent<Player>() != null)
+        if (other.GetComponent<PlayerCollector>() != null)
         {
 
             targetPos = other.gameObject.transform.position;
@@ -50,7 +50,7 @@ public class CanonHoming : Canon
 
     private void OnTriggerExit2D(Collider2D other)
     {
-        if (other.GetComponent<Player>() != null)
+        if (other.GetComponent<PlayerCollector>() != null)
         {
             StopShooting();
         }
@@ -58,7 +58,7 @@ public class CanonHoming : Canon
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.GetComponent<Player>() != null)
+        if (other.GetComponent<PlayerCollector>() != null)
         {
             StartShooting();
         }
