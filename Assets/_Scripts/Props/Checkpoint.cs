@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using CustomEventSystem;
+using Project.Player;
 
 public class Checkpoint : MonoBehaviour
 {

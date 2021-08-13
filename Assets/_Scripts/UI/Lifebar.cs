@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using CustomEventSystem;
+using Project.Player;
 
 public class Lifebar : MonoBehaviour, IStartLevelHandler, IHealthChangeHandler
 {
     #region Fields
     [Header("Set in Inspector")]
-    [SerializeField] private PlayerCollector _player;
+    [SerializeField] private PlayerHealth _playerHealth;
     [SerializeField] private Transform _lifePrefab;
 
     [Header("Set Dynamically")]
@@ -30,7 +31,7 @@ public class Lifebar : MonoBehaviour, IStartLevelHandler, IHealthChangeHandler
     {
         _lifes = new List<Transform>();
 
-        while (_lifes.Count < _player.MaxLifes)
+        while (_lifes.Count < _playerHealth.MaxLifes)
         {
             AddLife();
         }
@@ -65,6 +66,6 @@ public class Lifebar : MonoBehaviour, IStartLevelHandler, IHealthChangeHandler
     private void RemoveLife()
     {
         Destroy(_lifes.Last().gameObject);
-        _lifes.Remove(_lifes.Last());
+        //_lifes.Remove(_lifes.Last());
     }
 }

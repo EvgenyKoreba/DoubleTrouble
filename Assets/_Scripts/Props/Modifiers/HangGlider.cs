@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using CustomEventSystem;
 
-public class HangGlider : Modifier, ITouchingGroundWhenFall
+public class HangGlider : Modifier
 {
     #region Fields
     [Header("Set in Inspector: Parachute")]

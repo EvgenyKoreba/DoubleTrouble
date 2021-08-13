@@ -29,13 +29,6 @@ public class CheckpointsHandler : MonoBehaviour, ICheckpointReachHandler
     static public Checkpoint GetLastCheckpoint() => INSTANCE._lastCheckpoint;
     #endregion
 
-    #region Setters
-    static public void SetReturnToCheckpointDelay(float delay)
-    {
-        INSTANCE._returnToCheckpointDelay = delay;
-    }
-    #endregion
-
     #region Events
     private void OnEnable()
     {
@@ -61,7 +54,7 @@ public class CheckpointsHandler : MonoBehaviour, ICheckpointReachHandler
 
     private void PrepareSingleton()
     {
-        if(INSTANCE == null)
+        if (INSTANCE == null)
         {
             INSTANCE = this;
         }

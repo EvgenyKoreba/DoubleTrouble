@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Project.Player;
 
 public class ChaseAI : MonoBehaviour
 {
@@ -33,6 +34,7 @@ public class ChaseAI : MonoBehaviour
 
         }
     }
+
     private void OnTriggerEnter2D(Collider2D other)
     {
         if (other.GetComponent<PlayerCollector>() != null)

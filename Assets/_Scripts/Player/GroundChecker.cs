@@ -2,30 +2,34 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GroundChecker : MonoBehaviour
+namespace Project.Player
 {
-    #region Fields
-    [Header("       Set in Inspector:")]
-    [SerializeField] private float _groundRadius;
-    [SerializeField] private LayerMask _ground;
-    [SerializeField] private float _groundRememberTime = 0.2f;
 
-    private bool _isGround = false;
-    #endregion
-
-
-    public bool IsGrounded
+    public class GroundChecker : MonoBehaviour
     {
-        get { return _isGround; }
-    }
+        #region Fields
+        [Header("       Set in Inspector:")]
+        [SerializeField] private float _groundRadius;
+        [SerializeField] private LayerMask _ground;
+        [SerializeField] private float _groundRememberTime = 0.2f;
 
-    private void Update()
-    {
-        _isGround = Physics2D.OverlapCircle(transform.position, _groundRadius, _ground);
-    }
+        private bool _isGround = false;
+        #endregion
 
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawWireSphere(transform.position, _groundRadius);
+
+        public bool IsGrounded
+        {
+            get { return _isGround; }
+        }
+
+        private void Update()
+        {
+            _isGround = Physics2D.OverlapCircle(transform.position, _groundRadius, _ground);
+        }
+
+        private void OnDrawGizmos()
+        {
+            Gizmos.DrawWireSphere(transform.position, _groundRadius);
+        }
     }
 }

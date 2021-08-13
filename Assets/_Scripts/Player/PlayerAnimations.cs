@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Project.Player;
 
 namespace Project.Animations
 {
@@ -9,7 +10,7 @@ namespace Project.Animations
     public class PlayerAnimations : MonoBehaviour
     {
         [SerializeField] private Rigidbody2D _rigidbody;
-        [SerializeField] private PlayerCollector _collector;
+        [SerializeField] private PlayerModifier _playerModifier;
         [SerializeField] private PlayerMover _mover;
         [SerializeField] private PlayerMidAirAggregator _midAirStatesAggregator;
         [SerializeField] private PlayerInput _input;
@@ -42,9 +43,9 @@ namespace Project.Animations
             _animator.SetBool(_isGroundedParamID, _midAirStatesAggregator.IsGrounded);
             _animator.SetBool(_isJumpingParamID, _midAirStatesAggregator.IsJumping);
 
-            if (_collector.Modifier != null)
+            if (_playerModifier.CurrentModifier != null)
             {
-                _animator.SetBool(_collector.Modifier.ParamHash, _collector.Modifier.IsActive);
+                _animator.SetBool(_playerModifier.CurrentModifier.ParamHash, _playerModifier.CurrentModifier.IsActive);
             }
         }
     }

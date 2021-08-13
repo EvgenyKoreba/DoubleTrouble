@@ -8,7 +8,7 @@ namespace CustomEventSystem
 
     public interface IPickUpItem : IGlobalSubscriber
     {
-        void PickUpItem(IPickupableItem item);
+        void PickUpItem(Item item);
     }
 
 }

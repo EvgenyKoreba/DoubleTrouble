@@ -2,89 +2,93 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-
-[DefaultExecutionOrder(-100)]
-[RequireComponent(typeof(PlayerMover), typeof(PlayerMidAirAggregator), typeof(PlayerCollector))]
-public class PlayerInput : MonoBehaviour
+namespace Project.Player
 {
-    #region Fields
-    [Header("Set input buttons")]
-    [SerializeField] private KeyCode _jumpButton = KeyCode.Space;
-    [SerializeField] private KeyCode _modifierUseButton = KeyCode.Q;
 
-    private PlayerMover _mover;
-    private PlayerMidAirAggregator _midAirAggregator;
-    private PlayerCollector _collector;
-    #endregion
-
-    private void Awake()
+    [DefaultExecutionOrder(-100)]
+    [RequireComponent(typeof(PlayerMover), typeof(PlayerMidAirAggregator), typeof(PlayerModifier))]
+    public class PlayerInput : MonoBehaviour
     {
-        _mover = GetComponent<PlayerMover>();
-        _midAirAggregator = GetComponent<PlayerMidAirAggregator>();
-        _collector = GetComponent<PlayerCollector>();
-    }
+        #region Fields
+        [Header("Set input buttons")]
+        [SerializeField] private KeyCode _jumpButton = KeyCode.Space;
+        [SerializeField] private KeyCode _modifierUseButton = KeyCode.Q;
 
-    private void FixedUpdate()
-    {
-        MoveInput();
-    }
+        private PlayerMover _mover;
+        private PlayerMidAirAggregator _midAirAggregator;
+        private PlayerModifier _playerModifier;
+        #endregion
 
-    private void MoveInput()
-    {
-        float horizontalOffset = Input.GetAxis("Horizontal");
-        _mover.MoveHorizontal(horizontalOffset);
-    }
-
-    private void Update()
-    {
-        JumpInput();
-        ModifierInput();
-    }
-
-    #region Jump Input
-    private void JumpInput()
-    {
-        if (IsJumpButtonHeldDown())
+        private void Awake()
         {
-            _midAirAggregator.IncreaseJumpButtonHoldTime();
+            _mover = GetComponent<PlayerMover>();
+            _midAirAggregator = GetComponent<PlayerMidAirAggregator>();
+            _playerModifier = GetComponent<PlayerModifier>();
         }
 
-        if (IsJumpButtonReleased())
+        private void FixedUpdate()
         {
-            _midAirAggregator.TryJump();
+            MoveInput();
         }
-    }
 
-    private bool IsJumpButtonHeldDown() => Input.GetKey(_jumpButton);
-
-    private bool IsJumpButtonReleased() => Input.GetKeyUp(_jumpButton);
-    #endregion
-
-    #region Modifier Input
-    private void ModifierInput()
-    {
-        if (IsModifierButtonPressed())
+        private void MoveInput()
         {
-            _collector.TryActivateModifier();
-            StartCoroutine(WaitModifierButtonRelease());
+            float horizontalOffset = Input.GetAxis("Horizontal");
+            _mover.MoveHorizontal(horizontalOffset);
         }
-    }
 
-    private bool IsModifierButtonPressed() => Input.GetKeyDown(_modifierUseButton);
-
-    private IEnumerator WaitModifierButtonRelease()
-    {
-        while (true)
+        private void Update()
         {
-            if (IsModifierButtonReleased())
+            JumpInput();
+            ModifierInput();
+        }
+
+        #region Jump Input
+        private void JumpInput()
+        {
+            if (IsJumpButtonHeldDown())
             {
-                _collector.DisableModifier();
-                yield break;
+                _midAirAggregator.IncreaseJumpButtonHoldTime();
             }
-            yield return null;
+
+            if (IsJumpButtonReleased())
+            {
+                _midAirAggregator.TryJump();
+            }
         }
+
+        private bool IsJumpButtonHeldDown() => Input.GetKey(_jumpButton);
+
+        private bool IsJumpButtonReleased() => Input.GetKeyUp(_jumpButton);
+        #endregion
+
+        #region Modifier Input
+        private void ModifierInput()
+        {
+            if (IsModifierButtonPressed())
+            {
+                _playerModifier.TryActivateModifier();
+                StartCoroutine(WaitModifierButtonRelease());
+            }
+        }
+
+        private bool IsModifierButtonPressed() => Input.GetKeyDown(_modifierUseButton);
+
+        private IEnumerator WaitModifierButtonRelease()
+        {
+            while (true)
+            {
+                if (IsModifierButtonReleased())
+                {
+                    _playerModifier.DisableModifier();
+                    yield break;
+                }
+                yield return null;
+            }
+        }
+
+        private bool IsModifierButtonReleased() => Input.GetKeyUp(_modifierUseButton);
+        #endregion
     }
 
-    private bool IsModifierButtonReleased() => Input.GetKeyUp(_modifierUseButton);
-    #endregion
 }

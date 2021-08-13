@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using CustomEventSystem;
 using Project.Animations;
+using Project.Player;
 
-[RequireComponent(typeof(Renderer), typeof(Collider2D))]
-public class Modifier : MonoBehaviour, IGlobalSubscriber
+[RequireComponent(typeof(Collider2D))]
+public abstract class Modifier : MonoBehaviour, IGlobalSubscriber
 {
     #region Fields
     [Header("Set in Inspector: Modifier")]
@@ -51,7 +52,7 @@ public class Modifier : MonoBehaviour, IGlobalSubscriber
     private void Start()
     {
         ResetActivations();
-        GetParameterHash();
+        FindAnimatorParameterHash();
     }
 
     public void ResetActivations()
@@ -59,7 +60,7 @@ public class Modifier : MonoBehaviour, IGlobalSubscriber
         _currentNumbersOfActivations = _maxNumbersOfActivations;
     }
 
-    private void GetParameterHash()
+    private void FindAnimatorParameterHash()
     {
         _parameterHash = AnimatorParametersCustomizer.GetHash(AnimatorParameter);
     }
@@ -89,7 +90,7 @@ public class Modifier : MonoBehaviour, IGlobalSubscriber
         _currentNumbersOfActivations--;
     }
 
-    protected void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         var physicsComponent = collision.gameObject.GetComponentInParent<PlayerPhysics>();
         if (physicsComponent != null)
@@ -107,7 +108,7 @@ public class Modifier : MonoBehaviour, IGlobalSubscriber
 
     private void HideSelf()
     {
-        Renderer renderer = GetComponent<Renderer>();
+        Renderer renderer = GetComponentInChildren<Renderer>();
         renderer.enabled = false;
         Collider2D collider = GetComponent<Collider2D>();
         collider.enabled = false;

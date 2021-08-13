@@ -2,26 +2,31 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody2D))]
-public class PlayerPhysics : MonoBehaviour
+namespace Project.Player
 {
-    private Rigidbody2D _rigidbody;
 
-    public float Drag
+    [RequireComponent(typeof(Rigidbody2D))]
+    public class PlayerPhysics : MonoBehaviour
     {
-        get => _rigidbody.drag;
-        set => _rigidbody.drag = value;
+        private Rigidbody2D _rigidbody;
+
+        public float Drag
+        {
+            get => _rigidbody.drag;
+            set => _rigidbody.drag = value;
+        }
+
+        private void Awake()
+        {
+            _rigidbody = GetComponent<Rigidbody2D>();
+        }
+
+        public void NullifyVerticalVelocity()
+        {
+            Vector3 velocity = _rigidbody.velocity;
+            velocity.y = 0;
+            _rigidbody.velocity = velocity;
+        }
     }
 
-    private void Awake()
-    {
-        _rigidbody = GetComponent<Rigidbody2D>();
-    }
-
-    public void NullifyVerticalVelocity()
-    {
-        Vector3 velocity = _rigidbody.velocity;
-        velocity.y = 0;
-        _rigidbody.velocity = velocity;
-    }
 }

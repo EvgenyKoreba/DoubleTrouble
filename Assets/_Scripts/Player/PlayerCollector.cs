@@ -3,132 +3,49 @@ using System.Collections.Generic;
 using UnityEngine;
 using CustomEventSystem;
 
-[RequireComponent(typeof(PlayerPhysics))]
-public class PlayerCollector : MonoBehaviour, ICheckpointReachHandler, IHealthChangeHandler, IStartLevelHandler, 
-    IReturnToCheckpointHandler, IPickUpModifierHandler
+namespace Project.Player
 {
-    #region Fields
-    [Header("Set in Inspector")]
-    [SerializeField] private GroundChecker _groundChecker;
-    [SerializeField] private int _maxLifes;
-    [SerializeField] private float _returnDelay;
 
-
-    [Header("Set Dynamically")]
-    [SerializeField] private int _currentLives;
-    [SerializeField] private Modifier _modifier;
-
-    #endregion
-
-    #region Properties
-    public int CurrentLifes
+    [RequireComponent(typeof(PlayerPhysics))]
+    public class PlayerCollector : MonoBehaviour, ICheckpointReachHandler
     {
-        get { return _currentLives; }
-        private set { 
-            if (value <= 0)
-            {
-                EventsHandler.RaiseEvent<IRestartLevelHandler>(r => r.RestartLevel());
-            }
+        #region Fields
+        [Header("Set in Inspector")]
+        [SerializeField] private GroundChecker _groundChecker;
+        [SerializeField] private float _returnDelay;
 
-            _currentLives = Mathf.Clamp(value, 1, _maxLifes);
-        }
-    }
 
-    public int MaxLifes
-    {
-        get { return _maxLifes; }
-        private set { _maxLifes = value; }
-    }
+        #endregion
 
-    public Modifier Modifier
-    {
-        get => _modifier;
-    }
-    #endregion
-
-    #region Events
-    private void OnEnable()
-    {
-        EventsHandler.Subscribe(this);
-    }
-
-    private void OnDisable()
-    {
-        EventsHandler.Unsubscribe(this);
-    }
-
-    public void Heal(int value = 1)
-    {
-        CurrentLifes += value;
-    }
-
-    public void RecieveDamage(int damage = 1)
-    {
-        CurrentLifes -= damage;
-    }
-
-    public void StartLevel(LevelData level)
-    {
-        CurrentLifes = _maxLifes;
-    }
-
-    public void CheckpointReach(Checkpoint checkpoint)
-    {
-
-    }
-
-    public void ModifierPickUped(Modifier modifier)
-    {
-        _modifier = modifier;
-    }
-    #endregion
-
-    private void Start()
-    {
-        CurrentLifes = _maxLifes;
-    }
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        if (collision.gameObject.GetComponent<DamagingBehaviour>() != null)
+        #region Events
+        private void OnEnable()
         {
-            DamagingBehaviour dB = collision.gameObject.GetComponent<DamagingBehaviour>();
-            EventsHandler.RaiseEvent<IHealthChangeHandler>(h => h.RecieveDamage(dB.Damage));
-            EventsHandler.RaiseEvent<IReturnToCheckpointHandler>(h => 
-                h.ReturnToCheckpoint(CheckpointsHandler.GetLastCheckpoint()));
+            EventsHandler.Subscribe(this);
         }
-    }
 
-    public void ReturnToCheckpoint(Checkpoint checkpoint)
-    {
-        StartCoroutine(RespawnOnCheckpoint(checkpoint));
-    }
-
-    private IEnumerator RespawnOnCheckpoint(Checkpoint checkpoint)
-    {
-        CurrentLifes--;
-        transform.position = checkpoint.transform.position;
-        yield return null;
-        //Time.timeScale = 0;
-        //yield return new WaitForSeconds(_returnDelay);
-        //Time.timeScale = 1;
-    }
-
-    public void TryActivateModifier()
-    {
-        if (_modifier != null)
+        private void OnDisable()
         {
-            _modifier.ActivationAttempt(_groundChecker.IsGrounded);
+            EventsHandler.Unsubscribe(this);
         }
+
+        public void CheckpointReach(Checkpoint checkpoint)
+        {
+
+        }
+
+        public void ReturnToCheckpoint(Checkpoint checkpoint)
+        {
+            StartCoroutine(RespawnOnCheckpoint(checkpoint));
+        }
+
+        private IEnumerator RespawnOnCheckpoint(Checkpoint checkpoint)
+        {
+            transform.position = checkpoint.transform.position;
+            yield return null;
+            //yield return new WaitForSeconds(_returnDelay);
+        }
+        #endregion
+
     }
 
-    public void DisableModifier()
-    {
-        _modifier.Disable();
-    }
-
-    public int GetModifierParamHash()
-    {
-        return _modifier.ParamHash;
-    }
 }
